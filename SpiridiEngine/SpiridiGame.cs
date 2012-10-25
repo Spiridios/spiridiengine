@@ -11,7 +11,8 @@ namespace Spiridios.SpiridiEngine
     {
         private static Random random = new Random();
 
-        private Color clearColor = new Color(0xff, 0x80, 0xc0);
+        public static readonly Color DefaultClearColor = new Color(0xff, 0x80, 0xc0);
+        private Color clearColor = DefaultClearColor;
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
         protected ImageManager imageManager;
@@ -63,6 +64,12 @@ namespace Spiridios.SpiridiEngine
             }
             //The following is not supported by JSIL.
             //return System.IO.Path.ChangeExtension(fileName, null);
+        }
+
+        public Color ClearColor
+        {
+            get { return this.clearColor; }
+            set { this.clearColor = value; }
         }
 
         public float FPS
