@@ -29,9 +29,13 @@ namespace Spiridios.SpiridiEngine
             XElement tileSetImage = tileSetElement.Element("image");
             string tileSetImageSource = tileSetImage.Attribute("source").Value;
             tileSet = game.ImageManager.AddImage(tileSetImageSource, tileSetImageSource);
-            string layerString = tiledDoc.Root.Element("layer").Element("data").Value;
+
+            XElement layerElement = tiledDoc.Root.Element("layer");
+            int layerHeight = int.Parse(layerElement.Attribute("height").Value);
+            int layerWidth = int.Parse(layerElement.Attribute("width").Value);
+            string layerString = layerElement.Element("data").Value;
             byte[] rawLayer = Convert.FromBase64String(layerString);
-            int size = rawLayer.Length / sizeof(Int32); // TODO: this is not the size of the layer, it's the size of the COMPRESSED data.
+            int size = layerWidth * layerHeight; 
             mapGIDs = new List<int>(size);
             using (BinaryReader stuff = new BinaryReader(new GZipStream(new MemoryStream(rawLayer), CompressionMode.Decompress)))
             {
