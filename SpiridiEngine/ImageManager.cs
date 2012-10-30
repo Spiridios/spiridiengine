@@ -22,20 +22,30 @@ namespace Spiridios.SpiridiEngine
         /// </summary>
         /// <param name="imageName">The internal name for the image</param>
         /// <param name="imageSrc">The actual image name</param>
-        public void AddImage(string imageName, string imageSrc)
+        public Texture2D AddImage(string imageName, string imageSrc)
         {
+            if (this.images.ContainsKey(imageName))
+            {
+                throw new Exception(String.Format("An image named '{0}' already exists.", imageName));
+            }
             // Load image
-            string correctedName = SpiridiGame.NormalizeFilename(imageSrc);
+            Texture2D tex = this.GetImageNoCache(imageSrc);
+            this.images[imageName] = tex;
+            return tex;
+        }
+
+        private Texture2D GetImageNoCache(string imageSrc)
+        {
             try
             {
+                string correctedName = SpiridiGame.NormalizeFilename(imageSrc);
                 Texture2D tex = this.contentManager.Load<Texture2D>(correctedName);
-                this.images[imageName] = tex;
+                return tex;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                throw new Exception(String.Format("Could not load texture '{0}' - {1}",imageSrc, e.Message));
+                throw new Exception(String.Format("Could not load texture '{0}' - {1}", imageSrc, e.Message));
             }
-
         }
 
         public Texture2D GetImage(string imageName)

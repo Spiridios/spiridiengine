@@ -51,6 +51,11 @@ namespace Spiridios.SpiridiEngine
             get { return random; }
         }
 
+        public ImageManager ImageManager
+        {
+            get { return this.imageManager; }
+        }
+
         public static String NormalizeFilename(String fileName)
         {
             int dotPos = fileName.LastIndexOf('.');
