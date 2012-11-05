@@ -111,6 +111,7 @@
     <Compile Include="TextRenderer.cs" />
     <Compile Include="TileImage.cs" />
     <Compile Include="TileMap.cs" />
+    <Compile Include="TileMapLayer.cs" />
     <Compile Include="Updatable.cs" />
     <Compile Include="Vector2Ext.cs" />
     <Compile Include="XNAExtensions.cs" />
