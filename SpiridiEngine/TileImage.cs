@@ -1,11 +1,14 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using System;
+using System.IO;
 using System.Xml;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Spiridios.SpiridiEngine
 {
     class TileImage
     {
+        public const string TILED_ELEMENT = "tileset";
         private SpiridiGame game;
         private Texture2D tileSet = null;
         private int tileWidth = 0;
@@ -21,21 +24,43 @@ namespace Spiridios.SpiridiEngine
             get { return tileHeight; }
         }
 
-        public TileImage(SpiridiGame game, XmlNode tileSetElement)
+        public TileImage(SpiridiGame game, XmlReader tileSetReader)
         {
             this.game = game;
-            LoadFromTiledElement(tileSetElement);
+            LoadFromTiledElement(tileSetReader);
         }
 
-        private void LoadFromTiledElement(XmlNode tileSetElement)
+        private void LoadFromTiledElement(XmlReader xmlReader)
         {
-            XmlNode tileSetImage = tileSetElement.SelectSingleNode("image");
-            string tileSetImageSource = tileSetImage.Attributes["source"].Value;
-            tileWidth = int.Parse(tileSetElement.Attributes["tilewidth"].Value);
-            tileHeight = int.Parse(tileSetElement.Attributes["tileheight"].Value);
-            tileSet = this.game.ImageManager.AddImage(tileSetImageSource, tileSetImageSource);
-            //tileSheetSize.X = int.Parse(tileSetImage.Attributes["width"].Value);
-            //tileSheetSize.Y = int.Parse(tileSetImage.Attributes["height"].Value);
+            do
+            {
+                switch (xmlReader.NodeType)
+                {
+                    case (XmlNodeType.Element):
+                        switch (xmlReader.Name)
+                        {
+                            case (TileImage.TILED_ELEMENT):
+                                tileWidth = int.Parse(xmlReader.GetAttribute("tilewidth"));
+                                tileHeight = int.Parse(xmlReader.GetAttribute("tileheight"));
+                                break;
+                            case ("image"):
+                                string tileSetImageSource = xmlReader.GetAttribute("source");
+                                tileSet = this.game.ImageManager.AddImage(tileSetImageSource, tileSetImageSource);
+                                //tileSheetSize.X = int.Parse(tileSetImage.GetAttribute("width"));
+                                //tileSheetSize.Y = int.Parse(tileSetImage.GetAttribute("height"));
+                                break;
+                            default:
+                                throw new InvalidDataException(String.Format("TileImage: Unsupported node '{0}'", xmlReader.Name));
+                        }
+                        break;
+                    case (XmlNodeType.EndElement):
+                        if (xmlReader.Name == TILED_ELEMENT)
+                        {
+                            return;
+                        }
+                        break;
+                }
+            } while (xmlReader.Read());
         }
 
         // Move to Vector2Ext maybe

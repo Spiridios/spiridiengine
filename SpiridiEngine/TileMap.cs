@@ -10,6 +10,7 @@ namespace Spiridios.SpiridiEngine
 {
     public class TileMap : Drawable
     {
+        public const string TILED_ELEMENT = "map";
         private SpiridiGame game;
 
         // Need multiples of these.
@@ -27,14 +28,30 @@ namespace Spiridios.SpiridiEngine
         {
             using (FileStream fileStream = new FileStream(tiledFile, FileMode.Open))
             {
-                XmlReader crap = XmlReader.Create(fileStream);
-                XmlDocument tiledDoc = new XmlDocument();
-                tiledDoc.Load(crap);
-                tileSet = new TileImage(game, tiledDoc.DocumentElement.SelectSingleNode("tileset"));
-
-                foreach (XmlNode layerElement in tiledDoc.DocumentElement.SelectNodes("layer"))
+                using (XmlReader xmlReader = XmlReader.Create(fileStream))
                 {
-                    layers.Add(new TileMapLayer(game, layerElement));
+
+                    while (xmlReader.Read())
+                    {
+                        if (xmlReader.IsStartElement())
+                        {
+                            switch(xmlReader.Name)
+                            {
+                                case(TileMap.TILED_ELEMENT):
+                                    break;
+                                case(TileImage.TILED_ELEMENT):
+                                    tileSet = new TileImage(game, xmlReader);
+                                    break;
+                                case(TileMapLayer.TILED_ELEMENT):
+                                    layers.Add(new TileMapLayer(game, xmlReader));
+                                    break;
+                                case("objectgroup"):
+                                    break; //ignore it for now.
+                                default:
+                                    throw new InvalidDataException(String.Format("Unsupported tag '{0}'", xmlReader.Name));
+                            }
+                        }
+                    }
                 }
             }
         }

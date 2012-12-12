@@ -10,36 +10,76 @@ namespace Spiridios.SpiridiEngine
 {
     class TileMapLayer
     {
+        public const string TILED_ELEMENT = "layer";
         private SpiridiGame game;
         private List<int> layerTileIndices = null;
         private int layerWidth;
         private int layerHeight;
 
-        public TileMapLayer(SpiridiGame game, XmlNode layerElement)
+        public TileMapLayer(SpiridiGame game, XmlReader mapLayerReader)
         {
             this.game = game;
-            LoadTiledLayer(layerElement);
+            LoadTiledLayer(mapLayerReader);
         }
 
-        private void LoadTiledLayer(XmlNode layerElement)
+        private void LoadTiledLayer(XmlReader xmlReader)
         {
-            layerHeight = int.Parse(layerElement.Attributes["height"].Value);
-            layerWidth = int.Parse(layerElement.Attributes["width"].Value);
-
-            XmlNode dataNode = layerElement.SelectSingleNode("data");
-
-            string layerString = dataNode.FirstChild.Value;
-
-            byte[] rawLayer = Convert.FromBase64String(layerString);
-            int size = layerWidth * layerHeight;
-            layerTileIndices = new List<int>(size);
-            using (BinaryReader layerReader = new BinaryReader(new GZipStream(new MemoryStream(rawLayer), CompressionMode.Decompress)))
+            do
             {
-                for (int i = 0; i < size; i++)
+                switch (xmlReader.NodeType)
                 {
-                    layerTileIndices.Add(layerReader.ReadInt32());
+                    case (XmlNodeType.Element):
+                        switch (xmlReader.Name)
+                        {
+                            case(TileMapLayer.TILED_ELEMENT):
+                                layerHeight = int.Parse(xmlReader.GetAttribute("height"));
+                                layerWidth = int.Parse(xmlReader.GetAttribute("width"));
+                                break;
+                            case ("data"):
+                                string encoding = xmlReader.GetAttribute("encoding");
+                                if (encoding != "base64")
+                                {
+                                    throw new InvalidDataException(String.Format("Unsupported encoding {0}",encoding));
+                                }
+
+                                string compression = xmlReader.GetAttribute("compression");
+                                if(!String.IsNullOrEmpty(compression) && compression != "gzip")
+                                {
+                                    throw new InvalidDataException(String.Format("Unsupported compression {0}",compression));
+                                }
+
+                                string layerString = xmlReader.ReadElementContentAsString().Trim();
+                                byte[] rawLayer = Convert.FromBase64String(layerString);
+
+                                int size = layerWidth * layerHeight;
+                                layerTileIndices = new List<int>(size);
+                                
+                                Stream layerStream = new MemoryStream(rawLayer);
+                                if(compression == "gzip")
+                                {
+                                    layerStream = new GZipStream(layerStream, CompressionMode.Decompress);
+                                }
+
+                                using (BinaryReader layerReader = new BinaryReader(layerStream))
+                                {
+                                    for (int i = 0; i < size; i++)
+                                    {
+                                        layerTileIndices.Add(layerReader.ReadInt32());
+                                    }
+                                }
+                                break;
+                            default:
+                                throw new InvalidOperationException(string.Format("TileImage: Unsupported node '{0}'", xmlReader.Name));
+                        }
+                        break;
+                    case (XmlNodeType.EndElement):
+                        if (xmlReader.Name == TILED_ELEMENT)
+                        {
+                            return;
+                        }
+                        break;
                 }
-            }
+            } while (xmlReader.Read());
         }
 
         public void Draw(TileImage tileSet, SpriteBatch spriteBatch)
