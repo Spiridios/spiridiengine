@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
-using System.Xml.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Xml;
 
 namespace Spiridios.SpiridiEngine
 {
@@ -15,17 +15,21 @@ namespace Spiridios.SpiridiEngine
         private int layerWidth;
         private int layerHeight;
 
-        public TileMapLayer(SpiridiGame game, XElement layerElement)
+        public TileMapLayer(SpiridiGame game, XmlNode layerElement)
         {
             this.game = game;
             LoadTiledLayer(layerElement);
         }
 
-        private void LoadTiledLayer(XElement layerElement)
+        private void LoadTiledLayer(XmlNode layerElement)
         {
-            layerHeight = int.Parse(layerElement.Attribute("height").Value);
-            layerWidth = int.Parse(layerElement.Attribute("width").Value);
-            string layerString = layerElement.Element("data").Value;
+            layerHeight = int.Parse(layerElement.Attributes["height"].Value);
+            layerWidth = int.Parse(layerElement.Attributes["width"].Value);
+
+            XmlNode dataNode = layerElement.SelectSingleNode("data");
+
+            string layerString = dataNode.FirstChild.Value;
+
             byte[] rawLayer = Convert.FromBase64String(layerString);
             int size = layerWidth * layerHeight;
             layerTileIndices = new List<int>(size);

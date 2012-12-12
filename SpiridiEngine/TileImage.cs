@@ -1,6 +1,6 @@
-﻿using System.Xml.Linq;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Xml;
 
 namespace Spiridios.SpiridiEngine
 {
@@ -21,21 +21,21 @@ namespace Spiridios.SpiridiEngine
             get { return tileHeight; }
         }
 
-        public TileImage(SpiridiGame game, XElement tileSetElement)
+        public TileImage(SpiridiGame game, XmlNode tileSetElement)
         {
             this.game = game;
             LoadFromTiledElement(tileSetElement);
         }
-        
-        private void LoadFromTiledElement(XElement tileSetElement)
+
+        private void LoadFromTiledElement(XmlNode tileSetElement)
         {
-            XElement tileSetImage = tileSetElement.Element("image");
-            string tileSetImageSource = tileSetImage.Attribute("source").Value;
-            tileWidth = int.Parse(tileSetElement.Attribute("tilewidth").Value);
-            tileHeight = int.Parse(tileSetElement.Attribute("tileheight").Value);
+            XmlNode tileSetImage = tileSetElement.SelectSingleNode("image");
+            string tileSetImageSource = tileSetImage.Attributes["source"].Value;
+            tileWidth = int.Parse(tileSetElement.Attributes["tilewidth"].Value);
+            tileHeight = int.Parse(tileSetElement.Attributes["tileheight"].Value);
             tileSet = this.game.ImageManager.AddImage(tileSetImageSource, tileSetImageSource);
-            //tileSheetSize.X = int.Parse(tileSetImage.Attribute("width").Value);
-            //tileSheetSize.Y = int.Parse(tileSetImage.Attribute("height").Value);
+            //tileSheetSize.X = int.Parse(tileSetImage.Attributes["width"].Value);
+            //tileSheetSize.Y = int.Parse(tileSetImage.Attributes["height"].Value);
         }
 
         // Move to Vector2Ext maybe
@@ -46,7 +46,6 @@ namespace Spiridios.SpiridiEngine
             Vector2 coords = new Vector2(x * xMult, y * yMult);
             return coords;
         }
-
 
         /// <summary>
         /// 
