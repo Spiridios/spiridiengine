@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Spiridios.SpiridiEngine
 {
-    interface Sprite : Updatable
+    public interface Sprite : Updatable
     {
         int Width
         {

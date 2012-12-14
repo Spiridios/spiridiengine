@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Spiridios.SpiridiEngine
 {
-    class StaticSprite : Sprite
+    public class StaticSprite : Sprite
     {
         private Texture2D image = null;
 
