@@ -12,9 +12,8 @@ namespace Spiridios.SpiridiEngine
             ALIVE, DYING, DEAD
         };
 
-        internal static ImageManager imageManager = null;
-
-        private Texture2D image = null;
+        //private Texture2D image = null;
+        private Sprite sprite = null;
 
         public float Rotation { get; set; }
         public bool Collidable { get; set; }
@@ -29,7 +28,7 @@ namespace Spiridios.SpiridiEngine
 
         public Actor(string imageName)
         {
-            image = imageManager.GetImage(imageName);
+            sprite = new StaticSprite(imageName);
             centerOffset = new Vector2(this.Width / 2.0f, this.Height / 2.0f);
 
             Position = new Vector2(0, 0);
@@ -58,12 +57,12 @@ namespace Spiridios.SpiridiEngine
 
         public int Width
         {
-            get { return this.image.Width; }
+            get { return this.sprite.Width; }
         }
 
         public int Height
         {
-            get { return this.image.Height; }
+            get { return this.sprite.Height; }
         }
 
         public Vector2 GetCenter()
@@ -114,9 +113,8 @@ namespace Spiridios.SpiridiEngine
 
         public void DrawSprite(SpriteBatch spriteBatch, Vector2 position)
         {
-            //public void Draw(Texture2D texture, Vector2 position, Rectangle? sourceRectangle, Color color, float rotation, Vector2 origin, float scale, SpriteEffects effects, float layerDepth);
-            //public void Draw(Texture2D texture, Vector2 position, Rectangle? sourceRectangle, Color color, float rotation, Vector2 origin, Vector2 scale, SpriteEffects effects, float layerDepth);
-            spriteBatch.Draw(this.image, this.Position + this.centerOffset, null, this.TintColor, this.Rotation, this.centerOffset, 1.0f, SpriteEffects.None, this.Layer);
+            sprite.Draw(spriteBatch, position, centerOffset, this.TintColor, this.Rotation, this.Layer);
+            //spriteBatch.Draw(this.image, position + this.centerOffset, null, this.TintColor, this.Rotation, this.centerOffset, 1.0f, SpriteEffects.None, this.Layer);
         }
 
         public override void Draw(SpriteBatch spriteBatch)

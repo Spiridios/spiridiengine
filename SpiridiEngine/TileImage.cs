@@ -24,6 +24,13 @@ namespace Spiridios.SpiridiEngine
             get { return tileHeight; }
         }
 
+        public TileImage(SpiridiGame game, string imageName, int tileWidth, int tileHeight)
+        {
+            tileSet = game.ImageManager.GetImage(imageName);
+            this.tileWidth = tileWidth;
+            this.tileHeight = tileHeight;
+        }
+
         public TileImage(SpiridiGame game, XmlReader tileSetReader)
         {
             this.game = game;

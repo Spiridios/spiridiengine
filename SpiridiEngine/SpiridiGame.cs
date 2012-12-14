@@ -10,12 +10,12 @@ namespace Spiridios.SpiridiEngine
     public abstract class SpiridiGame : Microsoft.Xna.Framework.Game
     {
         private static Random random = new Random();
+        internal static ImageManager imageManager = null;
 
         public static readonly Color DefaultClearColor = new Color(0xff, 0x80, 0xc0);
         private Color clearColor = DefaultClearColor;
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
-        protected ImageManager imageManager;
         private Song backgroundMusic;
         private State currentState;
         public TextRenderer DefaultTextRenderer { get; set; }
@@ -35,8 +35,10 @@ namespace Spiridios.SpiridiEngine
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             SetWindowSize(640, 480);
-            this.imageManager = new ImageManager(Content);
-            Actor.imageManager = this.imageManager;
+            if (imageManager == null)
+            {
+                imageManager = new ImageManager(Content);
+            }
 
             SoundManager.Instance = new SoundManager(Content);
             this.currentState = new State(this);
@@ -53,22 +55,12 @@ namespace Spiridios.SpiridiEngine
 
         public ImageManager ImageManager
         {
-            get { return this.imageManager; }
+            get { return SpiridiGame.imageManager; }
         }
 
         public static String NormalizeFilename(String fileName)
         {
-            int dotPos = fileName.LastIndexOf('.');
-            if (dotPos < 0)
-            {
-                return fileName;
-            }
-            else
-            {
-                return fileName.Substring(0, dotPos);
-            }
-            //The following is not supported by JSIL.
-            //return System.IO.Path.ChangeExtension(fileName, null);
+            return System.IO.Path.GetFileNameWithoutExtension(fileName);
         }
 
         public Color ClearColor
