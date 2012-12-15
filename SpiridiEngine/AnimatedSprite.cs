@@ -11,6 +11,7 @@
 **/
 
 using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -18,13 +19,33 @@ namespace Spiridios.SpiridiEngine
 {
     public class AnimatedSprite : Sprite
     {
+        private struct FrameInfo
+        {
+            public FrameInfo(double frameSeconds, int nextFrameIndex)
+            {
+                this.frameSeconds = frameSeconds;
+                this.nextFrameIndex = nextFrameIndex;
+            }
+            public int nextFrameIndex;
+            public double frameSeconds;
+        };
+
         private TileImage image = null;
-        private int currentFrameIndex = 0;
+        private int currentFrameIndex = 1;
+        private Dictionary<int, FrameInfo> frameInfos = new Dictionary<int,FrameInfo>();
+        private double currentFrameElapsedSeconds = 0;
+
 
         public AnimatedSprite(string imageName, int tileWidth, int tileHeight)
             : base()
         {
             image = new TileImage(imageName, tileWidth, tileHeight);
+        }
+
+        public AnimatedSprite AddFrameInfo(int frameNumber, double frameSeconds, int nextFrame)
+        {
+            frameInfos[frameNumber] = new FrameInfo(frameSeconds, nextFrame);
+            return this;
         }
 
         // TODO: most of these parameters should be PROPERTIES of the sprite, not parameters to the draw method.
@@ -46,7 +67,16 @@ namespace Spiridios.SpiridiEngine
 
         public override void Update(TimeSpan elapsedTime)
         {
-            // TODO: switch current frame index.
+            if (frameInfos.Count > 0 && frameInfos.ContainsKey(currentFrameIndex))
+            {
+                currentFrameElapsedSeconds += elapsedTime.TotalSeconds;
+                FrameInfo currentFrameInfo = frameInfos[currentFrameIndex];
+                if (currentFrameElapsedSeconds > currentFrameInfo.frameSeconds)
+                {
+                    currentFrameElapsedSeconds -= currentFrameInfo.frameSeconds;
+                    currentFrameIndex = currentFrameInfo.nextFrameIndex;
+                }
+            }
         }
     }
 }
