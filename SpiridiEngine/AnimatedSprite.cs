@@ -16,31 +16,37 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Spiridios.SpiridiEngine
 {
-    public class StaticSprite : Sprite
+    public class AnimatedSprite : Sprite
     {
-        private Texture2D image = null;
+        private TileImage image = null;
+        private int currentFrameIndex = 0;
 
-        public StaticSprite(string imageName)
+        public AnimatedSprite(string imageName, int tileWidth, int tileHeight)
             : base()
         {
-            image = SpiridiGame.ImageManagerInstance.GetImage(imageName);
+            image = new TileImage(imageName, tileWidth, tileHeight);
         }
 
         // TODO: most of these parameters should be PROPERTIES of the sprite, not parameters to the draw method.
         public override void Draw(SpriteBatch spriteBatch, Vector2 position, Vector2 centerOffset)
         {
-            spriteBatch.Draw(this.image, position + centerOffset, null, TintColor, Rotation, centerOffset, 1.0f, SpriteEffects.None, Layer);
+            Rectangle source = this.image.GetTileSourceRect(currentFrameIndex);
+            spriteBatch.Draw(this.image.Image, position + centerOffset, source, TintColor, Rotation, centerOffset, 1.0f, SpriteEffects.None, Layer);
         }
 
         public override int Width
         {
-            get { return image.Width; }
+            get { return image.TileWidth; }
         }
 
         public override int Height
         {
-            get { return image.Height; }
+            get { return image.TileHeight; }
         }
 
+        public override void Update(TimeSpan elapsedTime)
+        {
+            // TODO: switch current frame index.
+        }
     }
 }

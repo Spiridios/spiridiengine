@@ -21,7 +21,6 @@ namespace Spiridios.SpiridiEngine
     class TileImage
     {
         public const string TILED_ELEMENT = "tileset";
-        private SpiridiGame game;
         private Texture2D tileSet = null;
         private int tileWidth = 0;
         private int tileHeight = 0;
@@ -36,16 +35,15 @@ namespace Spiridios.SpiridiEngine
             get { return tileHeight; }
         }
 
-        public TileImage(SpiridiGame game, string imageName, int tileWidth, int tileHeight)
+        public TileImage(string imageName, int tileWidth, int tileHeight)
         {
-            tileSet = game.ImageManager.GetImage(imageName);
+            tileSet = SpiridiGame.ImageManagerInstance.GetImage(imageName);
             this.tileWidth = tileWidth;
             this.tileHeight = tileHeight;
         }
 
-        public TileImage(SpiridiGame game, XmlReader tileSetReader)
+        public TileImage(XmlReader tileSetReader)
         {
-            this.game = game;
             LoadFromTiledElement(tileSetReader);
         }
 
@@ -64,7 +62,7 @@ namespace Spiridios.SpiridiEngine
                                 break;
                             case ("image"):
                                 string tileSetImageSource = xmlReader.GetAttribute("source");
-                                tileSet = this.game.ImageManager.AddImage(tileSetImageSource, tileSetImageSource);
+                                tileSet = SpiridiGame.ImageManagerInstance.AddImage(tileSetImageSource, tileSetImageSource);
                                 //tileSheetSize.X = int.Parse(tileSetImage.GetAttribute("width"));
                                 //tileSheetSize.Y = int.Parse(tileSetImage.GetAttribute("height"));
                                 break;
@@ -100,12 +98,22 @@ namespace Spiridios.SpiridiEngine
         {
             if (tileId > 0)
             {
-                Vector2 srcCoord = TileImage.GetImageCoordinatesFromOffset(tileId - 1, (tileSet.Width / tileWidth), tileWidth, tileHeight);
-                Rectangle source = new Rectangle((int)srcCoord.X, (int)srcCoord.Y, tileWidth, tileHeight);
-
+                Rectangle source = GetTileSourceRect(tileId);
                 spriteBatch.Draw(this.tileSet, destination, source, Color.White);
             }
 
+        }
+
+        public Texture2D Image
+        {
+            get { return this.tileSet; }
+        }
+
+        public Rectangle GetTileSourceRect(int tileId)
+        {
+            Vector2 srcCoord = TileImage.GetImageCoordinatesFromOffset(tileId - 1, (tileSet.Width / tileWidth), tileWidth, tileHeight);
+            Rectangle source = new Rectangle((int)srcCoord.X, (int)srcCoord.Y, tileWidth, tileHeight);
+            return source;
         }
 
     }

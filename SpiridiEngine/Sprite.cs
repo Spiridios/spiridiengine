@@ -16,19 +16,33 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Spiridios.SpiridiEngine
 {
-    public interface Sprite : Updatable
+    public abstract class Sprite : Updatable
     {
-        int Width
+        public Color TintColor { get; set; }
+        public float Layer { get; set; }
+        public float Rotation { get; set; }
+
+
+        protected Sprite()
+        {
+            TintColor = Color.White;
+            Layer = 0;
+            Rotation = 0;
+        }
+
+
+        public abstract int Width
         {
             get;
         }
 
-        int Height
+        public abstract int Height
         {
             get;
         }
 
-        void Draw(SpriteBatch spriteBatch, Vector2 position, Vector2 centerOffset, Color tintColor, float rotation, float layer);
+        public abstract void Draw(SpriteBatch spriteBatch, Vector2 position, Vector2 centerOffset);
+        public virtual void Update(System.TimeSpan elapsedTime) {}
 
     }
 }

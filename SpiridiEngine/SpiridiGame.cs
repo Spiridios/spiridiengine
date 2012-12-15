@@ -21,7 +21,7 @@ namespace Spiridios.SpiridiEngine
     public abstract class SpiridiGame : Microsoft.Xna.Framework.Game
     {
         private static Random random = new Random();
-        internal static ImageManager imageManager = null;
+        private static ImageManager imageManager = null;
 
         public static readonly Color DefaultClearColor = new Color(0xff, 0x80, 0xc0);
         private Color clearColor = DefaultClearColor;
@@ -65,6 +65,11 @@ namespace Spiridios.SpiridiEngine
         }
 
         public ImageManager ImageManager
+        {
+            get { return SpiridiGame.imageManager; }
+        }
+
+        public static ImageManager ImageManagerInstance
         {
             get { return SpiridiGame.imageManager; }
         }

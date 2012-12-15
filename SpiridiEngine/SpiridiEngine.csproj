@@ -95,6 +95,7 @@
     <Compile Include="Actor.cs" />
     <Compile Include="BeelineBehavior.cs" />
     <Compile Include="Behavior.cs" />
+    <Compile Include="AnimatedSprite.cs" />
     <Compile Include="Drawable.cs" />
     <Compile Include="Explosion.cs" />
     <Compile Include="ImageManager.cs" />

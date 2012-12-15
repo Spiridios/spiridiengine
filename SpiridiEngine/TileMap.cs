@@ -50,7 +50,7 @@ namespace Spiridios.SpiridiEngine
                                 case(TileMap.TILED_ELEMENT):
                                     break;
                                 case(TileImage.TILED_ELEMENT):
-                                    tileSet = new TileImage(game, xmlReader);
+                                    tileSet = new TileImage(xmlReader);
                                     break;
                                 case(TileMapLayer.TILED_ELEMENT):
                                     layers.Add(new TileMapLayer(game, xmlReader));

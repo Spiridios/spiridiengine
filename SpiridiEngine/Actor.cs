@@ -24,32 +24,50 @@ namespace Spiridios.SpiridiEngine
             ALIVE, DYING, DEAD
         };
 
-        //private Texture2D image = null;
         private Sprite sprite = null;
 
-        public float Rotation { get; set; }
         public bool Collidable { get; set; }
         public LifeStage lifeStage { get; set; }
         protected float BoundingRadius { get; set; }
         private Vector2 centerOffset;
-        public Color TintColor { get; set; }
-        public float Layer { get; set; }
 
         private Dictionary<LifeStage, Behavior> stageBehaviors = new Dictionary<LifeStage, Behavior>();
 
-
         public Actor(string imageName)
+            : this(new StaticSprite(imageName))
         {
-            sprite = new StaticSprite(imageName);
+        }
+
+        public Actor(Sprite sprite)
+        {
+            this.sprite = sprite;
             centerOffset = new Vector2(this.Width / 2.0f, this.Height / 2.0f);
 
             Position = new Vector2(0, 0);
             Rotation = 0.0f;
             Collidable = true;
             lifeStage = LifeStage.ALIVE;
-            this.BoundingRadius = this.Width > this.Height ? this.Width/2.0f : this.Height/2.0f;
+            this.BoundingRadius = this.Width > this.Height ? this.Width / 2.0f : this.Height / 2.0f;
             this.TintColor = Color.White;
             this.Layer = 0.0f;
+        }
+
+        public Color TintColor
+        {
+            get { return sprite.TintColor;  }
+            set { sprite.TintColor = value; }
+        }
+
+        public float Rotation
+        {
+            get { return sprite.Rotation; }
+            set { sprite.Rotation = value; }
+        }
+
+        public float Layer
+        {
+            get { return sprite.Layer; }
+            set { sprite.Layer = value; }
         }
 
         public void SetBehavior(LifeStage stage, Behavior behavior)
@@ -108,12 +126,17 @@ namespace Spiridios.SpiridiEngine
             }
         }
 
+        // TODO: Refactor this into a base default behavior.
         public override void Update(TimeSpan elapsedTime)
         {
             if (stageBehaviors.ContainsKey(this.lifeStage))
             {
                 Behavior b = stageBehaviors[this.lifeStage];
                 b.Update(elapsedTime);
+            }
+            else
+            {
+                this.sprite.Update(elapsedTime);
             }
 
         }
@@ -125,10 +148,11 @@ namespace Spiridios.SpiridiEngine
 
         public void DrawSprite(SpriteBatch spriteBatch, Vector2 position)
         {
-            sprite.Draw(spriteBatch, position, centerOffset, this.TintColor, this.Rotation, this.Layer);
+            sprite.Draw(spriteBatch, position, centerOffset);
             //spriteBatch.Draw(this.image, position + this.centerOffset, null, this.TintColor, this.Rotation, this.centerOffset, 1.0f, SpriteEffects.None, this.Layer);
         }
 
+        // TODO: move into default behavior.
         public override void Draw(SpriteBatch spriteBatch)
         {
             if (stageBehaviors.ContainsKey(this.lifeStage))
