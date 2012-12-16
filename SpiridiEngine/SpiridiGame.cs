@@ -217,8 +217,11 @@ namespace Spiridios.SpiridiEngine
 #else
             spriteBatch.Begin(SpriteBlendMode.AlphaBlend, this.spriteSortMode, SaveStateMode.None);
 #endif
-
+// TODO: When Main is fully deprecated (after LD), remove this.
+#pragma warning disable 612, 618
             this.currentState.Main(gameTime);
+#pragma warning restore 612, 618
+            this.currentState.Draw(gameTime);
 
             spriteBatch.End();
 

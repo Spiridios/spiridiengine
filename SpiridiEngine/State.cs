@@ -23,6 +23,7 @@ namespace Spiridios.SpiridiEngine
             this.game = game;
         }
 
+        [System.Obsolete("Main is deprecated, please use Draw instead.",false)]
         public virtual void Main(GameTime gameTime)
         {
         }
@@ -30,6 +31,11 @@ namespace Spiridios.SpiridiEngine
         public virtual void Update(GameTime gameTime)
         {
         }
+
+        public virtual void Draw(GameTime gameTime)
+        {
+        }
+
 
         public virtual void OnClick()
         {
