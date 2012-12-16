@@ -131,6 +131,11 @@ namespace Spiridios.SpiridiEngine
             MediaPlayer.Play(this.backgroundMusic);
         }
 
+        public void StopBackgroundMusic()
+        {
+            MediaPlayer.Stop();
+        }
+
         public abstract void InitObjects();
 
         protected override void LoadContent()
