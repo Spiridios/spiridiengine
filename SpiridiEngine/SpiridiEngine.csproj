@@ -93,6 +93,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Actor.cs" />
+    <Compile Include="Background.cs" />
     <Compile Include="BeelineBehavior.cs" />
     <Compile Include="Behavior.cs" />
     <Compile Include="AnimatedSprite.cs" />
@@ -110,6 +111,7 @@
     <Compile Include="SpiridiGame.cs" />
     <Compile Include="Sprite.cs" />
     <Compile Include="State.cs" />
+    <Compile Include="StaticBackground.cs" />
     <Compile Include="StaticSprite.cs" />
     <Compile Include="TextRenderer.cs" />
     <Compile Include="TileImage.cs" />
@@ -119,6 +121,7 @@
     <Compile Include="Vector2Ext.cs" />
     <Compile Include="XNAExtensions.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
   <!--

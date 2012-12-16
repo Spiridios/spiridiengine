@@ -31,6 +31,8 @@ namespace Spiridios.SpiridiEngine
         };
 
         private TileImage image = null;
+        private Vector2 centerOffset;
+
         private int currentFrameIndex = 1;
         private Dictionary<int, FrameInfo> frameInfos = new Dictionary<int,FrameInfo>();
         private double currentFrameElapsedSeconds = 0;
@@ -40,6 +42,7 @@ namespace Spiridios.SpiridiEngine
             : base()
         {
             image = new TileImage(imageName, tileWidth, tileHeight);
+            centerOffset = new Vector2(tileWidth / 2.0f, tileHeight / 2.0f);
         }
 
         public AnimatedSprite AddFrameInfo(int frameNumber, double frameSeconds, int nextFrame)
@@ -49,10 +52,15 @@ namespace Spiridios.SpiridiEngine
         }
 
         // TODO: most of these parameters should be PROPERTIES of the sprite, not parameters to the draw method.
-        public override void Draw(SpriteBatch spriteBatch, Vector2 position, Vector2 centerOffset)
+        public override void Draw(SpriteBatch spriteBatch, Vector2 position)
         {
             Rectangle source = this.image.GetTileSourceRect(currentFrameIndex);
             spriteBatch.Draw(this.image.Image, position + centerOffset, source, TintColor, Rotation, centerOffset, 1.0f, SpriteEffects.None, Layer);
+        }
+
+        public override Vector2 CenterOffset
+        {
+            get { return this.centerOffset; }
         }
 
         public override int Width

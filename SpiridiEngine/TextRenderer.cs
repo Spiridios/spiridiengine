@@ -33,6 +33,12 @@ namespace Spiridios.SpiridiEngine
             this.color = fontColor;
         }
 
+        public Color TextColor
+        {
+            get { return color;}
+            set { color = value; }
+        }
+
         public void DrawText(SpriteBatch spriteBatch, String text, int x, int y)
         {
             Vector2 extents = this.font.MeasureString(text);

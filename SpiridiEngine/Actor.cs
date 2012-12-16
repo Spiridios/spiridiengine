@@ -29,7 +29,6 @@ namespace Spiridios.SpiridiEngine
         public bool Collidable { get; set; }
         public LifeStage lifeStage { get; set; }
         protected float BoundingRadius { get; set; }
-        private Vector2 centerOffset;
 
         private Dictionary<LifeStage, Behavior> stageBehaviors = new Dictionary<LifeStage, Behavior>();
 
@@ -41,7 +40,6 @@ namespace Spiridios.SpiridiEngine
         public Actor(Sprite sprite)
         {
             this.sprite = sprite;
-            centerOffset = new Vector2(this.Width / 2.0f, this.Height / 2.0f);
 
             Position = new Vector2(0, 0);
             Rotation = 0.0f;
@@ -100,10 +98,10 @@ namespace Spiridios.SpiridiEngine
             return Vector2.Add(this.Position, this.GetCenterOffset());
         }
 
-        // TODO: should this BE public?
-        public Vector2 GetCenterOffset()
+        // TODO: propertize this (darn java day-job)
+        protected Vector2 GetCenterOffset()
         {
-            return this.centerOffset;
+            return this.sprite.CenterOffset;
         }
 
         //TODO: refactor into collidable or base object or something.
@@ -148,7 +146,7 @@ namespace Spiridios.SpiridiEngine
 
         public void DrawSprite(SpriteBatch spriteBatch, Vector2 position)
         {
-            sprite.Draw(spriteBatch, position, centerOffset);
+            sprite.Draw(spriteBatch, position);
             //spriteBatch.Draw(this.image, position + this.centerOffset, null, this.TintColor, this.Rotation, this.centerOffset, 1.0f, SpriteEffects.None, this.Layer);
         }
 

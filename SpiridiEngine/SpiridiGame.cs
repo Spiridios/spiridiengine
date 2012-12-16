@@ -15,6 +15,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
+using Microsoft.Xna.Framework.Input;
 
 namespace Spiridios.SpiridiEngine
 {
@@ -35,6 +36,7 @@ namespace Spiridios.SpiridiEngine
         private int windowWidth;
         private int windowHeight;
 
+        public bool IsQuickExit { get; set; }
         public bool ShowFPS { get; set; }
         private TimeSpan fpsTimer;
         private int frameCount = -1;
@@ -122,7 +124,7 @@ namespace Spiridios.SpiridiEngine
             return Content.Load<SoundEffect>(NormalizeFilename(soundFile));
         }
 
-        protected void PlayBackgroundMusic(String musicFile)
+        public void PlayBackgroundMusic(String musicFile)
         {
             this.backgroundMusic = Content.Load<Song>(NormalizeFilename(musicFile));
             MediaPlayer.IsRepeating = true;
@@ -163,6 +165,10 @@ namespace Spiridios.SpiridiEngine
             if (keyEvent.KeyUp)
             {
                 this.currentState.KeyUp(keyEvent);
+                if (this.IsQuickExit && keyEvent.KeyReleased(Keys.Escape))
+                {
+                    Exit();
+                }
             }
 
             this.currentState.Update(gameTime);

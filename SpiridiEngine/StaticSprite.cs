@@ -19,17 +19,24 @@ namespace Spiridios.SpiridiEngine
     public class StaticSprite : Sprite
     {
         private Texture2D image = null;
+        private Vector2 centerOffset;
 
         public StaticSprite(string imageName)
             : base()
         {
             image = SpiridiGame.ImageManagerInstance.GetImage(imageName);
+            centerOffset = new Vector2(this.Width / 2.0f, this.Height / 2.0f);
         }
 
         // TODO: most of these parameters should be PROPERTIES of the sprite, not parameters to the draw method.
-        public override void Draw(SpriteBatch spriteBatch, Vector2 position, Vector2 centerOffset)
+        public override void Draw(SpriteBatch spriteBatch, Vector2 position)
         {
             spriteBatch.Draw(this.image, position + centerOffset, null, TintColor, Rotation, centerOffset, 1.0f, SpriteEffects.None, Layer);
+        }
+
+        public override Vector2 CenterOffset
+        {
+            get { return this.centerOffset; }
         }
 
         public override int Width

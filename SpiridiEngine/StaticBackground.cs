@@ -16,38 +16,23 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Spiridios.SpiridiEngine
 {
-    public abstract class Sprite : Updatable
+    public class StaticBackground : Background
     {
-        public Color TintColor { get; set; }
-        public float Layer { get; set; }
-        public float Rotation { get; set; }
+        Texture2D backgroundImage;
 
-        protected Sprite()
+        public StaticBackground(string imageName)
         {
-            TintColor = Color.White;
-            Layer = 0;
-            Rotation = 0;
+            backgroundImage = SpiridiGame.ImageManagerInstance.GetImage(imageName);
         }
 
-
-        public abstract Vector2 CenterOffset
+        public void Draw(SpriteBatch spriteBatch)
         {
-            get;
+            spriteBatch.Draw(backgroundImage, new Vector2(0, 0), Color.White);
         }
 
-
-        public abstract int Width
+        public void Update(TimeSpan elapsedTime)
         {
-            get;
         }
-
-        public abstract int Height
-        {
-            get;
-        }
-
-        public abstract void Draw(SpriteBatch spriteBatch, Vector2 position);
-        public virtual void Update(System.TimeSpan elapsedTime) {}
 
     }
 }
