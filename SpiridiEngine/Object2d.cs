@@ -29,7 +29,8 @@ namespace Spiridios.SpiridiEngine
         // TODO: create constructor that accepts one of these.
         protected PositionHandler PositionHandler { get; set; }
 
-        // TODO: make this non-virtual
+        // TODO: make this non-virtual. Note: if this becomes non-virtual, then there NEEDS to be a
+        // PositionUpdated event so child objects can detect a change and react to it.
         public virtual Vector2 Position
         {
             get { return this.PositionHandler.Position; }

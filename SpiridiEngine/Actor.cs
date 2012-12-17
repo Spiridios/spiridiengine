@@ -127,16 +127,14 @@ namespace Spiridios.SpiridiEngine
         // TODO: Refactor this into a base default behavior.
         public override void Update(TimeSpan elapsedTime)
         {
+            // TODO: this is bad - need better seperation between actor and behavior.
+            this.sprite.Update(elapsedTime);
+
             if (stageBehaviors.ContainsKey(this.lifeStage))
             {
                 Behavior b = stageBehaviors[this.lifeStage];
                 b.Update(elapsedTime);
             }
-            else
-            {
-                this.sprite.Update(elapsedTime);
-            }
-
         }
 
         public void DrawSprite(SpriteBatch spriteBatch)
@@ -147,7 +145,6 @@ namespace Spiridios.SpiridiEngine
         public void DrawSprite(SpriteBatch spriteBatch, Vector2 position)
         {
             sprite.Draw(spriteBatch, position);
-            //spriteBatch.Draw(this.image, position + this.centerOffset, null, this.TintColor, this.Rotation, this.centerOffset, 1.0f, SpriteEffects.None, this.Layer);
         }
 
         // TODO: move into default behavior.

@@ -113,6 +113,9 @@ namespace Spiridios.SpiridiEngine
 
         protected void SetWindowSize(int width, int height)
         {
+            // NOTE: See http://stackoverflow.com/questions/720429/how-do-i-set-the-window-screen-size-in-xna
+            // graphics.ApplyChanges() needs to be called if this is changed outside the constructor.
+            // Also see :http://xboxforums.create.msdn.com/forums/p/1031/107718.aspx
             windowWidth = graphics.PreferredBackBufferWidth = width;
             windowHeight = graphics.PreferredBackBufferHeight = height;
         }

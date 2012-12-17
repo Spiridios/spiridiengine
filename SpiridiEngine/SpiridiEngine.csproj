@@ -94,12 +94,13 @@
   <ItemGroup>
     <Compile Include="Actor.cs" />
     <Compile Include="Background.cs" />
-    <Compile Include="BeelineBehavior.cs" />
-    <Compile Include="Behavior.cs" />
-    <Compile Include="AnimatedSprite.cs" />
+    <Compile Include="Behavior\BeelineBehavior.cs" />
+    <Compile Include="Behavior\Behavior.cs" />
+    <Compile Include="Sprite\AnimatedSprite.cs" />
     <Compile Include="Drawable.cs" />
-    <Compile Include="Explosion.cs" />
+    <Compile Include="Behavior\Explosion.cs" />
     <Compile Include="GUI\ImageButton.cs" />
+    <Compile Include="GUI\PercentBar.cs" />
     <Compile Include="GUI\Window.cs" />
     <Compile Include="ImageManager.cs" />
     <Compile Include="Input\KeyboardEvent.cs" />
@@ -111,10 +112,10 @@
     <Compile Include="RadialPositionHandler.cs" />
     <Compile Include="SoundManager.cs" />
     <Compile Include="SpiridiGame.cs" />
-    <Compile Include="Sprite.cs" />
+    <Compile Include="Sprite\Sprite.cs" />
     <Compile Include="State.cs" />
     <Compile Include="StaticBackground.cs" />
-    <Compile Include="StaticSprite.cs" />
+    <Compile Include="Sprite\StaticSprite.cs" />
     <Compile Include="TextRenderer.cs" />
     <Compile Include="TileImage.cs" />
     <Compile Include="TileMap.cs" />

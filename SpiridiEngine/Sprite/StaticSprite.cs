@@ -31,7 +31,14 @@ namespace Spiridios.SpiridiEngine
         // TODO: Should sprite have a position? Right now it's more or less a fancy image.
         public override void Draw(SpriteBatch spriteBatch, Vector2 position)
         {
-            spriteBatch.Draw(this.image, position + centerOffset, null, TintColor, Rotation, centerOffset, 1.0f, SpriteEffects.None, Layer);
+            Rectangle destRect;
+            destRect.X = (int)(position.X + centerOffset.X);
+            destRect.Y = (int)(position.Y + centerOffset.Y);
+            destRect.Width = (int)(this.image.Width);
+            destRect.Height = (int)(this.image.Height);
+
+            spriteBatch.Draw(this.image, destRect, null, TintColor, Rotation, centerOffset, SpriteEffects.None, Layer);
+            //spriteBatch.Draw(this.image, position + centerOffset, null, TintColor, Rotation, centerOffset, 1.0f, SpriteEffects.None, Layer);
         }
 
         public override Vector2 CenterOffset

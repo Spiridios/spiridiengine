@@ -21,6 +21,17 @@ namespace Spiridios.SpiridiEngine
     public class Vector2Ext
     {
         /// <summary>
+        /// Calculate the angle between v1 and v2
+        /// </summary>
+        /// <param name="v1"></param>
+        /// <param name="v2"></param>
+        /// <returns>Angle between v1 and v2, in radians.</returns>
+        public static double AngleOf(Vector2 v1, Vector2 v2)
+        {
+            return Math.Atan2(v2.Y - v1.Y, v2.X - v1.X);
+        }
+
+        /// <summary>
         /// Rotate the vector by theta radians
         /// </summary>
         /// <param name="v"></param>

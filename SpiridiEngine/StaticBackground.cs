@@ -28,6 +28,7 @@ namespace Spiridios.SpiridiEngine
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(backgroundImage, new Vector2(0, 0), Color.White);
+            //spriteBatch.Draw(backgroundImage, new Vector2(0, 0), null, Color.White, 0.0f, new Vector2(0, 0), 1.0f, SpriteEffects.None, 1.0f);
         }
 
         public void Update(TimeSpan elapsedTime)

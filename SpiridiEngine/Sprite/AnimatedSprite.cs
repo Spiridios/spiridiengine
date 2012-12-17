@@ -55,7 +55,15 @@ namespace Spiridios.SpiridiEngine
         public override void Draw(SpriteBatch spriteBatch, Vector2 position)
         {
             Rectangle source = this.image.GetTileSourceRect(currentFrameIndex);
-            spriteBatch.Draw(this.image.Image, position + centerOffset, source, TintColor, Rotation, centerOffset, 1.0f, SpriteEffects.None, Layer);
+            //spriteBatch.Draw(this.image.Image, position + centerOffset, source, TintColor, Rotation, centerOffset, 1.0f, SpriteEffects.None, Layer);
+
+            Rectangle destRect;
+            destRect.X = (int)(position.X + centerOffset.X);
+            destRect.Y = (int)(position.Y + centerOffset.Y);
+            destRect.Width = (int)(this.image.TileWidth);
+            destRect.Height = (int)(this.image.TileHeight);
+
+            spriteBatch.Draw(this.image.Image, destRect, source, TintColor, Rotation, centerOffset, SpriteEffects.None, Layer);
         }
 
         public int CurrentFrame
