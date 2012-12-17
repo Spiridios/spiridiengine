@@ -58,6 +58,12 @@ namespace Spiridios.SpiridiEngine
             spriteBatch.Draw(this.image.Image, position + centerOffset, source, TintColor, Rotation, centerOffset, 1.0f, SpriteEffects.None, Layer);
         }
 
+        public int CurrentFrame
+        {
+            get { return currentFrameIndex; }
+            set { currentFrameIndex = value; }
+        }
+
         public override Vector2 CenterOffset
         {
             get { return this.centerOffset; }

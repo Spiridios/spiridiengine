@@ -7,7 +7,7 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SpiridiEngine</RootNamespace>
+    <RootNamespace>Spiridios.SpiridiEngine</RootNamespace>
     <AssemblyName>SpiridiEngine</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
@@ -28,7 +28,7 @@
     <NoStdLib>true</NoStdLib>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <PlatformTarget>x86</PlatformTarget>
-    <XnaCompressContent>false</XnaCompressContent>
+    <XnaCompressContent>False</XnaCompressContent>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>pdbonly</DebugType>
@@ -99,8 +99,10 @@
     <Compile Include="AnimatedSprite.cs" />
     <Compile Include="Drawable.cs" />
     <Compile Include="Explosion.cs" />
+    <Compile Include="GUI\ImageButton.cs" />
+    <Compile Include="GUI\Window.cs" />
     <Compile Include="ImageManager.cs" />
-    <Compile Include="KeyboardEvent.cs" />
+    <Compile Include="Input\KeyboardEvent.cs" />
     <Compile Include="Object2d.cs" />
     <Compile Include="Particle.cs" />
     <Compile Include="PositionHandler.cs" />

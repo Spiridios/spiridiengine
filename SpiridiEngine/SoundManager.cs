@@ -23,10 +23,15 @@ namespace Spiridios.SpiridiEngine
     {
         private static SoundManager instance;
 
+        // TODO: Should probably not have a public setter on this.
         public static SoundManager Instance
         {
             get { return instance; }
-            set { instance = value; }
+        }
+
+        internal static void SetInstance(SoundManager instance)
+        {
+            SoundManager.instance = instance;
         }
 
         Dictionary<string, SoundEffect> soundEffects = new Dictionary<string, SoundEffect>();

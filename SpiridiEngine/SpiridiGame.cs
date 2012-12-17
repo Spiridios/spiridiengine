@@ -26,35 +26,43 @@ namespace Spiridios.SpiridiEngine
 
         public static readonly Color DefaultClearColor = new Color(0xff, 0x80, 0xc0);
         private Color clearColor = DefaultClearColor;
+
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
         private Song backgroundMusic;
         private State currentState;
+
         public TextRenderer DefaultTextRenderer { get; set; }
+
         private KeyboardEvent keyEvent;
-        private SpriteSortMode spriteSortMode { get; set; }
+        private SpriteSortMode SpriteSortMode { get; set; }
         private int windowWidth;
         private int windowHeight;
 
         public bool IsQuickExit { get; set; }
+
         public bool ShowFPS { get; set; }
         private TimeSpan fpsTimer;
         private int frameCount = -1;
         private float fps = 0.0f;
+        public Vector2 FPSPosition { get; set; }
 
         public SpiridiGame()
         {
-            this.spriteSortMode = SpriteSortMode.Deferred;
-            graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            SetWindowSize(640, 480);
+            graphics = new GraphicsDeviceManager(this);
+            SoundManager.SetInstance(new SoundManager(Content));
+
             if (imageManager == null)
             {
                 imageManager = new ImageManager(Content);
             }
 
-            SoundManager.Instance = new SoundManager(Content);
+            SetWindowSize(640, 480);
+
             this.currentState = new State(this);
+            this.SpriteSortMode = SpriteSortMode.Deferred;
+            this.FPSPosition = new Vector2(2, 2);
         }
 
         /// <summary>
@@ -136,6 +144,7 @@ namespace Spiridios.SpiridiEngine
             MediaPlayer.Stop();
         }
 
+        // TODO: I don't think this is needed anymore.
         public abstract void InitObjects();
 
         protected override void LoadContent()
@@ -150,7 +159,6 @@ namespace Spiridios.SpiridiEngine
             spriteBatch = new SpriteBatch(GraphicsDevice);
             keyEvent = new KeyboardEvent();
         }
-
 
         protected override void UnloadContent()
         {
@@ -188,7 +196,7 @@ namespace Spiridios.SpiridiEngine
         {
             if (this.ShowFPS)
             {
-                this.DrawText(String.Format("{0:0.0} FPS", this.fps),2,2);
+                this.DrawText(String.Format("{0:0.0} FPS", this.fps),(int)FPSPosition.X,(int)FPSPosition.Y);
             }
         }
 
@@ -213,11 +221,11 @@ namespace Spiridios.SpiridiEngine
             this.frameCount++;
 
 #if(!SILVERLIGHT)
-            spriteBatch.Begin(this.spriteSortMode, BlendState.NonPremultiplied);
+            spriteBatch.Begin(this.SpriteSortMode, BlendState.NonPremultiplied);
 #else
-            spriteBatch.Begin(SpriteBlendMode.AlphaBlend, this.spriteSortMode, SaveStateMode.None);
+            spriteBatch.Begin(SpriteBlendMode.AlphaBlend, this.SpriteSortMode, SaveStateMode.None);
 #endif
-// TODO: When Main is fully deprecated (after LD), remove this.
+// TODO: When Main is fully deprecated (after LD), remove this block.
 #pragma warning disable 612, 618
             this.currentState.Main(gameTime);
 #pragma warning restore 612, 618

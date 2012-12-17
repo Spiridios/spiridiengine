@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("SpiridiEngine")]
 [assembly: AssemblyProduct("SpiridiEngine")]
 [assembly: AssemblyDescription("Spiridios XNA Game Engine")]
-[assembly: AssemblyCompany("Spiridios")]
+[assembly: AssemblyCompany("Eidolon World")]
 [assembly: AssemblyCopyright("Copyright © Micah Lieske 2012")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
