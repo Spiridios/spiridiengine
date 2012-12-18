@@ -99,7 +99,8 @@ namespace Spiridios.SpiridiEngine
         }
 
         // TODO: propertize this (darn java day-job)
-        protected Vector2 GetCenterOffset()
+        // TODO: should this be public?
+        public Vector2 GetCenterOffset()
         {
             return this.sprite.CenterOffset;
         }

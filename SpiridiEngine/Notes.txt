@@ -1,0 +1,6 @@
+﻿TODO:
+
+Need some way for Actors and Behaviors to access information about the screen.
+Need some way for user defined behaviors to access game state specific logic.
+Since all Behaviors require an actor reference, should there be some standard way for an actor to attach itself?
+Behavior.Actor should be renamed, since it clashes with the class Actor.

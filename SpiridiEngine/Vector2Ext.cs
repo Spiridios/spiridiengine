@@ -28,7 +28,7 @@ namespace Spiridios.SpiridiEngine
         /// <returns>Angle between v1 and v2, in radians.</returns>
         public static double AngleOf(Vector2 v1, Vector2 v2)
         {
-            return Math.Atan2(v2.Y - v1.Y, v2.X - v1.X);
+            return Math.Atan2(v1.X, v1.Y) - Math.Atan2(v2.X, v2.Y);
         }
 
         /// <summary>

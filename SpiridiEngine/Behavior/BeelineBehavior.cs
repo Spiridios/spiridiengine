@@ -27,6 +27,12 @@ namespace Spiridios.SpiridiEngine
             velocity = velocity * speed;
         }
 
+        public BeelineBehavior(Actor actor, Vector2 velocity)
+            : base(actor)
+        {
+            this.velocity = velocity;
+        }
+
         public override void Update(TimeSpan elapsedTime)
         {
             base.Update(elapsedTime);

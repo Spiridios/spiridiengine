@@ -21,11 +21,15 @@ namespace Spiridios.SpiridiEngine
         private List<Actor> particles = new List<Actor>();
         private int numParticles;
         private bool exploding = false;
+        private string particleImageName;
+        private string explosionSoundName;
 
-        public Explosion(Actor actor, int numParticles)
+        public Explosion(Actor actor, string explosionSound, string particleImage, int numParticles)
             : base(actor)
         {
             this.numParticles = numParticles;
+            this.particleImageName = particleImage;
+            this.explosionSoundName = explosionSound;
         }
 
         public override void Update(TimeSpan elapsedTime)
@@ -55,10 +59,14 @@ namespace Spiridios.SpiridiEngine
             this.exploding = true;
             for (int i = 0; i < this.numParticles; i++)
             {
-                Actor spr = Particle.CreateExplosionParticle("particle", position);
+                Actor spr = Particle.CreateExplosionParticle(this.particleImageName, position);
                 this.particles.Add(spr);
             }
-            SoundManager.Instance.PlaySound("explosion");
+
+            if (explosionSoundName != null)
+            {
+                SoundManager.Instance.PlaySound(this.explosionSoundName);
+            }
         }
     }
 }
