@@ -33,8 +33,7 @@ namespace Spiridios.SpiridiEngine
             b.Speed = 100;
             b.SpeedVariance = 100;
             b.StartColor = Color.Red;
-            Color e = Color.Red;
-            e.A = 0x0;
+            Color e = new Color(0,0,0,0);
             b.EndColor = e;
 
             return b.Build();

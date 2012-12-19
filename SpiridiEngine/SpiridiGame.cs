@@ -224,7 +224,7 @@ namespace Spiridios.SpiridiEngine
             this.frameCount++;
 
 #if(!SILVERLIGHT)
-            spriteBatch.Begin(this.SpriteSortMode, BlendState.NonPremultiplied);
+            spriteBatch.Begin(this.SpriteSortMode, BlendState.AlphaBlend);
 #else
             spriteBatch.Begin(SpriteBlendMode.AlphaBlend, this.SpriteSortMode, SaveStateMode.None);
 #endif
