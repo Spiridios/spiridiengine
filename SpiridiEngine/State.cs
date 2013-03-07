@@ -23,6 +23,11 @@ namespace Spiridios.SpiridiEngine
             this.game = game;
         }
 
+        // TODO: have this automagically called when states change?
+        public virtual void Initialize()
+        {
+        }
+
         [System.Obsolete("Main is deprecated, please use Draw instead.",false)]
         public virtual void Main(GameTime gameTime)
         {

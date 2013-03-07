@@ -148,7 +148,7 @@ namespace Spiridios.SpiridiEngine
         }
 
         // TODO: I don't think this is needed anymore.
-        public abstract void InitObjects();
+        public virtual void InitObjects() { }
 
         protected override void LoadContent()
         {

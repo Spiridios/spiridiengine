@@ -97,6 +97,7 @@
     <Compile Include="Behavior\BeelineBehavior.cs" />
     <Compile Include="Behavior\Behavior.cs" />
     <Compile Include="Behavior\BulletBehavior.cs" />
+    <Compile Include="BootState.cs" />
     <Compile Include="Sprite\AnimatedSprite.cs" />
     <Compile Include="Drawable.cs" />
     <Compile Include="Behavior\Explosion.cs" />
