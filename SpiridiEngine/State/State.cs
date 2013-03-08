@@ -7,7 +7,7 @@
 
     SpiridiEngine is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License along with Foobar. If not, see http://www.gnu.org/licenses/.
+    You should have received a copy of the GNU General Public License along with SpiridiEngine. If not, see http://www.gnu.org/licenses/.
 **/
 
 using Microsoft.Xna.Framework;
@@ -23,7 +23,6 @@ namespace Spiridios.SpiridiEngine
             this.game = game;
         }
 
-        // TODO: have this automagically called when states change?
         public virtual void Initialize()
         {
         }
@@ -37,6 +36,7 @@ namespace Spiridios.SpiridiEngine
         {
         }
 
+        // TODO: this needs to take a spriteBatch, you should NOT be forced to fetch it from Game.
         public virtual void Draw(GameTime gameTime)
         {
         }

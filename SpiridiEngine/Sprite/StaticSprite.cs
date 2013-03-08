@@ -7,7 +7,7 @@
 
     SpiridiEngine is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License along with Foobar. If not, see http://www.gnu.org/licenses/.
+    You should have received a copy of the GNU General Public License along with SpiridiEngine. If not, see http://www.gnu.org/licenses/.
 **/
 
 using System;
@@ -38,7 +38,6 @@ namespace Spiridios.SpiridiEngine
             destRect.Height = (int)(this.image.Height);
 
             spriteBatch.Draw(this.image, destRect, null, TintColor, Rotation, centerOffset, SpriteEffects.None, Layer);
-            //spriteBatch.Draw(this.image, position + centerOffset, null, TintColor, Rotation, centerOffset, 1.0f, SpriteEffects.None, Layer);
         }
 
         public override Vector2 CenterOffset

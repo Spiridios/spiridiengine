@@ -29,12 +29,10 @@ namespace Spiridios.SpiridiEngine
             Rotation = 0;
         }
 
-
         public abstract Vector2 CenterOffset
         {
             get;
         }
-
 
         public abstract int Width
         {

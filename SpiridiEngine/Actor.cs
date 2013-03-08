@@ -138,12 +138,12 @@ namespace Spiridios.SpiridiEngine
             }
         }
 
-        public void DrawSprite(SpriteBatch spriteBatch)
+        internal void DrawSprite(SpriteBatch spriteBatch)
         {
             this.DrawSprite(spriteBatch, this.Position);
         }
 
-        public void DrawSprite(SpriteBatch spriteBatch, Vector2 position)
+        internal void DrawSprite(SpriteBatch spriteBatch, Vector2 position)
         {
             sprite.Draw(spriteBatch, position);
         }

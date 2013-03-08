@@ -7,7 +7,7 @@
 
     SpiridiEngine is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License along with Foobar. If not, see http://www.gnu.org/licenses/.
+    You should have received a copy of the GNU General Public License along with SpiridiEngine. If not, see http://www.gnu.org/licenses/.
 **/
 
 using System;
@@ -28,7 +28,6 @@ namespace Spiridios.SpiridiEngine
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(backgroundImage, new Vector2(0, 0), Color.White);
-            //spriteBatch.Draw(backgroundImage, new Vector2(0, 0), null, Color.White, 0.0f, new Vector2(0, 0), 1.0f, SpriteEffects.None, 1.0f);
         }
 
         public void Update(TimeSpan elapsedTime)
