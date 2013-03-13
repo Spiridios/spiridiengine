@@ -12,6 +12,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Xml;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -19,6 +21,9 @@ namespace Spiridios.SpiridiEngine
 {
     public class AnimatedSprite : Sprite
     {
+        private const string XML_CONFIG_ROOT_ELEMENT = "AnimatedSprite";
+        private const string XML_CONFIG_FRAME_ELEMENT = "Frame";
+
         private struct FrameInfo
         {
             public FrameInfo(double frameSeconds, int nextFrameIndex)
@@ -41,8 +46,90 @@ namespace Spiridios.SpiridiEngine
         public AnimatedSprite(string imageName, int tileWidth, int tileHeight)
             : base()
         {
+            CreateSprite(imageName, tileWidth, tileHeight);
+        }
+
+        public AnimatedSprite(string imageName, int tileWidth, int tileHeight, int startingFrame)
+            : this(imageName, tileWidth, tileHeight)
+        {
+            this.currentFrameIndex = startingFrame;
+        }
+
+        private void CreateSprite(string imageName, int tileWidth, int tileHeight)
+        {
+            if (!SpiridiGame.ImageManagerInstance.ImageExists(imageName))
+            {
+                SpiridiGame.ImageManagerInstance.AddImage(imageName, imageName);
+            }
             image = new TileImage(imageName, tileWidth, tileHeight);
             centerOffset = new Vector2(tileWidth / 2.0f, tileHeight / 2.0f);
+        }
+
+        public AnimatedSprite(string xmlAnimationFile)
+            : base()
+        {
+            LoadXML(xmlAnimationFile);
+        }
+
+        private void LoadXML(string xmlAnimationName)
+        {
+            using (FileStream fileStream = new FileStream(xmlAnimationName, FileMode.Open))
+            {
+                using (XmlReader xmlReader = XmlReader.Create(fileStream))
+                {
+
+                    while (xmlReader.Read())
+                    {
+                        if (xmlReader.IsStartElement())
+                        {
+                            switch (xmlReader.Name)
+                            {
+                                case (AnimatedSprite.XML_CONFIG_ROOT_ELEMENT):
+                                    int tileWidth = int.Parse(xmlReader.GetAttribute("tileWidth"));
+                                    int tileHeight = int.Parse(xmlReader.GetAttribute("tileHeight"));
+                                    string imageName = xmlReader.GetAttribute("image");
+                                    CreateSprite(imageName, tileWidth, tileHeight);
+                                    this.currentFrameIndex = int.Parse(xmlReader.GetAttribute("startFrame"));
+                                    break;
+                                case (AnimatedSprite.XML_CONFIG_FRAME_ELEMENT):
+                                    LoadXMLFrame(xmlReader);
+                                    break;
+                                default:
+                                    throw new InvalidDataException(String.Format("Unsupported tag '{0}'", xmlReader.Name));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private void LoadXMLFrame(XmlReader xmlReader)
+        {
+            do
+            {
+                switch (xmlReader.NodeType)
+                {
+                    case (XmlNodeType.Element):
+                        switch (xmlReader.Name)
+                        {
+                            case (AnimatedSprite.XML_CONFIG_FRAME_ELEMENT):
+                                int number = int.Parse(xmlReader.GetAttribute("number"));
+                                double time = double.Parse(xmlReader.GetAttribute("time"));
+                                int nextFrame = int.Parse(xmlReader.GetAttribute("nextFrame"));
+                                AddFrameInfo(number, time, nextFrame);
+                                break;
+                            default:
+                                throw new InvalidDataException(String.Format("TileImage: Unsupported node '{0}'", xmlReader.Name));
+                        }
+                        break;
+                    case (XmlNodeType.EndElement):
+                        if (xmlReader.Name == AnimatedSprite.XML_CONFIG_FRAME_ELEMENT)
+                        {
+                            return;
+                        }
+                        break;
+                }
+            } while (xmlReader.Read());
         }
 
         public AnimatedSprite AddFrameInfo(int frameNumber, double frameSeconds, int nextFrame)

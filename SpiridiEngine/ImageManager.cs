@@ -65,6 +65,11 @@ namespace Spiridios.SpiridiEngine
             return this.images[imageName];
         }
 
+        public bool ImageExists(string imageName)
+        {
+            return this.images.ContainsKey(imageName);
+        }
+
         internal void Clear()
         {
             this.images.Clear();

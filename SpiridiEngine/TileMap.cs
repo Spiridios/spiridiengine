@@ -20,7 +20,7 @@ namespace Spiridios.SpiridiEngine
 {
     public class TileMap : Drawable
     {
-        public const string TILED_ELEMENT = "map";
+        private const string TILED_ELEMENT = "map";
         private SpiridiGame game;
 
         // Need multiples of these.

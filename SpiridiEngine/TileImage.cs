@@ -71,7 +71,7 @@ namespace Spiridios.SpiridiEngine
                         }
                         break;
                     case (XmlNodeType.EndElement):
-                        if (xmlReader.Name == TILED_ELEMENT)
+                        if (xmlReader.Name == TileImage.TILED_ELEMENT)
                         {
                             return;
                         }
