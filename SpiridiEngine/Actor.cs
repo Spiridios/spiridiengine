@@ -68,6 +68,11 @@ namespace Spiridios.SpiridiEngine
             set { sprite.Layer = value; }
         }
 
+        protected Sprite Sprite
+        {
+            get { return this.sprite; }
+        }
+
         public void SetBehavior(LifeStage stage, Behavior behavior)
         {
             this.stageBehaviors[stage] = behavior;

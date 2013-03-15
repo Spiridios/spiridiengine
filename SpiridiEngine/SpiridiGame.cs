@@ -74,6 +74,11 @@ namespace Spiridios.SpiridiEngine
             get { return random; }
         }
 
+        public KeyboardEvent KeyboardEvent
+        {
+            get { return this.keyEvent; }
+        }
+
         public ImageManager ImageManager
         {
             get { return SpiridiGame.imageManager; }
@@ -173,12 +178,12 @@ namespace Spiridios.SpiridiEngine
             base.Update(gameTime);
             // Get key/mouse state?
             keyEvent.Update();
-            if (keyEvent.KeyDown)
+            if (keyEvent.AnyKeyDown)
             {
                 this.currentState.KeyDown(keyEvent);
             }
 
-            if (keyEvent.KeyUp)
+            if (keyEvent.AnyKeyUp)
             {
                 this.currentState.KeyUp(keyEvent);
                 if (this.IsQuickExit && keyEvent.KeyReleased(Keys.Escape))

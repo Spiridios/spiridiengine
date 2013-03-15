@@ -7,7 +7,7 @@
 
     SpiridiEngine is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License along with Foobar. If not, see http://www.gnu.org/licenses/.
+    You should have received a copy of the GNU General Public License along with SpiridiEngine. If not, see http://www.gnu.org/licenses/.
 **/
 
 using System;
@@ -37,8 +37,8 @@ namespace Spiridios.SpiridiEngine
 
         public KeyboardState KeyboardState { get { return currentState; } }
 
-        public bool KeyDown { get { return this.keysPressed.Count > 0; } }
-        public bool KeyUp { get { return this.keysReleased.Count > 0; } }
+        internal bool AnyKeyDown { get { return this.keysPressed.Count > 0; } }
+        internal bool AnyKeyUp { get { return this.keysReleased.Count > 0; } }
 
 
         public bool KeyPressed(Keys key)
@@ -51,6 +51,15 @@ namespace Spiridios.SpiridiEngine
             return keysReleased.Contains(key);
         }
 
+        public bool IsKeyDown(Keys key)
+        {
+            return currentState.IsKeyDown(key);
+        }
+
+        public bool IsKeyUp(Keys key)
+        {
+            return currentState.IsKeyUp(key);
+        }
 
         public void Update()
         {
@@ -79,6 +88,10 @@ namespace Spiridios.SpiridiEngine
             keysPressed = new HashSet<Keys>();
         }
 
+        /// <summary>
+        /// Determine which keys were pressed or released in the last update
+        /// </summary>
+        /// <param name="currentKeys"></param>
         private void UpdateKeySets(Keys[] currentKeys)
         {
             InitKeySets();
