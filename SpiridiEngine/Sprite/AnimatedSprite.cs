@@ -153,6 +153,8 @@ namespace Spiridios.SpiridiEngine
                                 string frameTimeString = xmlReader.GetAttribute("frameTime");
                                 double frameTime = frameTimeString == null ? defaultFrameTime : double.Parse(frameTimeString);
                                 AddFrame(animationName, tileNumber, frameTime);
+                                if (xmlReader.IsEmptyElement)
+                                    return;
                                 break;
                             default:
                                 throw new InvalidDataException(String.Format("TileImage: Unsupported node '{0}'", xmlReader.Name));
@@ -217,6 +219,12 @@ namespace Spiridios.SpiridiEngine
                 this.currentAnimation = value;
                 this.CurrentFrame = 0;
             }
+        }
+
+        public AnimatedSprite SetCurrentAnimation(string currentAnimation)
+        {
+            this.CurrentAnimation = currentAnimation;
+            return this;
         }
 
         public override Vector2 CenterOffset

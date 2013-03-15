@@ -26,7 +26,11 @@ namespace Spiridios.SpiridiEngine
             this.PositionHandler = new PositionHandler();
         }
 
-        // TODO: create constructor that accepts one of these.
+        public Object2d(PositionHandler positionHandler)
+        {
+            this.PositionHandler = positionHandler;
+        }
+
         protected PositionHandler PositionHandler { get; set; }
 
         // TODO: make this non-virtual. Note: if this becomes non-virtual, then there NEEDS to be a
