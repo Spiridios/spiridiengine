@@ -7,7 +7,7 @@
 
     SpiridiEngine is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License along with Foobar. If not, see http://www.gnu.org/licenses/.
+    You should have received a copy of the GNU General Public License along with SpiridiEngine. If not, see http://www.gnu.org/licenses/.
 **/
 
 using System;
@@ -21,8 +21,12 @@ namespace Spiridios.SpiridiEngine
 {
     public abstract class SpiridiGame : Microsoft.Xna.Framework.Game
     {
+        // TODO: Replace this with a mersenne twister. Check out starfield for a decent implementation.
         private static Random random = new Random();
+        // TODO: I don't think there should be a single image manager unless it understands level sets.
         private static ImageManager imageManager = null;
+
+        private InputManager inputManager;
 
         public static readonly Color DefaultClearColor = new Color(0xff, 0x80, 0xc0);
         private Color clearColor = DefaultClearColor;
@@ -34,7 +38,7 @@ namespace Spiridios.SpiridiEngine
 
         public TextRenderer DefaultTextRenderer { get; set; }
 
-        private KeyboardEvent keyEvent;
+
         private SpriteSortMode SpriteSortMode { get; set; }
         private int windowWidth;
         private int windowHeight;
@@ -74,19 +78,20 @@ namespace Spiridios.SpiridiEngine
             get { return random; }
         }
 
-        public KeyboardEvent KeyboardEvent
-        {
-            get { return this.keyEvent; }
-        }
-
         public ImageManager ImageManager
         {
             get { return SpiridiGame.imageManager; }
         }
 
+        // TODO: I don't want a single static instance of this.
         public static ImageManager ImageManagerInstance
         {
             get { return SpiridiGame.imageManager; }
+        }
+
+        internal InputManager InputManager
+        {
+            get { return inputManager; }
         }
 
         public static String NormalizeFilename(String fileName)
@@ -114,6 +119,11 @@ namespace Spiridios.SpiridiEngine
         {
             get { return currentState; }
             set { currentState = value; }
+        }
+
+        public State CurrentState
+        {
+            get { return currentState; }
         }
 
         protected void SetWindowSize(int width, int height)
@@ -165,7 +175,7 @@ namespace Spiridios.SpiridiEngine
         {
             base.Initialize();
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            keyEvent = new KeyboardEvent();
+            inputManager = new InputManager(this);
         }
 
         protected override void UnloadContent()
@@ -173,23 +183,16 @@ namespace Spiridios.SpiridiEngine
             base.UnloadContent();
         }
 
-        protected override void Update(GameTime gameTime)
+        protected sealed override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
             // Get key/mouse state?
-            keyEvent.Update();
-            if (keyEvent.AnyKeyDown)
-            {
-                this.currentState.KeyDown(keyEvent);
-            }
+            inputManager.Update(gameTime);
 
-            if (keyEvent.AnyKeyUp)
+            // TODO: This needs to be an event, not a poll.
+            if (this.IsQuickExit && this.inputManager.IsTriggered(InputManager.QUICK_EXIT_CONTROL))
             {
-                this.currentState.KeyUp(keyEvent);
-                if (this.IsQuickExit && keyEvent.KeyReleased(Keys.Escape))
-                {
-                    Exit();
-                }
+                Exit();
             }
 
             this.currentState.Update(gameTime);

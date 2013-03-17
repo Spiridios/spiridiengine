@@ -216,8 +216,11 @@ namespace Spiridios.SpiridiEngine
             get { return this.currentAnimation; }
             set
             {
-                this.currentAnimation = value;
-                this.CurrentFrame = 0;
+                if (this.currentAnimation != value)
+                {
+                    this.currentAnimation = value;
+                    this.CurrentFrame = 0;
+                }
             }
         }
 

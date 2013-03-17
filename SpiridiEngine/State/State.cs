@@ -17,14 +17,20 @@ namespace Spiridios.SpiridiEngine
     public class State
     {
         protected SpiridiGame game;
+        protected InputManager inputManager;
 
         public State(SpiridiGame game)
         {
             this.game = game;
+            this.inputManager = game.InputManager;
         }
 
         public virtual void Initialize()
         {
+            if (inputManager == null)
+            {
+                this.inputManager = game.InputManager;
+            }
         }
 
         [System.Obsolete("Main is deprecated, please use Draw instead.",false)]

@@ -1,5 +1,5 @@
 ﻿/**
-    Copyright 2012 Micah Lieske
+    Copyright 2013 Micah Lieske
 
     This file is part of SpiridiEngine.
 
@@ -37,31 +37,56 @@ namespace Spiridios.SpiridiEngine
 
         public KeyboardState KeyboardState { get { return currentState; } }
 
-        internal bool AnyKeyDown { get { return this.keysPressed.Count > 0; } }
-        internal bool AnyKeyUp { get { return this.keysReleased.Count > 0; } }
+        /// <summary>
+        /// Returns true if any keys were pressed since the last poll interval
+        /// </summary>
+        internal bool WereAnyKeysPressed { get { return this.keysPressed.Count > 0; } }
+        /// <summary>
+        /// Returns true if any keys were released since the last poll interval
+        /// </summary>
+        internal bool WereAnyKeysReleased { get { return this.keysReleased.Count > 0; } }
 
-
+        /// <summary>
+        /// Determines whether the given key was pressed since the last poll interval
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public bool KeyPressed(Keys key)
         {
             return keysPressed.Contains(key);
         }
 
+        /// <summary>
+        /// Determines whether the given key was released since the last poll interval
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public bool KeyReleased(Keys key)
         {
             return keysReleased.Contains(key);
         }
 
+        /// <summary>
+        /// Returns true if the specified key is currently pressed.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public bool IsKeyDown(Keys key)
         {
             return currentState.IsKeyDown(key);
         }
 
+        /// <summary>
+        /// Returns true if the specified key is currently released.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public bool IsKeyUp(Keys key)
         {
             return currentState.IsKeyUp(key);
         }
 
-        public void Update()
+        internal void Update()
         {
             this.lastState = this.currentState;
 
@@ -89,7 +114,7 @@ namespace Spiridios.SpiridiEngine
         }
 
         /// <summary>
-        /// Determine which keys were pressed or released in the last update
+        /// Determine which keys were pressed or released during the last update
         /// </summary>
         /// <param name="currentKeys"></param>
         private void UpdateKeySets(Keys[] currentKeys)
