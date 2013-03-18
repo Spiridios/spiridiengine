@@ -89,7 +89,7 @@ namespace Spiridios.SpiridiEngine
             get { return SpiridiGame.imageManager; }
         }
 
-        internal InputManager InputManager
+        public InputManager InputManager
         {
             get { return inputManager; }
         }
@@ -190,7 +190,7 @@ namespace Spiridios.SpiridiEngine
             inputManager.Update(gameTime);
 
             // TODO: This needs to be an event, not a poll.
-            if (this.IsQuickExit && this.inputManager.IsTriggered(InputManager.QUICK_EXIT_CONTROL))
+            if (this.IsQuickExit && this.inputManager.IsTriggered(InputManager.QUICK_EXIT_ACTION))
             {
                 Exit();
             }

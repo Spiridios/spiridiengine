@@ -22,25 +22,18 @@ namespace Spiridios.SpiridiEngine
 {
     public class InputManager
     {
-        public const string QUICK_EXIT_CONTROL = "QuickExit";
+        public const string QUICK_EXIT_ACTION = "QuickExit";
 
         private SpiridiGame game;
         private KeyboardEvent keyEvent;
-        private Dictionary<string, Keys> continuousBindings = new Dictionary<string, Keys>();
-        private Dictionary<string, Keys> momentaryBindings = new Dictionary<string, Keys>();
+        private Dictionary<string, Keys> keyBindings = new Dictionary<string, Keys>();
         
         public InputManager(SpiridiGame game)
         {
             this.game = game;
             keyEvent = new KeyboardEvent();
 
-            this.RegisterMomentaryInput(QUICK_EXIT_CONTROL, Keys.Escape);
-        }
-
-        // TODO: this seems hacky.
-        internal KeyboardEvent KeyboardEvent
-        {
-            get { return keyEvent; }
+            this.RegisterActionBinding(QUICK_EXIT_ACTION, Keys.Escape);
         }
 
         internal void Update(GameTime gameTime)
@@ -59,36 +52,42 @@ namespace Spiridios.SpiridiEngine
             }
         }
 
-        public void RegisterMomentaryInput(string controlName, Keys keyBind)
+        public void RegisterActionBinding(string controlName, Keys keyBind)
         {
-            momentaryBindings.Add(controlName, keyBind);
+            keyBindings.Add(controlName, keyBind);
         }
 
         public bool IsTriggered(string controlName)
         {
             bool triggered = false;
             Keys binding;
-            if (momentaryBindings.TryGetValue(controlName, out binding))
+            if (keyBindings.TryGetValue(controlName, out binding))
             {
                 triggered = keyEvent.KeyPressed(binding);
             }
             return triggered;
         }
 
-        public void RegisterContinuousInput(string controlName, Keys keyBind)
-        {
-            continuousBindings.Add(controlName, keyBind);
-        }
-
         public bool IsActive(string controlName)
         {
             bool active = false;
             Keys binding;
-            if (continuousBindings.TryGetValue(controlName, out binding))
+            if (keyBindings.TryGetValue(controlName, out binding))
             {
                 active = keyEvent.IsKeyDown(binding);
             }
             return active;
+        }
+
+        public bool IsFinished(string controlName)
+        {
+            bool finished = false;
+            Keys binding;
+            if (keyBindings.TryGetValue(controlName, out binding))
+            {
+                finished = keyEvent.KeyReleased(binding);
+            }
+            return finished;
         }
 
         public double GetCurrentRange(string controlName)

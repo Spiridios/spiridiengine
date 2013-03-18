@@ -1,5 +1,5 @@
 ﻿/**
-    Copyright 2012 Micah Lieske
+    Copyright 2013 Micah Lieske
 
     This file is part of SpiridiEngine.
 
@@ -30,17 +30,31 @@ namespace Spiridios.SpiridiEngine
         }
 
         /// <summary>
-        /// Adds an image to the image manager
+        /// Adds an image to the image manager. If the image already exits, then the existing image is used.
         /// </summary>
         /// <param name="imageName">The internal name for the image</param>
         /// <param name="imageSrc">The actual image name</param>
+        /// <returns>The image just added.</returns>
         public Texture2D AddImage(string imageName, string imageSrc)
         {
-            if (this.images.ContainsKey(imageName))
+            Texture2D tex;
+            if (!this.images.TryGetValue(imageName, out tex))
             {
-                throw new Exception(String.Format("An image named '{0}' already exists.", imageName));
+                // Load image
+                tex = this.GetImageNoCache(imageSrc);
+                this.images[imageName] = tex;
             }
-            // Load image
+            return tex;
+        }
+
+        /// <summary>
+        /// Replaces an existing image in the image manager. If the image doesn't exist, it is added.
+        /// </summary>
+        /// <param name="imageName">The internal name for the image</param>
+        /// <param name="imageSrc">The actual image name</param>
+        /// <returns>The image just added.</returns>
+        public Texture2D ReplaceImage(string imageName, string imageSrc)
+        {
             Texture2D tex = this.GetImageNoCache(imageSrc);
             this.images[imageName] = tex;
             return tex;
