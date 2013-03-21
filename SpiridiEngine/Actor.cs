@@ -19,6 +19,25 @@ namespace Spiridios.SpiridiEngine
 {
     public class Actor : Object2d
     {
+        public class AscendingYComparitor : IComparer<Actor>
+        {
+            public int Compare(Actor a, Actor b)
+            {
+                if (a.Position.Y < b.Position.Y)
+                {
+                    return -1;
+                }
+                else if (a.Position.Y > b.Position.Y)
+                {
+                    return 1;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+        }
+
         public enum LifeStage
         {
             ALIVE, DYING, DEAD

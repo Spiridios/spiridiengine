@@ -38,7 +38,7 @@ namespace Spiridios.SpiridiEngine
             this.tileSet = tileSet;
         }
 
-        internal static List<SceneLayer> LoadTiledMap(SpiridiGame game, string tiledFile)
+        public static List<SceneLayer> LoadTiledMap(SpiridiGame game, string tiledFile)
         {
             TileImage tileSet = null;
             List<SceneLayer> layers = new List<SceneLayer>();
@@ -140,13 +140,26 @@ namespace Spiridios.SpiridiEngine
 
         private void Draw(TileImage tileSet, SpriteBatch spriteBatch)
         {
+            // TODO: Possibly call from update instead of draw
+            actors.Sort(actorsComparer);
+
             int size = layerTileIndices.Count;
+            int currentActorIndex = 0;
+            Actor currentActor = (currentActorIndex < actors.Count) ? actors[currentActorIndex] : null;
+
             for (int i = 0; i < size; i++)
             {
+                Vector2 destCoord = TileImage.GetImageCoordinatesFromOffset(i, layerWidth, tileSet.TileWidth, tileSet.TileHeight);
+                if (currentActor != null && currentActor.Position.Y < destCoord.Y)
+                {
+                    currentActor.Draw(spriteBatch);
+                    currentActorIndex++;
+                    currentActor = (currentActorIndex < actors.Count) ? actors[currentActorIndex] : null;
+                }
+
                 int gid = layerTileIndices[i];
                 if (gid > 0)
                 {
-                    Vector2 destCoord = TileImage.GetImageCoordinatesFromOffset(i, layerWidth, tileSet.TileWidth, tileSet.TileHeight);
                     Rectangle dest = new Rectangle((int)destCoord.X, (int)destCoord.Y, tileSet.TileWidth, tileSet.TileHeight);
                     tileSet.DrawTile(spriteBatch, gid, dest);
                 }

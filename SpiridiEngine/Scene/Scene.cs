@@ -34,6 +34,21 @@ namespace Spiridios.SpiridiEngine
             layers.AddRange(TileMapLayer.LoadTiledMap(game, tiledFile));
         }
 
+        public void AddLayer(SceneLayer layer)
+        {
+            this.layers.Add(layer);
+        }
+
+        public void AddLayer(SceneLayer layer, int layerIndex)
+        {
+            this.layers.Insert(layerIndex, layer);
+        }
+
+        public SceneLayer GetLayer(int layerIndex)
+        {
+            return this.layers[layerIndex];
+        }
+
         public void Draw(SpriteBatch spriteBatch)
         {
             foreach (SceneLayer layer in layers)
@@ -44,7 +59,10 @@ namespace Spiridios.SpiridiEngine
 
         public void Update(System.TimeSpan elapsedTime)
         {
-
+            foreach (SceneLayer layer in layers)
+            {
+                layer.Update(elapsedTime);
+            }
         }
     }
 }
