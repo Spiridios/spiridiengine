@@ -20,18 +20,57 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Spiridios.SpiridiEngine
 {
-    class TileMapLayer
+    class TileMapLayer : SceneLayer
     {
-        public const string TILED_ELEMENT = "layer";
+        private const string TILED_ROOT_ELEMENT = "map";
+        private const string TILED_LAYER_ELEMENT = "layer";
+
         private SpiridiGame game;
         private List<int> layerTileIndices = null;
+        private TileImage tileSet;
         private int layerWidth;
         private int layerHeight;
 
-        public TileMapLayer(SpiridiGame game, XmlReader mapLayerReader)
+        public TileMapLayer(SpiridiGame game, TileImage tileSet, XmlReader mapLayerReader)
         {
             this.game = game;
             LoadTiledLayer(mapLayerReader);
+            this.tileSet = tileSet;
+        }
+
+        internal static List<SceneLayer> LoadTiledMap(SpiridiGame game, string tiledFile)
+        {
+            TileImage tileSet = null;
+            List<SceneLayer> layers = new List<SceneLayer>();
+            using (FileStream fileStream = new FileStream(tiledFile, FileMode.Open))
+            {
+                using (XmlReader xmlReader = XmlReader.Create(fileStream))
+                {
+
+                    while (xmlReader.Read())
+                    {
+                        if (xmlReader.IsStartElement())
+                        {
+                            switch (xmlReader.Name)
+                            {
+                                case (TileMapLayer.TILED_ROOT_ELEMENT):
+                                    break;
+                                case (TileImage.TILED_TILESET_ELEMENT):
+                                    tileSet = new TileImage(xmlReader);
+                                    break;
+                                case (TileMapLayer.TILED_LAYER_ELEMENT):
+                                    layers.Add(new TileMapLayer(game, tileSet, xmlReader));
+                                    break;
+                                case ("objectgroup"):
+                                    break; //ignore it for now.
+                                default:
+                                    throw new InvalidDataException(String.Format("Unsupported tag '{0}'", xmlReader.Name));
+                            }
+                        }
+                    }
+                }
+            }
+            return layers;
         }
 
         private void LoadTiledLayer(XmlReader xmlReader)
@@ -43,7 +82,7 @@ namespace Spiridios.SpiridiEngine
                     case (XmlNodeType.Element):
                         switch (xmlReader.Name)
                         {
-                            case(TileMapLayer.TILED_ELEMENT):
+                            case(TileMapLayer.TILED_LAYER_ELEMENT):
                                 layerHeight = int.Parse(xmlReader.GetAttribute("height"));
                                 layerWidth = int.Parse(xmlReader.GetAttribute("width"));
                                 break;
@@ -85,7 +124,7 @@ namespace Spiridios.SpiridiEngine
                         }
                         break;
                     case (XmlNodeType.EndElement):
-                        if (xmlReader.Name == TILED_ELEMENT)
+                        if (xmlReader.Name == TILED_LAYER_ELEMENT)
                         {
                             return;
                         }
@@ -94,7 +133,12 @@ namespace Spiridios.SpiridiEngine
             } while (xmlReader.Read());
         }
 
-        public void Draw(TileImage tileSet, SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            Draw(tileSet, spriteBatch);
+        }
+
+        private void Draw(TileImage tileSet, SpriteBatch spriteBatch)
         {
             int size = layerTileIndices.Count;
             for (int i = 0; i < size; i++)

@@ -20,7 +20,7 @@ namespace Spiridios.SpiridiEngine
 {
     class TileImage
     {
-        public const string TILED_ELEMENT = "tileset";
+        internal const string TILED_TILESET_ELEMENT = "tileset";
         private Texture2D tileSet = null;
         private int tileWidth = 0;
         private int tileHeight = 0;
@@ -56,7 +56,7 @@ namespace Spiridios.SpiridiEngine
                     case (XmlNodeType.Element):
                         switch (xmlReader.Name)
                         {
-                            case (TileImage.TILED_ELEMENT):
+                            case (TileImage.TILED_TILESET_ELEMENT):
                                 tileWidth = int.Parse(xmlReader.GetAttribute("tilewidth"));
                                 tileHeight = int.Parse(xmlReader.GetAttribute("tileheight"));
                                 break;
@@ -71,7 +71,7 @@ namespace Spiridios.SpiridiEngine
                         }
                         break;
                     case (XmlNodeType.EndElement):
-                        if (xmlReader.Name == TileImage.TILED_ELEMENT)
+                        if (xmlReader.Name == TileImage.TILED_TILESET_ELEMENT)
                         {
                             return;
                         }

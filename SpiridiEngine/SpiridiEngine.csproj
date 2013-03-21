@@ -98,6 +98,7 @@
     <Compile Include="Behavior\Behavior.cs" />
     <Compile Include="Behavior\BulletBehavior.cs" />
     <Compile Include="Input\InputManager.cs" />
+    <Compile Include="Scene\SceneLayer.cs" />
     <Compile Include="Sprite\Image.cs" />
     <Compile Include="State\BootState.cs" />
     <Compile Include="Sprite\AnimatedSprite.cs" />
@@ -122,9 +123,9 @@
     <Compile Include="StaticBackground.cs" />
     <Compile Include="Sprite\StaticSprite.cs" />
     <Compile Include="TextRenderer.cs" />
-    <Compile Include="TileImage.cs" />
-    <Compile Include="TileMap.cs" />
-    <Compile Include="TileMapLayer.cs" />
+    <Compile Include="Scene\TileImage.cs" />
+    <Compile Include="Scene\Scene.cs" />
+    <Compile Include="Scene\TileMapLayer.cs" />
     <Compile Include="Updatable.cs" />
     <Compile Include="Vector2Ext.cs" />
     <Compile Include="XNAExtensions.cs" />
