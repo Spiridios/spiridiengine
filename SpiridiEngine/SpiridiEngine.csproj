@@ -99,6 +99,7 @@
     <Compile Include="Behavior\BulletBehavior.cs" />
     <Compile Include="Input\InputManager.cs" />
     <Compile Include="Scene\SceneLayer.cs" />
+    <Compile Include="Scene\TileImageSet.cs" />
     <Compile Include="Sprite\Image.cs" />
     <Compile Include="State\BootState.cs" />
     <Compile Include="Sprite\AnimatedSprite.cs" />

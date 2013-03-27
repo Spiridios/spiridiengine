@@ -18,9 +18,11 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Spiridios.SpiridiEngine
 {
-    class TileImage
+    public class TileImage
     {
         internal const string TILED_TILESET_ELEMENT = "tileset";
+        private const string TILED_TILESET_IMAGE_ELEMENT = "image";
+
         private Texture2D tileSet = null;
         private int tileWidth = 0;
         private int tileHeight = 0;
@@ -47,6 +49,16 @@ namespace Spiridios.SpiridiEngine
             LoadFromTiledElement(tileSetReader);
         }
 
+        internal static string ParseTiledTilesetName(XmlReader xmlReader)
+        {
+            string tilesetName = null;
+            if (xmlReader.NodeType == XmlNodeType.Element && xmlReader.Name == TileImage.TILED_TILESET_ELEMENT)
+            {
+                tilesetName = xmlReader.GetAttribute("name");
+            }
+            return tilesetName;
+        }
+
         private void LoadFromTiledElement(XmlReader xmlReader)
         {
             do
@@ -60,7 +72,7 @@ namespace Spiridios.SpiridiEngine
                                 tileWidth = int.Parse(xmlReader.GetAttribute("tilewidth"));
                                 tileHeight = int.Parse(xmlReader.GetAttribute("tileheight"));
                                 break;
-                            case ("image"):
+                            case (TileImage.TILED_TILESET_IMAGE_ELEMENT):
                                 string tileSetImageSource = xmlReader.GetAttribute("source");
                                 tileSet = SpiridiGame.ImageManagerInstance.AddImage(tileSetImageSource, tileSetImageSource);
                                 //tileSheetSize.X = int.Parse(tileSetImage.GetAttribute("width"));
@@ -101,7 +113,6 @@ namespace Spiridios.SpiridiEngine
                 Rectangle source = GetTileSourceRect(tileId);
                 spriteBatch.Draw(this.tileSet, destination, source, Color.White);
             }
-
         }
 
         public Texture2D Image
@@ -118,3 +129,4 @@ namespace Spiridios.SpiridiEngine
 
     }
 }
+

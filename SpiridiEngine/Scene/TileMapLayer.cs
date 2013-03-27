@@ -27,11 +27,13 @@ namespace Spiridios.SpiridiEngine
 
         private SpiridiGame game;
         private List<int> layerTileIndices = null;
-        private TileImage tileSet;
+        private TileImageSet tileSet;
         private int layerWidth;
         private int layerHeight;
+        private int tileWidth;
+        private int tileHeight;
 
-        public TileMapLayer(SpiridiGame game, TileImage tileSet, XmlReader mapLayerReader)
+        public TileMapLayer(SpiridiGame game, TileImageSet tileSet, XmlReader mapLayerReader)
         {
             this.game = game;
             LoadTiledLayer(mapLayerReader);
@@ -41,6 +43,10 @@ namespace Spiridios.SpiridiEngine
         public static List<SceneLayer> LoadTiledMap(SpiridiGame game, string tiledFile)
         {
             TileImage tileSet = null;
+            TileImageSet tileImageSet = new TileImageSet();
+            int tileWidth = 0;
+            int tileHeight = 0;
+
             List<SceneLayer> layers = new List<SceneLayer>();
             using (FileStream fileStream = new FileStream(tiledFile, FileMode.Open))
             {
@@ -54,12 +60,20 @@ namespace Spiridios.SpiridiEngine
                             switch (xmlReader.Name)
                             {
                                 case (TileMapLayer.TILED_ROOT_ELEMENT):
+                                    tileWidth = int.Parse(xmlReader.GetAttribute("tilewidth"));
+                                    tileHeight = int.Parse(xmlReader.GetAttribute("tileheight"));
                                     break;
                                 case (TileImage.TILED_TILESET_ELEMENT):
+                                    //string tilesetName = TileImage.ParseTiledTilesetName(xmlReader);
+                                    int startTileId = int.Parse(xmlReader.GetAttribute("firstgid"));
                                     tileSet = new TileImage(xmlReader);
+                                    tileImageSet.AddImage(tileSet, startTileId);
                                     break;
                                 case (TileMapLayer.TILED_LAYER_ELEMENT):
-                                    layers.Add(new TileMapLayer(game, tileSet, xmlReader));
+                                    TileMapLayer mapLayer = new TileMapLayer(game, tileImageSet, xmlReader);
+                                    mapLayer.tileWidth = tileWidth;
+                                    mapLayer.tileHeight = tileHeight;
+                                    layers.Add(mapLayer);
                                     break;
                                 case ("objectgroup"):
                                     break; //ignore it for now.
@@ -136,6 +150,34 @@ namespace Spiridios.SpiridiEngine
         public override void Draw(SpriteBatch spriteBatch)
         {
             Draw(tileSet, spriteBatch);
+        }
+
+        private void Draw(TileImageSet tileSet, SpriteBatch spriteBatch)
+        {
+            // TODO: Possibly call from update instead of draw
+            actors.Sort(actorsComparer);
+
+            int size = layerTileIndices.Count;
+            int currentActorIndex = 0;
+            Actor currentActor = (currentActorIndex < actors.Count) ? actors[currentActorIndex] : null;
+
+            for (int i = 0; i < size; i++)
+            {
+                Vector2 destCoord = TileImage.GetImageCoordinatesFromOffset(i, layerWidth, tileWidth, tileHeight);
+                if (currentActor != null && (currentActor.Position.Y + currentActor.Height) < (destCoord.Y + tileHeight))
+                {
+                    currentActor.Draw(spriteBatch);
+                    currentActorIndex++;
+                    currentActor = (currentActorIndex < actors.Count) ? actors[currentActorIndex] : null;
+                }
+
+                int gid = layerTileIndices[i];
+                if (gid > 0)
+                {
+                    Rectangle dest = new Rectangle((int)destCoord.X, (int)destCoord.Y, tileWidth, tileHeight);
+                    tileSet.DrawTile(spriteBatch, gid, dest);
+                }
+            }
         }
 
         private void Draw(TileImage tileSet, SpriteBatch spriteBatch)
