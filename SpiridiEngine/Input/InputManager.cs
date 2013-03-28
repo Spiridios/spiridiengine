@@ -23,6 +23,7 @@ namespace Spiridios.SpiridiEngine
     public class InputManager
     {
         public const string QUICK_EXIT_ACTION = "QuickExit";
+        public const string MUSIC_MUTE_ACTION = "MusicMute";
 
         private SpiridiGame game;
         private KeyboardEvent keyEvent;
@@ -34,6 +35,7 @@ namespace Spiridios.SpiridiEngine
             keyEvent = new KeyboardEvent();
 
             this.RegisterActionBinding(QUICK_EXIT_ACTION, Keys.Escape);
+            this.RegisterActionBinding(MUSIC_MUTE_ACTION, Keys.M);
         }
 
         internal void Update(GameTime gameTime)

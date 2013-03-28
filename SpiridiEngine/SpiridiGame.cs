@@ -162,6 +162,11 @@ namespace Spiridios.SpiridiEngine
             MediaPlayer.Stop();
         }
 
+        public void ToggleBackgroundMusic()
+        {
+            MediaPlayer.IsMuted = !MediaPlayer.IsMuted;
+        }
+
         // TODO: I don't think this is needed anymore.
         public virtual void InitObjects() { }
 
@@ -193,6 +198,13 @@ namespace Spiridios.SpiridiEngine
             if (this.IsQuickExit && this.inputManager.IsTriggered(InputManager.QUICK_EXIT_ACTION))
             {
                 Exit();
+            }
+
+            // TODO: A lot of functionality is being pushed into the engine... Not sure I like this.
+            //   also, need an eventing system for input not just a polling system.
+            if (this.inputManager.IsTriggered(InputManager.MUSIC_MUTE_ACTION))
+            {
+                ToggleBackgroundMusic();
             }
 
             this.currentState.Update(gameTime);

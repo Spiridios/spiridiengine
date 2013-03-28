@@ -18,7 +18,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Spiridios.SpiridiEngine
 {
-    public class TileImage
+    public class TileSet
     {
         internal const string TILED_TILESET_ELEMENT = "tileset";
         private const string TILED_TILESET_IMAGE_ELEMENT = "image";
@@ -37,14 +37,14 @@ namespace Spiridios.SpiridiEngine
             get { return tileHeight; }
         }
 
-        public TileImage(string imageName, int tileWidth, int tileHeight)
+        public TileSet(string imageName, int tileWidth, int tileHeight)
         {
             tileSet = SpiridiGame.ImageManagerInstance.GetImage(imageName);
             this.tileWidth = tileWidth;
             this.tileHeight = tileHeight;
         }
 
-        public TileImage(XmlReader tileSetReader)
+        public TileSet(XmlReader tileSetReader)
         {
             LoadFromTiledElement(tileSetReader);
         }
@@ -52,7 +52,7 @@ namespace Spiridios.SpiridiEngine
         internal static string ParseTiledTilesetName(XmlReader xmlReader)
         {
             string tilesetName = null;
-            if (xmlReader.NodeType == XmlNodeType.Element && xmlReader.Name == TileImage.TILED_TILESET_ELEMENT)
+            if (xmlReader.NodeType == XmlNodeType.Element && xmlReader.Name == TileSet.TILED_TILESET_ELEMENT)
             {
                 tilesetName = xmlReader.GetAttribute("name");
             }
@@ -68,11 +68,11 @@ namespace Spiridios.SpiridiEngine
                     case (XmlNodeType.Element):
                         switch (xmlReader.Name)
                         {
-                            case (TileImage.TILED_TILESET_ELEMENT):
+                            case (TileSet.TILED_TILESET_ELEMENT):
                                 tileWidth = int.Parse(xmlReader.GetAttribute("tilewidth"));
                                 tileHeight = int.Parse(xmlReader.GetAttribute("tileheight"));
                                 break;
-                            case (TileImage.TILED_TILESET_IMAGE_ELEMENT):
+                            case (TileSet.TILED_TILESET_IMAGE_ELEMENT):
                                 string tileSetImageSource = xmlReader.GetAttribute("source");
                                 tileSet = SpiridiGame.ImageManagerInstance.AddImage(tileSetImageSource, tileSetImageSource);
                                 //tileSheetSize.X = int.Parse(tileSetImage.GetAttribute("width"));
@@ -83,7 +83,7 @@ namespace Spiridios.SpiridiEngine
                         }
                         break;
                     case (XmlNodeType.EndElement):
-                        if (xmlReader.Name == TileImage.TILED_TILESET_ELEMENT)
+                        if (xmlReader.Name == TileSet.TILED_TILESET_ELEMENT)
                         {
                             return;
                         }
@@ -122,7 +122,7 @@ namespace Spiridios.SpiridiEngine
 
         public Rectangle GetTileSourceRect(int tileId)
         {
-            Vector2 srcCoord = TileImage.GetImageCoordinatesFromOffset(tileId - 1, (tileSet.Width / tileWidth), tileWidth, tileHeight);
+            Vector2 srcCoord = TileSet.GetImageCoordinatesFromOffset(tileId - 1, (tileSet.Width / tileWidth), tileWidth, tileHeight);
             Rectangle source = new Rectangle((int)srcCoord.X, (int)srcCoord.Y, tileWidth, tileHeight);
             return source;
         }

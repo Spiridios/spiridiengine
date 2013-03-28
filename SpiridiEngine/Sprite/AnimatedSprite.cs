@@ -36,7 +36,7 @@ namespace Spiridios.SpiridiEngine
             public int frameNumber;
         };
 
-        private TileImage image = null;
+        private TileSet image = null;
         private Vector2 centerOffset;
 
         private Dictionary<string, List<FrameInfo>> animations = new Dictionary<string, List<FrameInfo>>();
@@ -65,7 +65,7 @@ namespace Spiridios.SpiridiEngine
             {
                 SpiridiGame.ImageManagerInstance.AddImage(imageName, imageName);
             }
-            image = new TileImage(imageName, tileWidth, tileHeight);
+            image = new TileSet(imageName, tileWidth, tileHeight);
             centerOffset = new Vector2(tileWidth / 2.0f, tileHeight / 2.0f);
         }
 

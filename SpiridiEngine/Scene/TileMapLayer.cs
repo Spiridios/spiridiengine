@@ -27,13 +27,13 @@ namespace Spiridios.SpiridiEngine
 
         private SpiridiGame game;
         private List<int> layerTileIndices = null;
-        private TileImageSet tileSet;
+        private TileSetCollection tileSet;
         private int layerWidth;
         private int layerHeight;
         private int tileWidth;
         private int tileHeight;
 
-        public TileMapLayer(SpiridiGame game, TileImageSet tileSet, XmlReader mapLayerReader)
+        public TileMapLayer(SpiridiGame game, TileSetCollection tileSet, XmlReader mapLayerReader)
         {
             this.game = game;
             LoadTiledLayer(mapLayerReader);
@@ -42,8 +42,8 @@ namespace Spiridios.SpiridiEngine
 
         public static List<SceneLayer> LoadTiledMap(SpiridiGame game, string tiledFile)
         {
-            TileImage tileSet = null;
-            TileImageSet tileImageSet = new TileImageSet();
+            TileSet tileSet = null;
+            TileSetCollection tileImageSet = new TileSetCollection();
             int tileWidth = 0;
             int tileHeight = 0;
 
@@ -63,10 +63,10 @@ namespace Spiridios.SpiridiEngine
                                     tileWidth = int.Parse(xmlReader.GetAttribute("tilewidth"));
                                     tileHeight = int.Parse(xmlReader.GetAttribute("tileheight"));
                                     break;
-                                case (TileImage.TILED_TILESET_ELEMENT):
-                                    //string tilesetName = TileImage.ParseTiledTilesetName(xmlReader);
+                                case (TileSet.TILED_TILESET_ELEMENT):
+                                    //string tilesetName = TileSet.ParseTiledTilesetName(xmlReader);
                                     int startTileId = int.Parse(xmlReader.GetAttribute("firstgid"));
-                                    tileSet = new TileImage(xmlReader);
+                                    tileSet = new TileSet(xmlReader);
                                     tileImageSet.AddImage(tileSet, startTileId);
                                     break;
                                 case (TileMapLayer.TILED_LAYER_ELEMENT):
@@ -152,7 +152,7 @@ namespace Spiridios.SpiridiEngine
             Draw(tileSet, spriteBatch);
         }
 
-        private void Draw(TileImageSet tileSet, SpriteBatch spriteBatch)
+        private void Draw(TileSetCollection tileSet, SpriteBatch spriteBatch)
         {
             // TODO: Possibly call from update instead of draw
             actors.Sort(actorsComparer);
@@ -163,7 +163,7 @@ namespace Spiridios.SpiridiEngine
 
             for (int i = 0; i < size; i++)
             {
-                Vector2 destCoord = TileImage.GetImageCoordinatesFromOffset(i, layerWidth, tileWidth, tileHeight);
+                Vector2 destCoord = TileSet.GetImageCoordinatesFromOffset(i, layerWidth, tileWidth, tileHeight);
                 if (currentActor != null && (currentActor.Position.Y + currentActor.Height) < (destCoord.Y + tileHeight))
                 {
                     currentActor.Draw(spriteBatch);
@@ -180,7 +180,7 @@ namespace Spiridios.SpiridiEngine
             }
         }
 
-        private void Draw(TileImage tileSet, SpriteBatch spriteBatch)
+        private void Draw(TileSet tileSet, SpriteBatch spriteBatch)
         {
             // TODO: Possibly call from update instead of draw
             actors.Sort(actorsComparer);
@@ -191,7 +191,7 @@ namespace Spiridios.SpiridiEngine
 
             for (int i = 0; i < size; i++)
             {
-                Vector2 destCoord = TileImage.GetImageCoordinatesFromOffset(i, layerWidth, tileSet.TileWidth, tileSet.TileHeight);
+                Vector2 destCoord = TileSet.GetImageCoordinatesFromOffset(i, layerWidth, tileSet.TileWidth, tileSet.TileHeight);
                 if (currentActor != null && (currentActor.Position.Y + currentActor.Height) < (destCoord.Y + tileSet.TileHeight))
                 {
                     currentActor.Draw(spriteBatch);

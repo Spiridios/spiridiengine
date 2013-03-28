@@ -4,13 +4,13 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Spiridios.SpiridiEngine
 {
-    public class TileImageSet
+    public class TileSetCollection
     {
-        private List<TileImage> tileImages = new List<TileImage>();
+        private List<TileSet> tileImages = new List<TileSet>();
         private SortedList<int, int> tileIdMap = new SortedList<int, int>();
-        // How to find the TileImage for the given tileId?
+        // How to find the TileSet for the given tileId?
 
-        public void AddImage(TileImage tileImage, int startTileId)
+        public void AddImage(TileSet tileImage, int startTileId)
         {
             this.tileIdMap.Add(startTileId, this.tileImages.Count);
             this.tileImages.Add(tileImage);
@@ -29,7 +29,7 @@ namespace Spiridios.SpiridiEngine
                 if (key >= 0 )
                 {
                     int index = tileIdMap[key];
-                    TileImage ti = tileImages[index];
+                    TileSet ti = tileImages[index];
                     ti.DrawTile(spriteBatch, tileId - (key - 1), destination);
                 }
             }
