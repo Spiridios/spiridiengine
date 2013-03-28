@@ -100,9 +100,9 @@
     <Compile Include="Input\InputManager.cs" />
     <Compile Include="Scene\SceneLayer.cs" />
     <Compile Include="Scene\TileSetCollection.cs" />
-    <Compile Include="Sprite\Image.cs" />
+    <Compile Include="ScreenSpace\Image.cs" />
     <Compile Include="State\BootState.cs" />
-    <Compile Include="Sprite\AnimatedSprite.cs" />
+    <Compile Include="ScreenSpace\AnimatedSprite.cs" />
     <Compile Include="Drawable.cs" />
     <Compile Include="Behavior\Explosion.cs" />
     <Compile Include="GUI\ImageButton.cs" />
@@ -118,11 +118,11 @@
     <Compile Include="WorldSpace\RadialPositionHandler.cs" />
     <Compile Include="SoundManager.cs" />
     <Compile Include="SpiridiGame.cs" />
-    <Compile Include="Sprite\Sprite.cs" />
+    <Compile Include="ScreenSpace\Sprite.cs" />
     <Compile Include="State\SplashState.cs" />
     <Compile Include="State\State.cs" />
     <Compile Include="StaticBackground.cs" />
-    <Compile Include="Sprite\StaticSprite.cs" />
+    <Compile Include="ScreenSpace\StaticSprite.cs" />
     <Compile Include="TextRenderer.cs" />
     <Compile Include="Scene\TileSet.cs" />
     <Compile Include="Scene\Scene.cs" />
