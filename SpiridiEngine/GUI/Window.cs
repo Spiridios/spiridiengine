@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Spiridios.SpiridiEngine.GUI
 {
-    public abstract class Window : Object2d
+    public abstract class Window : WorldObject
     {
 
         public override void Update(TimeSpan elapsedTime) {}

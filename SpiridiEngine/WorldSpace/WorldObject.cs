@@ -19,14 +19,14 @@ namespace Spiridios.SpiridiEngine
     /// <summary>
     /// Represents an object in 2d space
     /// </summary>
-    public abstract class Object2d : Drawable, Updatable
+    public abstract class WorldObject : Drawable, Updatable
     {
-        public Object2d()
+        public WorldObject()
         {
             this.PositionHandler = new PositionHandler();
         }
 
-        public Object2d(PositionHandler positionHandler)
+        public WorldObject(PositionHandler positionHandler)
         {
             this.PositionHandler = positionHandler;
         }

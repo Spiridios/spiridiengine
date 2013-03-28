@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 
 namespace Spiridios.SpiridiEngine
 {
-    public class Image : Object2d
+    public class Image : WorldObject
     {
         private Sprite image;
 

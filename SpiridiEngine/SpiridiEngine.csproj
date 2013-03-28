@@ -92,7 +92,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Actor.cs" />
+    <Compile Include="WorldSpace\Actor.cs" />
     <Compile Include="Background.cs" />
     <Compile Include="Behavior\BeelineBehavior.cs" />
     <Compile Include="Behavior\Behavior.cs" />
@@ -110,12 +110,12 @@
     <Compile Include="GUI\Window.cs" />
     <Compile Include="ImageManager.cs" />
     <Compile Include="Input\KeyboardEvent.cs" />
-    <Compile Include="Object2d.cs" />
+    <Compile Include="WorldSpace\WorldObject.cs" />
     <Compile Include="Particle.cs" />
-    <Compile Include="PositionHandler.cs" />
+    <Compile Include="WorldSpace\PositionHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RadialActor.cs" />
-    <Compile Include="RadialPositionHandler.cs" />
+    <Compile Include="WorldSpace\RadialActor.cs" />
+    <Compile Include="WorldSpace\RadialPositionHandler.cs" />
     <Compile Include="SoundManager.cs" />
     <Compile Include="SpiridiGame.cs" />
     <Compile Include="Sprite\Sprite.cs" />

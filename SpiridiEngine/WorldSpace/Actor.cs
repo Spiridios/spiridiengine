@@ -17,7 +17,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Spiridios.SpiridiEngine
 {
-    public class Actor : Object2d
+    public class Actor : WorldObject
     {
         public class AscendingYComparitor : IComparer<Actor>
         {
