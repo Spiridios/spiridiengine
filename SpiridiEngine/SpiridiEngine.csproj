@@ -92,6 +92,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ScreenSpace\ScreenObject.cs" />
     <Compile Include="WorldSpace\Actor.cs" />
     <Compile Include="Background.cs" />
     <Compile Include="Behavior\BeelineBehavior.cs" />
