@@ -23,23 +23,13 @@ namespace Spiridios.SpiridiEngine
     {
         public ScreenObject()
         {
-            this.PositionHandler = new PositionHandler();
         }
 
-        public ScreenObject(PositionHandler positionHandler)
-        {
-            this.PositionHandler = positionHandler;
-        }
+        public virtual Vector2 Position { get; set; }
 
-        protected PositionHandler PositionHandler { get; set; }
+        public abstract int Width { get; }
 
-        // TODO: make this non-virtual. Note: if this becomes non-virtual, then there NEEDS to be a
-        // PositionUpdated event so child objects can detect a change and react to it.
-        public virtual Vector2 Position
-        {
-            get { return this.PositionHandler.Position; }
-            set { this.PositionHandler.Position = value; }
-        }
+        public abstract int Height { get; }
 
         public abstract void Draw(SpriteBatch spriteBatch);
 
