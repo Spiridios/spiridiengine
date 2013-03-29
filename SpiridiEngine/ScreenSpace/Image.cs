@@ -16,7 +16,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Spiridios.SpiridiEngine
 {
-    public class Image : DrawableAt
+    public class Image 
     {
         private Texture2D image;
         private Vector2 origin = new Vector2(0, 0);
@@ -31,10 +31,6 @@ namespace Spiridios.SpiridiEngine
             this.image = image;
         }
 
-        // TODO: these do not seem like they belong here.
-        public Color TintColor { get; set; }
-        public float Layer { get; set; }
-        public float Rotation { get; set; }
         public Vector2 Origin
         {
             get { return origin; }
@@ -51,15 +47,15 @@ namespace Spiridios.SpiridiEngine
             get { return this.image.Height; }
         }
 
-        public void Draw(SpriteBatch spriteBatch, Vector2 position)
+        public void Draw(SpriteBatch spriteBatch, Vector2 position, Color tintColor, float rotation, float layer)
         {
             Rectangle destRect;
-            destRect.X = (int)(position.X);
-            destRect.Y = (int)(position.Y);
+            destRect.X = (int)(position.X + origin.X);
+            destRect.Y = (int)(position.Y + origin.Y);
             destRect.Width = (int)(this.image.Width);
             destRect.Height = (int)(this.image.Height);
 
-            spriteBatch.Draw(this.image, destRect, null, TintColor, Rotation, Origin, SpriteEffects.None, Layer);
+            spriteBatch.Draw(this.image, destRect, null, tintColor, rotation, Origin, SpriteEffects.None, layer);
         }
     }
 }

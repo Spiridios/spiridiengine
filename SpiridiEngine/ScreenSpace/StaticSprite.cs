@@ -18,36 +18,23 @@ namespace Spiridios.SpiridiEngine
 {
     public class StaticSprite : Sprite
     {
-        private Texture2D image = null;
-        private Vector2 centerOffset;
+        private Image image = null;
 
         public StaticSprite(string imageName)
             : base()
         {
-            image = SpiridiGame.ImageManagerInstance.GetImage(imageName);
-            centerOffset = new Vector2(this.Width / 2.0f, this.Height / 2.0f);
+            image = new Image(imageName);
+            image.Origin = new Vector2(image.Width / 2.0f, image.Height / 2.0f);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            Draw(spriteBatch, this.Position);
-        }
-
-        // TODO: Should sprite have a position? Right now it's more or less a fancy image.
-        public override void Draw(SpriteBatch spriteBatch, Vector2 position)
-        {
-            Rectangle destRect;
-            destRect.X = (int)(position.X + centerOffset.X);
-            destRect.Y = (int)(position.Y + centerOffset.Y);
-            destRect.Width = (int)(this.image.Width);
-            destRect.Height = (int)(this.image.Height);
-
-            spriteBatch.Draw(this.image, destRect, null, TintColor, Rotation, centerOffset, SpriteEffects.None, Layer);
+            image.Draw(spriteBatch, this.Position, this.TintColor, this.Rotation, this.Layer);
         }
 
         public override Vector2 CenterOffset
         {
-            get { return this.centerOffset; }
+            get { return this.image.Origin; }
         }
 
         public override int Width

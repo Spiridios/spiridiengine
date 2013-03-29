@@ -29,6 +29,8 @@ namespace Spiridios.SpiridiEngine
             this.contentManager = contentManager;
         }
 
+        // TODO: Make all current "Image" methods "Texture" and create Image methods that deal with our Image class.
+
         /// <summary>
         /// Adds an image to the image manager. If the image already exits, then the existing image is used.
         /// </summary>
