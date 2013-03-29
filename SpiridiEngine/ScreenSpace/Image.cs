@@ -31,23 +31,33 @@ namespace Spiridios.SpiridiEngine
             this.image = image;
         }
 
+        protected Image()
+        {
+        }
+
+        protected Texture2D Texture
+        {
+            get { return this.image; }
+            set { this.image = value; }
+        }
+
         public Vector2 Origin
         {
             get { return origin; }
             set { origin = value; }
         }
 
-        public int Width
+        public virtual int Width
         {
             get { return this.image.Width; }
         }
 
-        public int Height
+        public virtual int Height
         {
             get { return this.image.Height; }
         }
 
-        public void Draw(SpriteBatch spriteBatch, Vector2 position, Color tintColor, float rotation, float layer)
+        public virtual void Draw(SpriteBatch spriteBatch, Vector2 position, Color tintColor, float rotation, float layer)
         {
             Rectangle destRect;
             destRect.X = (int)(position.X + origin.X);

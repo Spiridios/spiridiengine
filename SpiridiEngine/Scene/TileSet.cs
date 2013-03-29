@@ -115,7 +115,7 @@ namespace Spiridios.SpiridiEngine
             }
         }
 
-        public Texture2D Image
+        public Texture2D Texture
         {
             get { return this.tileSet; }
         }

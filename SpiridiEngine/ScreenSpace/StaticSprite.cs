@@ -46,6 +46,5 @@ namespace Spiridios.SpiridiEngine
         {
             get { return image.Height; }
         }
-
     }
 }

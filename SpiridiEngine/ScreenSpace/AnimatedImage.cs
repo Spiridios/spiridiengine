@@ -1,5 +1,5 @@
 ﻿/**
-    Copyright 2012 Micah Lieske
+    Copyright 2013 Micah Lieske
 
     This file is part of SpiridiEngine.
 
@@ -7,7 +7,7 @@
 
     SpiridiEngine is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License along with Foobar. If not, see http://www.gnu.org/licenses/.
+    You should have received a copy of the GNU General Public License along with SpiridiEngine. If not, see http://www.gnu.org/licenses/.
 **/
 
 using System;
@@ -17,9 +17,9 @@ using System.Xml;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Spiridios.SpiridiEngine
+namespace Spiridios.SpiridiEngine.ScreenSpace
 {
-    public class AnimatedSprite : Sprite
+    public class AnimatedImage : Image, Updatable
     {
         private const string XML_CONFIG_ROOT_ELEMENT = "AnimatedSprite";
         private const string XML_CONFIG_ANIMATION_ELEMENT = "Animation";
@@ -36,7 +36,7 @@ namespace Spiridios.SpiridiEngine
             public int frameNumber;
         };
 
-        private TileSet image = null;
+        private TileSet tileSet = null;
         private Vector2 centerOffset;
 
         private Dictionary<string, List<FrameInfo>> animations = new Dictionary<string, List<FrameInfo>>();
@@ -47,13 +47,13 @@ namespace Spiridios.SpiridiEngine
         private double currentFrameElapsedSeconds = 0;
 
 
-        public AnimatedSprite(string imageName, int tileWidth, int tileHeight)
+        public AnimatedImage(string imageName, int tileWidth, int tileHeight)
             : base()
         {
             CreateSprite(imageName, tileWidth, tileHeight);
         }
 
-        public AnimatedSprite(string imageName, int tileWidth, int tileHeight, int startingFrame)
+        public AnimatedImage(string imageName, int tileWidth, int tileHeight, int startingFrame)
             : this(imageName, tileWidth, tileHeight)
         {
             this.currentFrameIndex = startingFrame;
@@ -65,11 +65,12 @@ namespace Spiridios.SpiridiEngine
             {
                 SpiridiGame.ImageManagerInstance.AddImage(imageName, imageName);
             }
-            image = new TileSet(imageName, tileWidth, tileHeight);
+            tileSet = new TileSet(imageName, tileWidth, tileHeight);
+            this.Texture = tileSet.Texture;
             centerOffset = new Vector2(tileWidth / 2.0f, tileHeight / 2.0f);
         }
 
-        public AnimatedSprite(string xmlAnimationFile)
+        public AnimatedImage(string xmlAnimationFile)
             : base()
         {
             LoadXML(xmlAnimationFile);
@@ -88,13 +89,13 @@ namespace Spiridios.SpiridiEngine
                         {
                             switch (xmlReader.Name)
                             {
-                                case (AnimatedSprite.XML_CONFIG_ROOT_ELEMENT):
+                                case (AnimatedImage.XML_CONFIG_ROOT_ELEMENT):
                                     int tileWidth = int.Parse(xmlReader.GetAttribute("tileWidth"));
                                     int tileHeight = int.Parse(xmlReader.GetAttribute("tileHeight"));
                                     string imageName = xmlReader.GetAttribute("image");
                                     CreateSprite(imageName, tileWidth, tileHeight);
                                     break;
-                                case(AnimatedSprite.XML_CONFIG_ANIMATION_ELEMENT):
+                                case (AnimatedImage.XML_CONFIG_ANIMATION_ELEMENT):
                                     LoadXMLAnimation(xmlReader);
                                     break;
                                 default:
@@ -117,12 +118,12 @@ namespace Spiridios.SpiridiEngine
                     case (XmlNodeType.Element):
                         switch (xmlReader.Name)
                         {
-                            case (AnimatedSprite.XML_CONFIG_ANIMATION_ELEMENT):
+                            case (AnimatedImage.XML_CONFIG_ANIMATION_ELEMENT):
                                 string defaultFrameTimeString = xmlReader.GetAttribute("frameTime");
                                 defaultFrameTime = defaultFrameTimeString == null ? 0.25 : double.Parse(defaultFrameTimeString);
                                 animationName = xmlReader.GetAttribute("name");
                                 break;
-                            case (AnimatedSprite.XML_CONFIG_FRAME_ELEMENT):
+                            case (AnimatedImage.XML_CONFIG_FRAME_ELEMENT):
                                 LoadXMLFrame(xmlReader, animationName, defaultFrameTime);
                                 break;
                             default:
@@ -130,7 +131,7 @@ namespace Spiridios.SpiridiEngine
                         }
                         break;
                     case (XmlNodeType.EndElement):
-                        if (xmlReader.Name == AnimatedSprite.XML_CONFIG_ANIMATION_ELEMENT)
+                        if (xmlReader.Name == AnimatedImage.XML_CONFIG_ANIMATION_ELEMENT)
                         {
                             return;
                         }
@@ -148,7 +149,7 @@ namespace Spiridios.SpiridiEngine
                     case (XmlNodeType.Element):
                         switch (xmlReader.Name)
                         {
-                            case (AnimatedSprite.XML_CONFIG_FRAME_ELEMENT):
+                            case (AnimatedImage.XML_CONFIG_FRAME_ELEMENT):
                                 int tileNumber = int.Parse(xmlReader.GetAttribute("tile"));
                                 string frameTimeString = xmlReader.GetAttribute("frameTime");
                                 double frameTime = frameTimeString == null ? defaultFrameTime : double.Parse(frameTimeString);
@@ -161,7 +162,7 @@ namespace Spiridios.SpiridiEngine
                         }
                         break;
                     case (XmlNodeType.EndElement):
-                        if (xmlReader.Name == AnimatedSprite.XML_CONFIG_FRAME_ELEMENT)
+                        if (xmlReader.Name == AnimatedImage.XML_CONFIG_FRAME_ELEMENT)
                         {
                             return;
                         }
@@ -170,7 +171,7 @@ namespace Spiridios.SpiridiEngine
             } while (xmlReader.Read());
         }
 
-        public AnimatedSprite AddFrame(string animation, int frameNumber, double frameSeconds)
+        public AnimatedImage AddFrame(string animation, int frameNumber, double frameSeconds)
         {
             if (!animations.ContainsKey(animation))
             {
@@ -180,24 +181,17 @@ namespace Spiridios.SpiridiEngine
             return this;
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch, Vector2 position, Color tintColor, float rotation, float layer)
         {
-            this.Draw(spriteBatch, this.Position);
-        }
-
-        // TODO: most of these parameters should be PROPERTIES of the sprite, not parameters to the draw method.
-        public override void Draw(SpriteBatch spriteBatch, Vector2 position)
-        {
-            Rectangle source = this.image.GetTileSourceRect(currentTile);
-            //spriteBatch.Draw(this.tileSet.Texture, position + centerOffset, source, TintColor, Rotation, centerOffset, 1.0f, SpriteEffects.None, Layer);
+            Rectangle source = this.tileSet.GetTileSourceRect(currentTile);
 
             Rectangle destRect;
             destRect.X = (int)(position.X + centerOffset.X);
             destRect.Y = (int)(position.Y + centerOffset.Y);
-            destRect.Width = (int)(this.image.TileWidth);
-            destRect.Height = (int)(this.image.TileHeight);
+            destRect.Width = (int)(this.tileSet.TileWidth);
+            destRect.Height = (int)(this.tileSet.TileHeight);
 
-            spriteBatch.Draw(this.image.Texture, destRect, source, TintColor, Rotation, centerOffset, SpriteEffects.None, Layer);
+            spriteBatch.Draw(this.tileSet.Texture, destRect, source, tintColor, rotation, centerOffset, SpriteEffects.None, layer);
         }
 
         public int CurrentFrame
@@ -229,28 +223,23 @@ namespace Spiridios.SpiridiEngine
             }
         }
 
-        public AnimatedSprite SetCurrentAnimation(string currentAnimation)
+        public AnimatedImage SetCurrentAnimation(string currentAnimation)
         {
             this.CurrentAnimation = currentAnimation;
             return this;
         }
 
-        public override Vector2 CenterOffset
-        {
-            get { return this.centerOffset; }
-        }
-
         public override int Width
         {
-            get { return image.TileWidth; }
+            get { return tileSet.TileWidth; }
         }
 
         public override int Height
         {
-            get { return image.TileHeight; }
+            get { return tileSet.TileHeight; }
         }
 
-        public override void Update(TimeSpan elapsedTime)
+        public void Update(TimeSpan elapsedTime)
         {
             List<FrameInfo> frameInfos;
             if (currentAnimation != null && animations.TryGetValue(currentAnimation, out frameInfos))

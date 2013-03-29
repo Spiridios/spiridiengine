@@ -92,6 +92,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ScreenSpace\AnimatedImage.cs" />
     <Compile Include="ScreenSpace\DrawableAt.cs" />
     <Compile Include="ScreenSpace\ScreenObject.cs" />
     <Compile Include="WorldSpace\Actor.cs" />
