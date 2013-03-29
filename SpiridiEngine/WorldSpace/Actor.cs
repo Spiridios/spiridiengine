@@ -170,6 +170,9 @@ namespace Spiridios.SpiridiEngine
         internal void DrawSprite(SpriteBatch spriteBatch, Vector2 position)
         {
             sprite.Draw(spriteBatch, position);
+            // TODO: HACK, since sprite is a bit of a dual-personality right now.
+            sprite.Position = position;
+            sprite.Draw(spriteBatch);
         }
 
         // TODO: move into default behavior.
