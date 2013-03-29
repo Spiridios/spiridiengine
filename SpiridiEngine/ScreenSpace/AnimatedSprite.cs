@@ -21,255 +21,57 @@ namespace Spiridios.SpiridiEngine
 {
     public class AnimatedSprite : Sprite
     {
-        private const string XML_CONFIG_ROOT_ELEMENT = "AnimatedSprite";
-        private const string XML_CONFIG_ANIMATION_ELEMENT = "Animation";
-        private const string XML_CONFIG_FRAME_ELEMENT = "Frame";
+        private AnimatedImage image = null;
 
-        private struct FrameInfo
-        {
-            public FrameInfo(int frameNumber, double frameSeconds)
-            {
-                this.frameSeconds = frameSeconds;
-                this.frameNumber = frameNumber;
-            }
-            public double frameSeconds;
-            public int frameNumber;
-        };
-
-        private TileSet image = null;
-        private Vector2 centerOffset;
-
-        private Dictionary<string, List<FrameInfo>> animations = new Dictionary<string, List<FrameInfo>>();
-
-        private int currentFrameIndex = 0;
-        private int currentTile = 1;
-        private string currentAnimation;
-        private double currentFrameElapsedSeconds = 0;
-
-
-        public AnimatedSprite(string imageName, int tileWidth, int tileHeight)
+        public AnimatedSprite(string imageName)
             : base()
         {
-            CreateSprite(imageName, tileWidth, tileHeight);
+            image = new AnimatedImage(imageName);
+            image.Origin = new Vector2(image.Width / 2.0f, image.Height / 2.0f);
         }
 
-        public AnimatedSprite(string imageName, int tileWidth, int tileHeight, int startingFrame)
-            : this(imageName, tileWidth, tileHeight)
+        public AnimatedSprite(AnimatedImage image)
         {
-            this.currentFrameIndex = startingFrame;
-        }
-
-        private void CreateSprite(string imageName, int tileWidth, int tileHeight)
-        {
-            if (!SpiridiGame.ImageManagerInstance.ImageExists(imageName))
-            {
-                SpiridiGame.ImageManagerInstance.AddImage(imageName, imageName);
-            }
-            image = new TileSet(imageName, tileWidth, tileHeight);
-            centerOffset = new Vector2(tileWidth / 2.0f, tileHeight / 2.0f);
-        }
-
-        public AnimatedSprite(string xmlAnimationFile)
-            : base()
-        {
-            LoadXML(xmlAnimationFile);
-        }
-
-        private void LoadXML(string xmlAnimationName)
-        {
-            using (FileStream fileStream = new FileStream(xmlAnimationName, FileMode.Open))
-            {
-                using (XmlReader xmlReader = XmlReader.Create(fileStream))
-                {
-
-                     while (xmlReader.Read())
-                    {
-                        if (xmlReader.IsStartElement())
-                        {
-                            switch (xmlReader.Name)
-                            {
-                                case (AnimatedSprite.XML_CONFIG_ROOT_ELEMENT):
-                                    int tileWidth = int.Parse(xmlReader.GetAttribute("tileWidth"));
-                                    int tileHeight = int.Parse(xmlReader.GetAttribute("tileHeight"));
-                                    string imageName = xmlReader.GetAttribute("image");
-                                    CreateSprite(imageName, tileWidth, tileHeight);
-                                    break;
-                                case(AnimatedSprite.XML_CONFIG_ANIMATION_ELEMENT):
-                                    LoadXMLAnimation(xmlReader);
-                                    break;
-                                default:
-                                    throw new InvalidDataException(String.Format("Unsupported tag '{0}'", xmlReader.Name));
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        private void LoadXMLAnimation(XmlReader xmlReader)
-        {
-            double defaultFrameTime = 0.0;
-            string animationName = "";
-            do
-            {
-                switch (xmlReader.NodeType)
-                {
-                    case (XmlNodeType.Element):
-                        switch (xmlReader.Name)
-                        {
-                            case (AnimatedSprite.XML_CONFIG_ANIMATION_ELEMENT):
-                                string defaultFrameTimeString = xmlReader.GetAttribute("frameTime");
-                                defaultFrameTime = defaultFrameTimeString == null ? 0.25 : double.Parse(defaultFrameTimeString);
-                                animationName = xmlReader.GetAttribute("name");
-                                break;
-                            case (AnimatedSprite.XML_CONFIG_FRAME_ELEMENT):
-                                LoadXMLFrame(xmlReader, animationName, defaultFrameTime);
-                                break;
-                            default:
-                                throw new InvalidDataException(String.Format("TileImage: Unsupported node '{0}'", xmlReader.Name));
-                        }
-                        break;
-                    case (XmlNodeType.EndElement):
-                        if (xmlReader.Name == AnimatedSprite.XML_CONFIG_ANIMATION_ELEMENT)
-                        {
-                            return;
-                        }
-                        break;
-                }
-            } while (xmlReader.Read());
-        }
-
-        private void LoadXMLFrame(XmlReader xmlReader, string animationName, double defaultFrameTime)
-        {
-            do
-            {
-                switch (xmlReader.NodeType)
-                {
-                    case (XmlNodeType.Element):
-                        switch (xmlReader.Name)
-                        {
-                            case (AnimatedSprite.XML_CONFIG_FRAME_ELEMENT):
-                                int tileNumber = int.Parse(xmlReader.GetAttribute("tile"));
-                                string frameTimeString = xmlReader.GetAttribute("frameTime");
-                                double frameTime = frameTimeString == null ? defaultFrameTime : double.Parse(frameTimeString);
-                                AddFrame(animationName, tileNumber, frameTime);
-                                if (xmlReader.IsEmptyElement)
-                                    return;
-                                break;
-                            default:
-                                throw new InvalidDataException(String.Format("TileImage: Unsupported node '{0}'", xmlReader.Name));
-                        }
-                        break;
-                    case (XmlNodeType.EndElement):
-                        if (xmlReader.Name == AnimatedSprite.XML_CONFIG_FRAME_ELEMENT)
-                        {
-                            return;
-                        }
-                        break;
-                }
-            } while (xmlReader.Read());
-        }
-
-        public AnimatedSprite AddFrame(string animation, int frameNumber, double frameSeconds)
-        {
-            if (!animations.ContainsKey(animation))
-            {
-                animations.Add(animation, new List<FrameInfo>());
-            }
-            animations[animation].Add(new FrameInfo(frameNumber, frameSeconds));
-            return this;
-        }
-
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            this.Draw(spriteBatch, this.Position);
-        }
-
-        // TODO: most of these parameters should be PROPERTIES of the sprite, not parameters to the draw method.
-        public override void Draw(SpriteBatch spriteBatch, Vector2 position)
-        {
-            Rectangle source = this.image.GetTileSourceRect(currentTile);
-            //spriteBatch.Draw(this.tileSet.Texture, position + centerOffset, source, TintColor, Rotation, centerOffset, 1.0f, SpriteEffects.None, Layer);
-
-            Rectangle destRect;
-            destRect.X = (int)(position.X + centerOffset.X);
-            destRect.Y = (int)(position.Y + centerOffset.Y);
-            destRect.Width = (int)(this.image.TileWidth);
-            destRect.Height = (int)(this.image.TileHeight);
-
-            spriteBatch.Draw(this.image.Texture, destRect, source, TintColor, Rotation, centerOffset, SpriteEffects.None, Layer);
+            this.image = image;
+            this.image.Origin = new Vector2(image.Width / 2.0f, image.Height / 2.0f);
         }
 
         public int CurrentFrame
         {
-            get { return currentFrameIndex; }
-            set
-            {
-                List<FrameInfo> frameInfos;
-                if (currentAnimation != null && animations.TryGetValue(currentAnimation, out frameInfos))
-                {
-                    // TODO: make this a private SetCurrentFrame(value, frameInfos)
-                    currentFrameIndex = value % frameInfos.Count;
-                    FrameInfo currentFrameInfo = frameInfos[currentFrameIndex];
-                    this.currentTile = currentFrameInfo.frameNumber;
-                }
-            }
+            get { return image.CurrentFrame; }
+            set { image.CurrentFrame = value; }
         }
 
         public string CurrentAnimation
         {
-            get { return this.currentAnimation; }
-            set
-            {
-                if (this.currentAnimation != value)
-                {
-                    this.currentAnimation = value;
-                    this.CurrentFrame = 0;
-                }
-            }
+            get { return image.CurrentAnimation; }
+            set { image.CurrentAnimation = value; }
         }
 
-        public AnimatedSprite SetCurrentAnimation(string currentAnimation)
+        public override void Draw(SpriteBatch spriteBatch)
         {
-            this.CurrentAnimation = currentAnimation;
-            return this;
-        }
-
-        public override Vector2 CenterOffset
-        {
-            get { return this.centerOffset; }
-        }
-
-        public override int Width
-        {
-            get { return image.TileWidth; }
-        }
-
-        public override int Height
-        {
-            get { return image.TileHeight; }
+            image.Draw(spriteBatch, this.Position, this.TintColor, this.Rotation, this.Layer);
         }
 
         public override void Update(TimeSpan elapsedTime)
         {
-            List<FrameInfo> frameInfos;
-            if (currentAnimation != null && animations.TryGetValue(currentAnimation, out frameInfos))
-            {
-                if (currentFrameIndex < frameInfos.Count)
-                {
-                    currentFrameElapsedSeconds += elapsedTime.TotalSeconds;
-                    FrameInfo currentFrameInfo = frameInfos[currentFrameIndex];
-                    if (currentFrameElapsedSeconds > currentFrameInfo.frameSeconds)
-                    {
-                        currentFrameElapsedSeconds -= currentFrameInfo.frameSeconds;
-                        currentFrameIndex++;
-                        currentFrameIndex %= frameInfos.Count;
+            base.Update(elapsedTime);
+            image.Update(elapsedTime);
+        }
 
-                        currentFrameInfo = frameInfos[currentFrameIndex];
-                        this.currentTile = currentFrameInfo.frameNumber;
-                    }
-                }
-            }
+        public override Vector2 CenterOffset
+        {
+            get { return this.image.Origin; }
+        }
+
+        public override int Width
+        {
+            get { return image.Width; }
+        }
+
+        public override int Height
+        {
+            get { return image.Height; }
         }
     }
 }

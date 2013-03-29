@@ -17,7 +17,7 @@ using System.Xml;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Spiridios.SpiridiEngine.ScreenSpace
+namespace Spiridios.SpiridiEngine
 {
     public class AnimatedImage : Image, Updatable
     {
