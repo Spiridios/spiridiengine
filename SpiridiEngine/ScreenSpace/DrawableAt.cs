@@ -10,6 +10,7 @@
     You should have received a copy of the GNU General Public License along with SpiridiEngine. If not, see http://www.gnu.org/licenses/.
 **/
 
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Spiridios.SpiridiEngine
@@ -19,6 +20,6 @@ namespace Spiridios.SpiridiEngine
     /// </summary>
     public interface DrawableAt
     {
-        void Draw(SpriteBatch spriteBatch, Vector2Ext position);
+        void Draw(SpriteBatch spriteBatch, Vector2 position);
     }
 }

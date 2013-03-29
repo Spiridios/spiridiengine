@@ -12,47 +12,54 @@
 
 using System;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Spiridios.SpiridiEngine
 {
-    public class Image : ScreenObject, Updatable
+    public class Image : DrawableAt
     {
-        private Sprite image;
+        private Texture2D image;
+        private Vector2 origin = new Vector2(0, 0);
 
         public Image(string imageName)
-            :this(new StaticSprite(imageName))
         {
-
+            image = SpiridiGame.ImageManagerInstance.GetImage(imageName);
         }
 
-        public Image(Sprite image)
+        public Image(Texture2D image)
         {
             this.image = image;
         }
 
-        public Vector2 CenterOffset
+        // TODO: these do not seem like they belong here.
+        public Color TintColor { get; set; }
+        public float Layer { get; set; }
+        public float Rotation { get; set; }
+        public Vector2 Origin
         {
-            get { return this.image.CenterOffset; }
+            get { return origin; }
+            set { origin = value; }
         }
 
-        public override int Width
+        public int Width
         {
             get { return this.image.Width; }
         }
 
-        public override int Height
+        public int Height
         {
             get { return this.image.Height; }
         }
 
-        public override void Draw(Microsoft.Xna.Framework.Graphics.SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch, Vector2 position)
         {
-            this.image.Draw(spriteBatch, this.Position);
-        }
+            Rectangle destRect;
+            destRect.X = (int)(position.X);
+            destRect.Y = (int)(position.Y);
+            destRect.Width = (int)(this.image.Width);
+            destRect.Height = (int)(this.image.Height);
 
-        public void Update(TimeSpan elapsedTime)
-        {
-            this.image.Update(elapsedTime);
+            spriteBatch.Draw(this.image, destRect, null, TintColor, Rotation, Origin, SpriteEffects.None, Layer);
         }
     }
 }
