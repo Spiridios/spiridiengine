@@ -19,7 +19,7 @@ namespace Spiridios.SpiridiEngine
     /// <summary>
     /// Represents an object on screen
     /// </summary>
-    public abstract class ScreenObject : Drawable, Updatable
+    public abstract class ScreenObject : Drawable
     {
         public ScreenObject()
         {
@@ -32,7 +32,5 @@ namespace Spiridios.SpiridiEngine
         public abstract int Height { get; }
 
         public abstract void Draw(SpriteBatch spriteBatch);
-
-        public abstract void Update(TimeSpan elapsedTime);
     }
 }

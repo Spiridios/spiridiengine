@@ -7,7 +7,7 @@
 
     SpiridiEngine is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License along with Foobar. If not, see http://www.gnu.org/licenses/.
+    You should have received a copy of the GNU General Public License along with SpiridiEngine. If not, see http://www.gnu.org/licenses/.
 **/
 
 using Microsoft.Xna.Framework.Graphics;
@@ -17,8 +17,8 @@ namespace Spiridios.SpiridiEngine
     /// <summary>
     /// Interface for anything that's drawable
     /// </summary>
-    public interface Drawable
+    public interface DrawableAt
     {
-        void Draw(SpriteBatch spriteBatch);
+        void Draw(SpriteBatch spriteBatch, Vector2Ext position);
     }
 }

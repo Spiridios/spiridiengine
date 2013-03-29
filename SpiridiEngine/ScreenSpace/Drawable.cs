@@ -10,33 +10,15 @@
     You should have received a copy of the GNU General Public License along with SpiridiEngine. If not, see http://www.gnu.org/licenses/.
 **/
 
-using System;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Spiridios.SpiridiEngine
 {
-    public abstract class Sprite : ScreenObject, Updatable
+    /// <summary>
+    /// Interface for anything that's drawable
+    /// </summary>
+    public interface Drawable
     {
-        public Color TintColor { get; set; }
-        public float Layer { get; set; }
-        public float Rotation { get; set; }
-
-        protected Sprite()
-        {
-            TintColor = Color.White;
-            Layer = 0;
-            Rotation = 0;
-        }
-
-        public abstract Vector2 CenterOffset
-        {
-            get;
-        }
-
-        [System.Obsolete("Use Drawable's Draw instead.", false)]
-        public abstract void Draw(SpriteBatch spriteBatch, Vector2 position);
-        public virtual void Update(System.TimeSpan elapsedTime) {}
-
+        void Draw(SpriteBatch spriteBatch);
     }
 }

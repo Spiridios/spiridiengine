@@ -180,6 +180,11 @@ namespace Spiridios.SpiridiEngine
             return this;
         }
 
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            this.Draw(spriteBatch, this.Position);
+        }
+
         // TODO: most of these parameters should be PROPERTIES of the sprite, not parameters to the draw method.
         public override void Draw(SpriteBatch spriteBatch, Vector2 position)
         {

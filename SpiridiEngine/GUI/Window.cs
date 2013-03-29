@@ -17,9 +17,9 @@ using System.Text;
 
 namespace Spiridios.SpiridiEngine.GUI
 {
-    public abstract class Window : ScreenObject
+    public abstract class Window : ScreenObject, Updatable
     {
-        public override void Update(TimeSpan elapsedTime) {}
+        public virtual void Update(TimeSpan elapsedTime) {}
         public override void Draw(Microsoft.Xna.Framework.Graphics.SpriteBatch spriteBatch) {}
     }
 }

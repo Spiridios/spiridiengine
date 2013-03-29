@@ -15,7 +15,7 @@ using Microsoft.Xna.Framework;
 
 namespace Spiridios.SpiridiEngine
 {
-    public class Image : ScreenObject
+    public class Image : ScreenObject, Updatable
     {
         private Sprite image;
 
@@ -50,7 +50,7 @@ namespace Spiridios.SpiridiEngine
             this.image.Draw(spriteBatch, this.Position);
         }
 
-        public override void Update(TimeSpan elapsedTime)
+        public void Update(TimeSpan elapsedTime)
         {
             this.image.Update(elapsedTime);
         }

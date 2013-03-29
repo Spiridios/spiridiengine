@@ -28,6 +28,11 @@ namespace Spiridios.SpiridiEngine
             centerOffset = new Vector2(this.Width / 2.0f, this.Height / 2.0f);
         }
 
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            Draw(spriteBatch, this.Position);
+        }
+
         // TODO: Should sprite have a position? Right now it's more or less a fancy image.
         public override void Draw(SpriteBatch spriteBatch, Vector2 position)
         {

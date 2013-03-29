@@ -21,7 +21,7 @@ namespace Spiridios.SpiridiEngine
         private State nextState;
 
         private string splashImageName;
-        private Image splashImage;
+        private Sprite splashImage;
 
         private TimeSpan splashStart;
         private int updateCount = 0;
@@ -38,7 +38,7 @@ namespace Spiridios.SpiridiEngine
         public override void Initialize()
         {
             base.Initialize();
-            this.splashImage = new Image(this.splashImageName);
+            this.splashImage = new StaticSprite(this.splashImageName);
             this.splashImage.Position = new Vector2((game.WindowWidth - this.splashImage.Width) / 2, (game.WindowHeight - this.splashImage.Height) / 2);
         }
 
