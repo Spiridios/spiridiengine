@@ -105,7 +105,6 @@
     <Compile Include="Scene\TileSetCollection.cs" />
     <Compile Include="ScreenSpace\Image.cs" />
     <Compile Include="State\BootState.cs" />
-    <Compile Include="ScreenSpace\AnimatedSprite.cs" />
     <Compile Include="ScreenSpace\Drawable.cs" />
     <Compile Include="Behavior\Explosion.cs" />
     <Compile Include="GUI\ImageButton.cs" />
@@ -125,7 +124,6 @@
     <Compile Include="State\SplashState.cs" />
     <Compile Include="State\State.cs" />
     <Compile Include="StaticBackground.cs" />
-    <Compile Include="ScreenSpace\StaticSprite.cs" />
     <Compile Include="TextRenderer.cs" />
     <Compile Include="Scene\TileSet.cs" />
     <Compile Include="Scene\Scene.cs" />

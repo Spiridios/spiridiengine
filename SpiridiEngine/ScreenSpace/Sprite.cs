@@ -18,7 +18,7 @@ namespace Spiridios.SpiridiEngine
 {
     public class Sprite : ScreenObject, Updatable
     {
-        protected Image image = null;
+        private Image image = null;
         private Updatable updatable = null;
 
         public Color TintColor { get; set; }
