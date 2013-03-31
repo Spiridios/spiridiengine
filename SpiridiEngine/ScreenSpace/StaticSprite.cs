@@ -16,35 +16,12 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Spiridios.SpiridiEngine
 {
+    [System.Obsolete("StaticSprite is deprecated. Use Sprite instead.", true)]
     public class StaticSprite : Sprite
     {
-        private Image image = null;
-
         public StaticSprite(string imageName)
-            : base()
+            : base(imageName)
         {
-            image = new Image(imageName);
-            image.Origin = new Vector2(image.Width / 2.0f, image.Height / 2.0f);
-        }
-
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            image.Draw(spriteBatch, this.Position, this.TintColor, this.Rotation, this.Layer);
-        }
-
-        public override Vector2 CenterOffset
-        {
-            get { return this.image.Origin; }
-        }
-
-        public override int Width
-        {
-            get { return image.Width; }
-        }
-
-        public override int Height
-        {
-            get { return image.Height; }
         }
     }
 }

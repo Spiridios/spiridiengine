@@ -19,59 +19,39 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Spiridios.SpiridiEngine
 {
+    [System.Obsolete("AnimatedSprite is deprecated. Use Sprite with AnimatedImage instead.", true)]
     public class AnimatedSprite : Sprite
     {
-        private AnimatedImage image = null;
+        private AnimatedImage animatedImage = null;
 
         public AnimatedSprite(string imageName)
-            : base()
+            : this(new AnimatedImage(imageName))
         {
-            image = new AnimatedImage(imageName);
-            image.Origin = new Vector2(image.Width / 2.0f, image.Height / 2.0f);
         }
 
         public AnimatedSprite(AnimatedImage image)
+            : base(image)
         {
-            this.image = image;
-            this.image.Origin = new Vector2(image.Width / 2.0f, image.Height / 2.0f);
+            this.animatedImage = image;
         }
 
         public int CurrentFrame
         {
-            get { return image.CurrentFrame; }
-            set { image.CurrentFrame = value; }
+            get { return animatedImage.CurrentFrame; }
+            set { animatedImage.CurrentFrame = value; }
         }
 
         public string CurrentAnimation
         {
-            get { return image.CurrentAnimation; }
-            set { image.CurrentAnimation = value; }
-        }
-
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            image.Draw(spriteBatch, this.Position, this.TintColor, this.Rotation, this.Layer);
+            get { return animatedImage.CurrentAnimation; }
+            set { animatedImage.CurrentAnimation = value; }
         }
 
         public override void Update(TimeSpan elapsedTime)
         {
             base.Update(elapsedTime);
-            image.Update(elapsedTime);
+            animatedImage.Update(elapsedTime);
         }
 
-        public override Vector2 CenterOffset
-        {
-            get { return this.image.Origin; }
-        }
-
-        public override int Width
-        {
-            get { return image.Width; }
-        }
-
-        public override int Height
-        {
-            get { return image.Height; }
-        }
     }
 }

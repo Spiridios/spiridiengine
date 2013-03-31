@@ -16,25 +16,65 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Spiridios.SpiridiEngine
 {
-    public abstract class Sprite : ScreenObject, Updatable
+    public class Sprite : ScreenObject, Updatable
     {
+        protected Image image = null;
+        private Updatable updatable = null;
+
         public Color TintColor { get; set; }
         public float Layer { get; set; }
         public float Rotation { get; set; }
 
-        protected Sprite()
+        public Sprite(Image image)
         {
+            this.image = image;
+            if (image is Updatable)
+            {
+                this.updatable = (Updatable)image;
+            }
+            this.image.Origin = new Vector2(image.Width / 2.0f, image.Height / 2.0f);
             TintColor = Color.White;
             Layer = 0;
             Rotation = 0;
         }
 
-        public abstract Vector2 CenterOffset
+        public Sprite(string imageName)
+            : this(new Image(imageName))
         {
-            get;
         }
 
-        public virtual void Update(System.TimeSpan elapsedTime) {}
+        public Image Image
+        {
+            get { return image; }
+        }
+
+        public Vector2 CenterOffset
+        {
+            get { return image.Origin; }
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            image.Draw(spriteBatch, this.Position, this.TintColor, this.Rotation, this.Layer);
+        }
+
+        public override int Width
+        {
+            get { return image.Width; }
+        }
+
+        public override int Height
+        {
+            get { return image.Height; }
+        }
+
+        public virtual void Update(System.TimeSpan elapsedTime)
+        {
+            if (updatable != null)
+            {
+                updatable.Update(elapsedTime);
+            }
+        }
 
     }
 }

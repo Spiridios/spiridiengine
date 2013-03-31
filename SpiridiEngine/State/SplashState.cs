@@ -38,7 +38,7 @@ namespace Spiridios.SpiridiEngine
         public override void Initialize()
         {
             base.Initialize();
-            this.splashImage = new StaticSprite(this.splashImageName);
+            this.splashImage = new Sprite(this.splashImageName);
             this.splashImage.Position = new Vector2((game.WindowWidth - this.splashImage.Width) / 2, (game.WindowHeight - this.splashImage.Height) / 2);
         }
 

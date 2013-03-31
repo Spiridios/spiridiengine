@@ -52,8 +52,14 @@ namespace Spiridios.SpiridiEngine
         private Dictionary<LifeStage, Behavior> stageBehaviors = new Dictionary<LifeStage, Behavior>();
 
         public Actor(string imageName)
-            : this(new StaticSprite(imageName))
+            : this(new Sprite(imageName))
         {
+        }
+
+        public Actor(Image image)
+            : this(new Sprite(image))
+        {
+
         }
 
         public Actor(Sprite sprite)
