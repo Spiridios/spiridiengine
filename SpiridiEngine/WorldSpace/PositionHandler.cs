@@ -19,6 +19,17 @@ namespace Spiridios.SpiridiEngine
     /// </summary>
     public class PositionHandler
     {
-        public virtual Vector2 Position { get; set; }
+        private Vector2 position;
+
+        public virtual Vector2 ScreenPosition
+        {
+            get { return position; }
+        }
+
+        public virtual Vector2 Position
+        {
+            get { return position; }
+            set { position = value; }
+        }
     }
 }

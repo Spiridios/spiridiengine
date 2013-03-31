@@ -59,8 +59,10 @@ namespace Spiridios.SpiridiEngine
         public Actor(Sprite sprite)
         {
             this.sprite = sprite;
+            AddScreenObject(sprite);
 
             Position = new Vector2(0, 0);
+
             Rotation = 0.0f;
             Collidable = true;
             lifeStage = LifeStage.ALIVE;
@@ -119,10 +121,9 @@ namespace Spiridios.SpiridiEngine
 
         public Vector2 GetCenter()
         {
-            return Vector2.Add(this.Position, this.GetCenterOffset());
+            return Vector2.Add(this.PositionHandler.ScreenPosition, this.GetCenterOffset());
         }
 
-        // TODO: propertize this (darn java day-job)
         // TODO: should this be public?
         public Vector2 GetCenterOffset()
         {
@@ -130,6 +131,7 @@ namespace Spiridios.SpiridiEngine
         }
 
         //TODO: refactor into collidable or base object or something.
+        //TODO: CollidesWith uses ScreenSpace coordinates
         public bool CollidesWith(Actor that)
         {
             if (this.Collidable)
@@ -162,16 +164,9 @@ namespace Spiridios.SpiridiEngine
             }
         }
 
+        // TODO: internal?! Behavior calls it, but still....
         internal void DrawSprite(SpriteBatch spriteBatch)
         {
-            this.DrawSprite(spriteBatch, this.Position);
-        }
-
-        internal void DrawSprite(SpriteBatch spriteBatch, Vector2 position)
-        {
-            sprite.Draw(spriteBatch, position);
-            // TODO: HACK, since sprite is a bit of a dual-personality right now.
-            sprite.Position = position;
             sprite.Draw(spriteBatch);
         }
 

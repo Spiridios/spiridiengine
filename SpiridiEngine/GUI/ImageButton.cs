@@ -16,22 +16,22 @@ namespace Spiridios.SpiridiEngine.GUI
 {
     public class ImageButton : Window
     {
-        private AnimatedSprite buttonSprite;
+        private AnimatedImage buttonImage;
 
-        public ImageButton(AnimatedSprite buttonSprite, int upFrame, int downFrame)
+        public ImageButton(AnimatedImage buttonSprite, int upFrame, int downFrame)
         {
-            this.buttonSprite = buttonSprite;
+            this.buttonImage = buttonSprite;
             buttonSprite.CurrentFrame = upFrame;
         }
 
         public override int Height
         {
-            get { return buttonSprite.Height; }
+            get { return buttonImage.Height; }
         }
 
         public override int Width
         {
-            get { return buttonSprite.Width; }
+            get { return buttonImage.Width; }
         }
 
         public override void Update(TimeSpan elapsedTime)
@@ -41,7 +41,7 @@ namespace Spiridios.SpiridiEngine.GUI
 
         public override void Draw(Microsoft.Xna.Framework.Graphics.SpriteBatch spriteBatch)
         {
-            buttonSprite.Draw(spriteBatch, this.Position);
+            buttonImage.Draw(spriteBatch, this.Position);
         }
 
     }

@@ -25,23 +25,17 @@ namespace Spiridios.SpiridiEngine
             this.radialPositionHandler.CenterCorrection = this.GetCenterOffset();
         }
 
-        public Vector2 Origin
+        public Vector2 RadialOrigin
         {
-            get { return radialPositionHandler.Origin; }
-            set { radialPositionHandler.Origin = value; }
+            get { return radialPositionHandler.RadialOrigin; }
+            set { radialPositionHandler.RadialOrigin = value; }
         }
 
+        // TODO: PositionHandlers need to notify ScreenObjects, not WorldObject notifying ScreenObject
         public float Theta
         {
             get { return radialPositionHandler.Theta; }
-            set { radialPositionHandler.Theta = value; }
+            set { radialPositionHandler.Theta = value; this.Sprite.Position = this.PositionHandler.ScreenPosition; }
         }
-
-        public Vector2 BasePosition
-        {
-            get { return radialPositionHandler.BasePosition; }
-            set { radialPositionHandler.BasePosition = value; }
-        }
-
     }
 }

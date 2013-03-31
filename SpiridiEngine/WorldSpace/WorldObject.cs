@@ -21,6 +21,8 @@ namespace Spiridios.SpiridiEngine
     /// </summary>
     public abstract class WorldObject : Drawable, Updatable
     {
+        private ScreenObject screenObject;
+
         public WorldObject()
         {
             this.PositionHandler = new PositionHandler();
@@ -33,12 +35,25 @@ namespace Spiridios.SpiridiEngine
 
         protected PositionHandler PositionHandler { get; set; }
 
+        protected void AddScreenObject(ScreenObject screenObject)
+        {
+            this.screenObject = screenObject;
+            screenObject.Position = PositionHandler.Position;
+        }
+
         // TODO: make this non-virtual. Note: if this becomes non-virtual, then there NEEDS to be a
         // PositionUpdated event so child objects can detect a change and react to it.
         public virtual Vector2 Position
         {
             get { return this.PositionHandler.Position; }
-            set { this.PositionHandler.Position = value; }
+            set
+            {
+                this.PositionHandler.Position = value;
+                if (screenObject != null)
+                {
+                    screenObject.Position = this.PositionHandler.ScreenPosition;
+                }
+            }
         }
 
         public abstract void Draw(SpriteBatch spriteBatch);

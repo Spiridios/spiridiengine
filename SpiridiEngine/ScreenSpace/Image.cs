@@ -57,6 +57,11 @@ namespace Spiridios.SpiridiEngine
             get { return this.image.Height; }
         }
 
+        public void Draw(SpriteBatch spriteBatch, Vector2 position)
+        {
+            this.Draw(spriteBatch, position, Color.White, 0.0f, 1.0f);
+        }
+
         public virtual void Draw(SpriteBatch spriteBatch, Vector2 position, Color tintColor, float rotation, float layer)
         {
             Rectangle destRect;

@@ -17,22 +17,28 @@ namespace Spiridios.SpiridiEngine
 {
     public class RadialPositionHandler : PositionHandler
     {
-        public Vector2 Origin { get; set; }
-        private Vector2 untransformedPosition;
+        private Vector2 radialOrigin;
+        private Vector2 screenPosition;
         private float theta;
-        private Vector2 centerCorrection;
+        private Vector2 objectOrigin;
 
         public RadialPositionHandler()
         {
-            Origin = new Vector2(0, 0);
-            untransformedPosition = new Vector2(0, 0);
+            RadialOrigin = new Vector2(0, 0);
+            screenPosition = new Vector2(0, 0);
             theta = 0;
-            centerCorrection = new Vector2(0, 0);
+            objectOrigin = new Vector2(0, 0);
+        }
+
+        public Vector2 RadialOrigin
+        {
+            get { return radialOrigin; }
+            set { radialOrigin = value; }
         }
 
         public Vector2 CenterCorrection
         {
-            set { this.centerCorrection = value; }
+            set { this.objectOrigin = value; }
         }
 
         public float Theta
@@ -49,30 +55,24 @@ namespace Spiridios.SpiridiEngine
                 {
                     theta += (float)(Math.PI * 2.0);
                 }
-                RefreshPosition();
+                RefreshScreenPosition();
             }
+        }
+
+        public override Vector2 ScreenPosition
+        {
+            get { return screenPosition; }
         }
 
         public override Vector2 Position
         {
             get { return base.Position; }
-            set { base.Position = value; this.untransformedPosition = value; this.theta = 0; }
+            set { base.Position = value; RefreshScreenPosition(); }
         }
 
-        public Vector2 BasePosition
+        private void RefreshScreenPosition()
         {
-            get { return this.untransformedPosition; }
-            set { this.untransformedPosition = value; RefreshPosition(); }
-        }
-
-        private void RefreshPosition()
-        {
-            base.Position = this.GetRotatedPosition();
-        }
-
-        private Vector2 GetRotatedPosition()
-        {
-            return Vector2.Subtract(Vector2Ext.RotateAround(Vector2.Add(this.untransformedPosition, this.centerCorrection), this.Origin, this.Theta), this.centerCorrection);
+            screenPosition = Vector2.Add(Vector2.Subtract(Vector2Ext.Rotate(this.Position, this.Theta), this.objectOrigin), this.RadialOrigin);
         }
     }
 }

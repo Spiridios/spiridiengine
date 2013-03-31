@@ -34,8 +34,6 @@ namespace Spiridios.SpiridiEngine
             get;
         }
 
-        [System.Obsolete("Use Drawable's Draw instead.", false)]
-        public virtual void Draw(SpriteBatch spriteBatch, Vector2 position) {}
         public virtual void Update(System.TimeSpan elapsedTime) {}
 
     }
