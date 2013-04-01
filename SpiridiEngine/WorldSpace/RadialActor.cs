@@ -22,7 +22,7 @@ namespace Spiridios.SpiridiEngine
         {
             this.radialPositionHandler = new RadialPositionHandler();
             this.PositionHandler = this.radialPositionHandler;
-            this.radialPositionHandler.CenterCorrection = this.GetCenterOffset();
+            this.radialPositionHandler.ObjectOrigin = this.Origin;
         }
 
         public Vector2 RadialOrigin

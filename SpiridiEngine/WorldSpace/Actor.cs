@@ -127,13 +127,12 @@ namespace Spiridios.SpiridiEngine
 
         public Vector2 GetCenter()
         {
-            return Vector2.Add(this.PositionHandler.ScreenPosition, this.GetCenterOffset());
+            return Vector2.Add(this.PositionHandler.ScreenPosition, this.Origin);
         }
 
-        // TODO: should this be public?
-        public Vector2 GetCenterOffset()
+        public Vector2 Origin
         {
-            return this.sprite.CenterOffset;
+            get { return this.sprite.Origin; }
         }
 
         //TODO: refactor into collidable or base object or something.

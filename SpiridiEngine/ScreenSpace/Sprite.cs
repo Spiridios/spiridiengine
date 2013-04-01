@@ -48,7 +48,7 @@ namespace Spiridios.SpiridiEngine
             get { return image; }
         }
 
-        public Vector2 CenterOffset
+        public Vector2 Origin
         {
             get { return image.Origin; }
         }

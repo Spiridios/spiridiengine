@@ -37,7 +37,6 @@ namespace Spiridios.SpiridiEngine
         };
 
         private TileSet tileSet = null;
-        private Vector2 centerOffset;
 
         private Dictionary<string, List<FrameInfo>> animations = new Dictionary<string, List<FrameInfo>>();
 
@@ -50,7 +49,7 @@ namespace Spiridios.SpiridiEngine
         public AnimatedImage(string imageName, int tileWidth, int tileHeight)
             : base()
         {
-            CreateSprite(imageName, tileWidth, tileHeight);
+            CreateImage(imageName, tileWidth, tileHeight);
         }
 
         public AnimatedImage(string imageName, int tileWidth, int tileHeight, int startingFrame)
@@ -59,7 +58,7 @@ namespace Spiridios.SpiridiEngine
             this.currentFrameIndex = startingFrame;
         }
 
-        private void CreateSprite(string imageName, int tileWidth, int tileHeight)
+        private void CreateImage(string imageName, int tileWidth, int tileHeight)
         {
             if (!SpiridiGame.ImageManagerInstance.ImageExists(imageName))
             {
@@ -67,7 +66,7 @@ namespace Spiridios.SpiridiEngine
             }
             tileSet = new TileSet(imageName, tileWidth, tileHeight);
             this.Texture = tileSet.Texture;
-            centerOffset = new Vector2(tileWidth / 2.0f, tileHeight / 2.0f);
+            //this.Origin = new Vector2(tileWidth / 2.0f, tileHeight / 2.0f);
         }
 
         public AnimatedImage(string xmlAnimationFile)
@@ -93,7 +92,7 @@ namespace Spiridios.SpiridiEngine
                                     int tileWidth = int.Parse(xmlReader.GetAttribute("tileWidth"));
                                     int tileHeight = int.Parse(xmlReader.GetAttribute("tileHeight"));
                                     string imageName = xmlReader.GetAttribute("image");
-                                    CreateSprite(imageName, tileWidth, tileHeight);
+                                    CreateImage(imageName, tileWidth, tileHeight);
                                     break;
                                 case (AnimatedImage.XML_CONFIG_ANIMATION_ELEMENT):
                                     LoadXMLAnimation(xmlReader);
@@ -181,19 +180,6 @@ namespace Spiridios.SpiridiEngine
             return this;
         }
 
-        public override void Draw(SpriteBatch spriteBatch, Vector2 position, Color tintColor, float rotation, float layer)
-        {
-            Rectangle source = this.tileSet.GetTileSourceRect(currentTile);
-
-            Rectangle destRect;
-            destRect.X = (int)(position.X + centerOffset.X);
-            destRect.Y = (int)(position.Y + centerOffset.Y);
-            destRect.Width = (int)(this.tileSet.TileWidth);
-            destRect.Height = (int)(this.tileSet.TileHeight);
-
-            spriteBatch.Draw(this.tileSet.Texture, destRect, source, tintColor, rotation, centerOffset, SpriteEffects.None, layer);
-        }
-
         public int CurrentFrame
         {
             get { return currentFrameIndex; }
@@ -206,6 +192,7 @@ namespace Spiridios.SpiridiEngine
                     currentFrameIndex = value % frameInfos.Count;
                     FrameInfo currentFrameInfo = frameInfos[currentFrameIndex];
                     this.currentTile = currentFrameInfo.frameNumber;
+                    this.SourceRectangle = this.tileSet.GetTileSourceRect(currentTile);
                 }
             }
         }
@@ -256,6 +243,7 @@ namespace Spiridios.SpiridiEngine
 
                         currentFrameInfo = frameInfos[currentFrameIndex];
                         this.currentTile = currentFrameInfo.frameNumber;
+                        this.SourceRectangle = this.tileSet.GetTileSourceRect(currentTile);
                     }
                 }
             }

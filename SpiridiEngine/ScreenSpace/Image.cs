@@ -20,19 +20,39 @@ namespace Spiridios.SpiridiEngine
     {
         private Texture2D image;
         private Vector2 origin = new Vector2(0, 0);
+        private Rectangle sourceRect;
 
         public Image(string imageName)
         {
             image = SpiridiGame.ImageManagerInstance.GetImage(imageName);
+            sourceRect = new Rectangle(0, 0, image.Width, image.Height);
         }
 
         public Image(Texture2D image)
         {
             this.image = image;
+            sourceRect = new Rectangle(0, 0, image.Width, image.Height);
+        }
+
+        public Image(string imageName, Rectangle sourceRect)
+        {
+            this.sourceRect = sourceRect;
+        }
+
+        public Image(Texture2D image, Rectangle sourceRect)
+        {
+            this.image = image;
+            this.sourceRect = sourceRect;
         }
 
         protected Image()
         {
+        }
+
+        public Rectangle SourceRectangle
+        {
+            get { return sourceRect; }
+            set { sourceRect = value; }
         }
 
         protected Texture2D Texture
@@ -67,10 +87,10 @@ namespace Spiridios.SpiridiEngine
             Rectangle destRect;
             destRect.X = (int)(position.X + origin.X);
             destRect.Y = (int)(position.Y + origin.Y);
-            destRect.Width = (int)(this.image.Width);
-            destRect.Height = (int)(this.image.Height);
+            destRect.Width = (int)(sourceRect.Width);
+            destRect.Height = (int)(sourceRect.Height);
 
-            spriteBatch.Draw(this.image, destRect, null, tintColor, rotation, Origin, SpriteEffects.None, layer);
+            spriteBatch.Draw(this.image, destRect, sourceRect, tintColor, rotation, Origin, SpriteEffects.None, layer);
         }
     }
 }
