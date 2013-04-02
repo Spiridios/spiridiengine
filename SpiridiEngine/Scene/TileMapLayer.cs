@@ -67,7 +67,7 @@ namespace Spiridios.SpiridiEngine
                                     //string tilesetName = TileSet.ParseTiledTilesetName(xmlReader);
                                     int startTileId = int.Parse(xmlReader.GetAttribute("firstgid"));
                                     tileSet = new TileSet(xmlReader);
-                                    tileImageSet.AddImage(tileSet, startTileId);
+                                    tileImageSet.AddTileSet(tileSet, startTileId);
                                     break;
                                 case (TileMapLayer.TILED_LAYER_ELEMENT):
                                     TileMapLayer mapLayer = new TileMapLayer(game, tileImageSet, xmlReader);

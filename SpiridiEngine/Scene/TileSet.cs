@@ -120,6 +120,14 @@ namespace Spiridios.SpiridiEngine
             get { return this.tileSet; }
         }
 
+        // TODO: this does not cache the Image
+        public Image CreateTileImage(int tileId)
+        {
+            Rectangle source = GetTileSourceRect(tileId);
+            Image tileImage = new Image(this.tileSet, source);
+            return tileImage;
+        }
+
         public Rectangle GetTileSourceRect(int tileId)
         {
             Vector2 srcCoord = TileSet.GetImageCoordinatesFromOffset(tileId - 1, (tileSet.Width / tileWidth), tileWidth, tileHeight);
