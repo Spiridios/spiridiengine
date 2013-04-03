@@ -8,6 +8,7 @@ namespace Spiridios.SpiridiEngine
     {
         private List<TileSet> tileImages = new List<TileSet>();
         private SortedList<int, int> tileIdMap = new SortedList<int, int>();
+        private Dictionary<int, Image> tileImageMap = new Dictionary<int, Image>();
         // How to find the TileSet for the given tileId?
 
         public void AddTileSet(TileSet tileImage, int startTileId)
@@ -19,18 +20,36 @@ namespace Spiridios.SpiridiEngine
         public Image GetImage(int tileId)
         {
             Image image = null;
-            if (tileId > 0)
+            if (this.tileImageMap == null)
             {
-                int key = FindKey(tileId);
-                if (key >= 0)
-                {
-                    int index = tileIdMap[key];
-                    TileSet ti = tileImages[index];
-                    image = ti.CreateTileImage(tileId - (key - 1));
-                }
+                image = this.GetImageNoCache(tileId);
+            }
+            else if (!this.tileImageMap.TryGetValue(tileId, out image))
+            {
+                image = this.GetImageNoCache(tileId);
+                this.tileImageMap[tileId] = image;
             }
             return image;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tileId">Must be greater than 0</param>
+        /// <returns></returns>
+        private Image GetImageNoCache(int tileId)
+        {
+            Image image = null;
+            int key = FindKey(tileId);
+            if (key >= 0)
+            {
+                int index = tileIdMap[key];
+                TileSet ti = tileImages[index];
+                image = ti.CreateTileImage(tileId - (key - 1));
+            }
+            return image;
+        }
+
 
         /// <summary>
         /// 
@@ -43,10 +62,7 @@ namespace Spiridios.SpiridiEngine
             Image image = GetImage(tileId);
             if (image != null)
             {
-                Vector2 position;
-                position.Y = destination.Y;
-                position.X = destination.X;
-                image.Draw(spriteBatch, position);
+                image.Draw(spriteBatch, destination);
             }
             // */
 

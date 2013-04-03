@@ -84,13 +84,18 @@ namespace Spiridios.SpiridiEngine
 
         public virtual void Draw(SpriteBatch spriteBatch, Vector2 position, Color tintColor, float rotation, float layer)
         {
-            Rectangle destRect;
-            destRect.X = (int)(position.X + origin.X);
-            destRect.Y = (int)(position.Y + origin.Y);
-            destRect.Width = (int)(sourceRect.Width);
-            destRect.Height = (int)(sourceRect.Height);
+            Rectangle destination;
+            destination.X = (int)(position.X + origin.X);
+            destination.Y = (int)(position.Y + origin.Y);
+            destination.Width = (int)(sourceRect.Width);
+            destination.Height = (int)(sourceRect.Height);
 
-            spriteBatch.Draw(this.image, destRect, sourceRect, tintColor, rotation, Origin, SpriteEffects.None, layer);
+            spriteBatch.Draw(this.image, destination, sourceRect, tintColor, rotation, Origin, SpriteEffects.None, layer);
+        }
+
+        public virtual void Draw(SpriteBatch spriteBatch, Rectangle destination, Color tintColor, float rotation, float layer)
+        {
+            spriteBatch.Draw(this.image, destination, sourceRect, tintColor, rotation, Origin, SpriteEffects.None, layer);
         }
     }
 }

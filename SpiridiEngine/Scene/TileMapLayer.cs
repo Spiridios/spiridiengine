@@ -26,7 +26,7 @@ namespace Spiridios.SpiridiEngine
         private const string TILED_LAYER_ELEMENT = "layer";
 
         private SpiridiGame game;
-        private List<int> layerTileIndices = null;
+        private List<Image> layerTileImages = null;
         private TileSetCollection tileSet;
         private int layerWidth;
         private int layerHeight;
@@ -36,8 +36,8 @@ namespace Spiridios.SpiridiEngine
         public TileMapLayer(SpiridiGame game, TileSetCollection tileSet, XmlReader mapLayerReader)
         {
             this.game = game;
-            LoadTiledLayer(mapLayerReader);
             this.tileSet = tileSet;
+            LoadTiledLayer(mapLayerReader);
         }
 
         public static List<SceneLayer> LoadTiledMap(SpiridiGame game, string tiledFile)
@@ -117,7 +117,7 @@ namespace Spiridios.SpiridiEngine
                                 byte[] rawLayer = Convert.FromBase64String(layerString);
 
                                 int size = layerWidth * layerHeight;
-                                layerTileIndices = new List<int>(size);
+                                layerTileImages= new List<Image>(size);
                                 
                                 Stream layerStream = new MemoryStream(rawLayer);
                                 if(compression == "gzip")
@@ -129,7 +129,8 @@ namespace Spiridios.SpiridiEngine
                                 {
                                     for (int i = 0; i < size; i++)
                                     {
-                                        layerTileIndices.Add(layerReader.ReadInt32());
+                                        int tileId = layerReader.ReadInt32();
+                                        layerTileImages.Add(this.tileSet.GetImage(tileId));
                                     }
                                 }
                                 break;
@@ -157,7 +158,7 @@ namespace Spiridios.SpiridiEngine
             // TODO: Possibly call from update instead of draw
             actors.Sort(actorsComparer);
 
-            int size = layerTileIndices.Count;
+            int size = layerTileImages.Count;
             int currentActorIndex = 0;
             Actor currentActor = (currentActorIndex < actors.Count) ? actors[currentActorIndex] : null;
 
@@ -171,39 +172,10 @@ namespace Spiridios.SpiridiEngine
                     currentActor = (currentActorIndex < actors.Count) ? actors[currentActorIndex] : null;
                 }
 
-                int gid = layerTileIndices[i];
-                if (gid > 0)
+                Image image = layerTileImages[i];
+                if (image != null)
                 {
-                    Rectangle dest = new Rectangle((int)destCoord.X, (int)destCoord.Y, tileWidth, tileHeight);
-                    tileSet.DrawTile(spriteBatch, gid, dest);
-                }
-            }
-        }
-
-        private void Draw(TileSet tileSet, SpriteBatch spriteBatch)
-        {
-            // TODO: Possibly call from update instead of draw
-            actors.Sort(actorsComparer);
-
-            int size = layerTileIndices.Count;
-            int currentActorIndex = 0;
-            Actor currentActor = (currentActorIndex < actors.Count) ? actors[currentActorIndex] : null;
-
-            for (int i = 0; i < size; i++)
-            {
-                Vector2 destCoord = TileSet.GetImageCoordinatesFromOffset(i, layerWidth, tileSet.TileWidth, tileSet.TileHeight);
-                if (currentActor != null && (currentActor.Position.Y + currentActor.Height) < (destCoord.Y + tileSet.TileHeight))
-                {
-                    currentActor.Draw(spriteBatch);
-                    currentActorIndex++;
-                    currentActor = (currentActorIndex < actors.Count) ? actors[currentActorIndex] : null;
-                }
-
-                int gid = layerTileIndices[i];
-                if (gid > 0)
-                {
-                    Rectangle dest = new Rectangle((int)destCoord.X, (int)destCoord.Y, tileSet.TileWidth, tileSet.TileHeight);
-                    tileSet.DrawTile(spriteBatch, gid, dest);
+                    image.Draw(spriteBatch, destCoord);
                 }
             }
         }
