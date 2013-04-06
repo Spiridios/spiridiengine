@@ -97,6 +97,7 @@ namespace Spiridios.SpiridiEngine
                         switch (xmlReader.Name)
                         {
                             case(TileMapLayer.TILED_LAYER_ELEMENT):
+                                this.Name = xmlReader.GetAttribute("name");
                                 layerHeight = int.Parse(xmlReader.GetAttribute("height"));
                                 layerWidth = int.Parse(xmlReader.GetAttribute("width"));
                                 break;
@@ -177,6 +178,12 @@ namespace Spiridios.SpiridiEngine
                 {
                     image.Draw(spriteBatch, destCoord);
                 }
+            }
+
+            // Draw any  undrawn actors.
+            for (int i = currentActorIndex; i < actors.Count; i++)
+            {
+                actors[currentActorIndex].Draw(spriteBatch);
             }
         }
     }

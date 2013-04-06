@@ -8,6 +8,7 @@ namespace Spiridios.SpiridiEngine
         // TODO: This shouldn't be protected
         protected List<Actor> actors = new List<Actor>();
         protected IComparer<Actor> actorsComparer = new Actor.AscendingYComparitor();
+        private string layerName;
 
         public void AddActor(Actor actor)
         {
@@ -30,5 +31,12 @@ namespace Spiridios.SpiridiEngine
                 actor.Update(elapsedTime);
             }
         }
+
+        public string Name
+        {
+            get { return this.layerName; }
+            set { this.layerName = value; }
+        }
+        
     }
 }

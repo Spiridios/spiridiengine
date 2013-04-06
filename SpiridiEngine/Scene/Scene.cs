@@ -23,6 +23,7 @@ namespace Spiridios.SpiridiEngine
         private SpiridiGame game;
 
         private List<SceneLayer> layers = new List<SceneLayer>();
+        private Dictionary<string, SceneLayer> layerNameMap = new Dictionary<string, SceneLayer>();
 
         public Scene(SpiridiGame game) 
         {
@@ -31,7 +32,15 @@ namespace Spiridios.SpiridiEngine
 
         public void LoadTiledMap(string tiledFile)
         {
-            layers.AddRange(TileMapLayer.LoadTiledMap(game, tiledFile));
+            List<SceneLayer> tmpLayers = TileMapLayer.LoadTiledMap(game, tiledFile);
+            layers.AddRange(tmpLayers);
+            foreach(SceneLayer layer in tmpLayers)
+            {
+                if (layer.Name != null)
+                {
+                    layerNameMap.Add(layer.Name, layer);
+                }
+            }
         }
 
         public void AddLayer(SceneLayer layer)
@@ -39,14 +48,33 @@ namespace Spiridios.SpiridiEngine
             this.layers.Add(layer);
         }
 
+        public void AddLayer(SceneLayer layer, string layerName)
+        {
+            this.layerNameMap.Add(layerName, layer);
+            AddLayer(layer);
+        }
+
         public void AddLayer(SceneLayer layer, int layerIndex)
         {
             this.layers.Insert(layerIndex, layer);
         }
 
+        public void AddLayer(SceneLayer layer, int layerIndex, string layerName)
+        {
+            this.layerNameMap.Add(layerName, layer);
+            AddLayer(layer, layerIndex);
+        }
+
         public SceneLayer GetLayer(int layerIndex)
         {
             return this.layers[layerIndex];
+        }
+
+        public SceneLayer GetLayer(String layerName)
+        {
+            SceneLayer sceneLayer = null;
+            layerNameMap.TryGetValue(layerName, out sceneLayer);
+            return sceneLayer;
         }
 
         public void Draw(SpriteBatch spriteBatch)
