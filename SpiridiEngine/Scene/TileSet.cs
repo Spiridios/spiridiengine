@@ -1,5 +1,5 @@
 ﻿/**
-    Copyright 2012 Micah Lieske
+    Copyright 2013 Micah Lieske
 
     This file is part of SpiridiEngine.
 
@@ -23,9 +23,25 @@ namespace Spiridios.SpiridiEngine
         internal const string TILED_TILESET_ELEMENT = "tileset";
         private const string TILED_TILESET_IMAGE_ELEMENT = "image";
 
+        // TODO: shouldn't this be an image?
         private Texture2D tileSet = null;
         private int tileWidth = 0;
         private int tileHeight = 0;
+        private int tileCount = 0;
+
+        public TileSet(string imageName, int tileWidth, int tileHeight)
+        {
+            tileSet = SpiridiGame.ImageManagerInstance.GetImage(imageName);
+            this.tileWidth = tileWidth;
+            this.tileHeight = tileHeight;
+            ComputeTileCount();
+        }
+
+        public TileSet(XmlReader tileSetReader)
+        {
+            LoadFromTiledElement(tileSetReader);
+            ComputeTileCount();
+        }
 
         public int TileWidth
         {
@@ -37,19 +53,17 @@ namespace Spiridios.SpiridiEngine
             get { return tileHeight; }
         }
 
-        public TileSet(string imageName, int tileWidth, int tileHeight)
+        public int TileCount
         {
-            tileSet = SpiridiGame.ImageManagerInstance.GetImage(imageName);
-            this.tileWidth = tileWidth;
-            this.tileHeight = tileHeight;
+            get { return tileCount; }
         }
 
-        public TileSet(XmlReader tileSetReader)
+        private void ComputeTileCount()
         {
-            LoadFromTiledElement(tileSetReader);
+            tileCount = (tileSet.Width / tileWidth) * (tileSet.Height / tileHeight);
         }
 
-        internal static string ParseTiledTilesetName(XmlReader xmlReader)
+        private static string ParseTiledTilesetName(XmlReader xmlReader)
         {
             string tilesetName = null;
             if (xmlReader.NodeType == XmlNodeType.Element && xmlReader.Name == TileSet.TILED_TILESET_ELEMENT)
