@@ -26,6 +26,7 @@ namespace Spiridios.SpiridiEngine
         private const string TILED_LAYER_ELEMENT = "layer";
 
         private SpiridiGame game;
+        private string collisionLayerName;
         private List<Image> layerTileImages = null;
         private TileSetCollection tileSet;
         private int layerWidth;
@@ -136,6 +137,7 @@ namespace Spiridios.SpiridiEngine
                                 }
                                 break;
                             case ("properties"):
+                                ReadProperties(xmlReader);
                                 break;
                             default:
                                 throw new InvalidOperationException(string.Format("TileImage: Unsupported node '{0}'", xmlReader.Name));
@@ -150,6 +152,43 @@ namespace Spiridios.SpiridiEngine
                 }
             } while (xmlReader.Read());
         }
+
+        private void ReadProperties(XmlReader xmlReader)
+        {
+            do
+            {
+                switch (xmlReader.NodeType)
+                {
+                    case (XmlNodeType.Element):
+                        switch (xmlReader.Name)
+                        {
+                            case ("properties"):
+                                break;
+                            case("property"):
+                                string propertyName = xmlReader.GetAttribute("name");
+                                switch(propertyName)
+                                {
+                                    case("CollisionLayer"):
+                                        this.collisionLayerName = xmlReader.GetAttribute("value");
+                                        break;
+                                    default:
+                                        throw new InvalidOperationException(string.Format("TileImage: Unsupported node '{0}'", xmlReader.Name));
+                                }
+                                break;
+                            default:
+                                throw new InvalidOperationException(string.Format("TileImage: Unsupported node '{0}'", xmlReader.Name));
+                        }
+                        break;
+                    case (XmlNodeType.EndElement):
+                        if (xmlReader.Name == "properties")
+                        {
+                            return;
+                        }
+                        break;
+                }
+            } while (xmlReader.Read());
+        }
+
 
         public override void Draw(SpriteBatch spriteBatch)
         {
