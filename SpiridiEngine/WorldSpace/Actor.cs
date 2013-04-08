@@ -44,8 +44,8 @@ namespace Spiridios.SpiridiEngine
         };
 
         private Sprite sprite = null;
+        private Collidable collidable = null;
 
-        public bool Collidable { get; set; }
         public LifeStage lifeStage { get; set; }
         protected float BoundingRadius { get; set; }
 
@@ -59,7 +59,6 @@ namespace Spiridios.SpiridiEngine
         public Actor(Image image)
             : this(new Sprite(image))
         {
-
         }
 
         public Actor(Sprite sprite)
@@ -70,11 +69,23 @@ namespace Spiridios.SpiridiEngine
             Position = new Vector2(0, 0);
 
             Rotation = 0.0f;
-            Collidable = true;
             lifeStage = LifeStage.ALIVE;
-            this.BoundingRadius = this.Width > this.Height ? this.Width / 2.0f : this.Height / 2.0f;
+
+            this.collidable = new Collidable();
+            this.collidable.BoundingRadius = this.Width > this.Height ? this.Width / 2.0f : this.Height / 2.0f;
+
             this.TintColor = Color.White;
             this.Layer = 0.0f;
+        }
+
+        public bool Collidable
+        {
+            get { return this.collidable != null; }
+        }
+
+        public void DisableCollisionDetection()
+        {
+            this.collidable = null;
         }
 
         public Color TintColor
@@ -141,14 +152,7 @@ namespace Spiridios.SpiridiEngine
         {
             if (this.Collidable)
             {
-                Vector2 thisCenter = this.GetCenter();
-                Vector2 thatCenter = that.GetCenter();
-
-                Vector2 direction = thisCenter - thatCenter;
-                float length = direction.Length();
-                float thisRadius = this.BoundingRadius;
-                float thatRadius = that.BoundingRadius;
-                return !(length > (thisRadius + thatRadius));
+                return this.collidable.CollidesWith(that.collidable, this.GetCenter(), that.GetCenter());
             }
             else
             {

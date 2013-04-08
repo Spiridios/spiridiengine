@@ -19,6 +19,7 @@ namespace Spiridios.SpiridiEngine
     /// <summary>
     /// Represents an object in 2d space
     /// </summary>
+    // TODO: this should not BE Drawable, anything in world space should HAVE Drawables
     public abstract class WorldObject : Drawable, Updatable
     {
         private ScreenObject screenObject;
