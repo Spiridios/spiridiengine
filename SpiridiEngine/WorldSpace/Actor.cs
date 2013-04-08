@@ -72,20 +72,10 @@ namespace Spiridios.SpiridiEngine
             lifeStage = LifeStage.ALIVE;
 
             this.collidable = new Collidable();
-            this.collidable.BoundingRadius = this.Width > this.Height ? this.Width / 2.0f : this.Height / 2.0f;
+            this.collidable.RadiusCollidableShape = new RadiusCollidableShape(Position, this.Width > this.Height ? this.Width / 2.0f : this.Height / 2.0f);
 
             this.TintColor = Color.White;
             this.Layer = 0.0f;
-        }
-
-        public bool Collidable
-        {
-            get { return this.collidable != null; }
-        }
-
-        public void DisableCollisionDetection()
-        {
-            this.collidable = null;
         }
 
         public Color TintColor
@@ -146,13 +136,12 @@ namespace Spiridios.SpiridiEngine
             get { return this.sprite.Origin; }
         }
 
-        //TODO: refactor into collidable or base object or something.
         //TODO: CollidesWith uses ScreenSpace coordinates
         public bool CollidesWith(Actor that)
         {
-            if (this.Collidable)
+            if (this.collidable != null)
             {
-                return this.collidable.CollidesWith(that.collidable, this.GetCenter(), that.GetCenter());
+                return this.collidable.CollidesWith(that.collidable);
             }
             else
             {
@@ -170,6 +159,11 @@ namespace Spiridios.SpiridiEngine
             {
                 Behavior b = stageBehaviors[this.lifeStage];
                 b.Update(elapsedTime);
+            }
+
+            if (this.collidable != null)
+            {
+                this.collidable.RadiusCollidableShape.Position = this.GetCenter();
             }
         }
 

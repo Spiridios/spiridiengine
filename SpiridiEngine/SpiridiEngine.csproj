@@ -93,6 +93,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Physics\Collidable.cs" />
+    <Compile Include="Physics\RadiusCollidableShape.cs" />
     <Compile Include="ScreenSpace\AnimatedImage.cs" />
     <Compile Include="ScreenSpace\DrawableAt.cs" />
     <Compile Include="ScreenSpace\ScreenObject.cs" />

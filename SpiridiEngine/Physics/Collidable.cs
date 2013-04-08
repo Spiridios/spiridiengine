@@ -16,31 +16,33 @@ namespace Spiridios.SpiridiEngine
 {
     public class Collidable
     {
-        private double boundingRadius = -1.0f;
+        private RadiusCollidableShape radiusShape = null;
 
-        public double BoundingRadius
+
+        public RadiusCollidableShape RadiusCollidableShape
         {
-            get { return this.boundingRadius; }
-            set { this.boundingRadius = value; }
+            get { return this.radiusShape; }
+            set { this.radiusShape = value; }
         }
 
-        public bool CollidesWith(Collidable that, Vector2 thisPosition, Vector2 thatPosition)
+        public bool CollidesWith(Collidable that)
         {
-            if (this.boundingRadius >= 0.0 && that.boundingRadius >= 0.0)
+            if (this.RadiusCollidableShape!= null && that.RadiusCollidableShape != null)
             {
-                return CollidesWithRadiusRadius(that, thisPosition, thatPosition);
+                return CollidesWithRadiusRadius(that);
             }
             else
             {
                 return false;
             }
         }
-        private bool CollidesWithRadiusRadius(Collidable that, Vector2 thisPosition, Vector2 thatPosition)
+
+        private bool CollidesWithRadiusRadius(Collidable that)
         {
-            Vector2 direction = thisPosition - thatPosition;
+            Vector2 direction = this.radiusShape.Position - that.radiusShape.Position;
             float length = direction.Length();
-            double thisRadius = this.boundingRadius;
-            double thatRadius = that.boundingRadius;
+            double thisRadius = this.radiusShape.BoundingRadius;
+            double thatRadius = that.radiusShape.BoundingRadius;
             return !(length > (thisRadius + thatRadius));
         }
     }
