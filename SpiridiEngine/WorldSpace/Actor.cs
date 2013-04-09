@@ -78,6 +78,11 @@ namespace Spiridios.SpiridiEngine
             this.Layer = 0.0f;
         }
 
+        public Rectangle Bounds
+        {
+            get { return new Rectangle((int)Position.X, (int)Position.Y, this.Width, this.Height); }
+        }
+
         public Color TintColor
         {
             get { return sprite.TintColor;  }

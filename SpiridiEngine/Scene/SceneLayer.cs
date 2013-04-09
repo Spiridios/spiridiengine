@@ -6,9 +6,15 @@ namespace Spiridios.SpiridiEngine
     public class SceneLayer : Drawable, Updatable
     {
         // TODO: This shouldn't be protected
-        protected List<Actor> actors = new List<Actor>();
-        protected IComparer<Actor> actorsComparer = new Actor.AscendingYComparitor();
+        private List<Actor> actors = new List<Actor>();
+        private IComparer<Actor> actorsComparer = new Actor.AscendingYComparitor();
         private string layerName;
+        private Scene scene;
+
+        public SceneLayer(Scene scene)
+        {
+            this.scene = scene;
+        }
 
         public void AddActor(Actor actor)
         {
@@ -17,7 +23,7 @@ namespace Spiridios.SpiridiEngine
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            actors.Sort(actorsComparer);
+            SortActors();
             foreach (Actor actor in actors)
             {
                 actor.Draw(spriteBatch);
@@ -32,11 +38,30 @@ namespace Spiridios.SpiridiEngine
             }
         }
 
+        public List<Actor> Actors
+        {
+            get { return actors; }
+        }
+
+        public Scene Scene
+        {
+            get { return scene; }
+        }
+
+        public void SortActors()
+        {
+            actors.Sort(actorsComparer);
+        }
+
         public string Name
         {
             get { return this.layerName; }
             set { this.layerName = value; }
         }
-        
+
+        public virtual void ProcessCollisions()
+        {
+
+        }
     }
 }

@@ -126,6 +126,16 @@ namespace Spiridios.SpiridiEngine
             get { return currentState; }
         }
 
+        public bool LockFramerate
+        {
+            get { return this.IsFixedTimeStep; }
+            set
+            {
+                graphics.SynchronizeWithVerticalRetrace = value;
+                this.IsFixedTimeStep = value;
+            }
+        }
+
         protected void SetWindowSize(int width, int height)
         {
             // NOTE: See http://stackoverflow.com/questions/720429/how-do-i-set-the-window-screen-size-in-xna

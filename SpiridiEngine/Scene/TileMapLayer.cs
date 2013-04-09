@@ -34,14 +34,15 @@ namespace Spiridios.SpiridiEngine
         private int tileWidth;
         private int tileHeight;
 
-        public TileMapLayer(SpiridiGame game, TileSetCollection tileSet, XmlReader mapLayerReader)
+        public TileMapLayer(SpiridiGame game, Scene scene, TileSetCollection tileSet, XmlReader mapLayerReader)
+            : base(scene)
         {
             this.game = game;
             this.tileSet = tileSet;
             LoadTiledLayer(mapLayerReader);
         }
 
-        public static List<SceneLayer> LoadTiledMap(SpiridiGame game, string tiledFile)
+        public static List<SceneLayer> LoadTiledMap(SpiridiGame game, Scene scene, string tiledFile)
         {
             TileSet tileSet = null;
             TileSetCollection tileImageSet = new TileSetCollection();
@@ -71,7 +72,7 @@ namespace Spiridios.SpiridiEngine
                                     tileImageSet.AddTileSet(tileSet, startTileId);
                                     break;
                                 case (TileMapLayer.TILED_LAYER_ELEMENT):
-                                    TileMapLayer mapLayer = new TileMapLayer(game, tileImageSet, xmlReader);
+                                    TileMapLayer mapLayer = new TileMapLayer(game, scene, tileImageSet, xmlReader);
                                     mapLayer.tileWidth = tileWidth;
                                     mapLayer.tileHeight = tileHeight;
                                     layers.Add(mapLayer);
@@ -197,12 +198,11 @@ namespace Spiridios.SpiridiEngine
 
         private void Draw(TileSetCollection tileSet, SpriteBatch spriteBatch)
         {
-            // TODO: Possibly call from update instead of draw
-            actors.Sort(actorsComparer);
+            SortActors();
 
             int size = layerTileImages.Count;
             int currentActorIndex = 0;
-            Actor currentActor = (currentActorIndex < actors.Count) ? actors[currentActorIndex] : null;
+            Actor currentActor = (currentActorIndex < Actors.Count) ? Actors[currentActorIndex] : null;
 
             for (int i = 0; i < size; i++)
             {
@@ -211,7 +211,7 @@ namespace Spiridios.SpiridiEngine
                 {
                     currentActor.Draw(spriteBatch);
                     currentActorIndex++;
-                    currentActor = (currentActorIndex < actors.Count) ? actors[currentActorIndex] : null;
+                    currentActor = (currentActorIndex < Actors.Count) ? Actors[currentActorIndex] : null;
                 }
 
                 Image image = layerTileImages[i];
@@ -222,10 +222,38 @@ namespace Spiridios.SpiridiEngine
             }
 
             // Draw any  undrawn actors.
-            for (int i = currentActorIndex; i < actors.Count; i++)
+            for (int i = currentActorIndex; i < Actors.Count; i++)
             {
-                actors[currentActorIndex].Draw(spriteBatch);
+                Actors[currentActorIndex].Draw(spriteBatch);
             }
+        }
+
+        public override void ProcessCollisions()
+        {
+            TileMapLayer collisionLayer = this;
+            if(!String.IsNullOrEmpty(this.collisionLayerName))
+            {
+                collisionLayer = (TileMapLayer)this.Scene.GetLayer(this.collisionLayerName);
+            }
+
+            foreach (Actor actor in Actors)
+            {
+                Rectangle actorBounds = actor.Bounds;
+                Image image = collisionLayer.GetImageFromPosition((int)actor.Position.X, (int)actor.Position.Y);
+                if (image != null)
+                {
+                    actor.Position = actor.Position + new Vector2(-actor.Width, 0);
+                }
+            }
+
+        }
+
+        private Image GetImageFromPosition(int x, int y)
+        {
+            int tilex = x/tileWidth;
+            int tiley = y/tileHeight;
+            int index = tiley * this.layerWidth + tilex;
+            return this.layerTileImages[index];
         }
     }
 }

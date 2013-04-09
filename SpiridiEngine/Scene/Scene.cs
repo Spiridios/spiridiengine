@@ -32,7 +32,7 @@ namespace Spiridios.SpiridiEngine
 
         public void LoadTiledMap(string tiledFile)
         {
-            List<SceneLayer> tmpLayers = TileMapLayer.LoadTiledMap(game, tiledFile);
+            List<SceneLayer> tmpLayers = TileMapLayer.LoadTiledMap(game, this, tiledFile);
             layers.AddRange(tmpLayers);
             foreach(SceneLayer layer in tmpLayers)
             {
@@ -90,6 +90,15 @@ namespace Spiridios.SpiridiEngine
             foreach (SceneLayer layer in layers)
             {
                 layer.Update(elapsedTime);
+            }
+            ProcessCollisions();
+        }
+
+        public void ProcessCollisions()
+        {
+            foreach (SceneLayer layer in layers)
+            {
+                layer.ProcessCollisions();
             }
         }
     }
