@@ -96,6 +96,7 @@
     <Compile Include="Physics\RadiusCollidableShape.cs" />
     <Compile Include="ScreenSpace\AnimatedImage.cs" />
     <Compile Include="ScreenSpace\DrawableAt.cs" />
+    <Compile Include="ScreenSpace\PositionedImage.cs" />
     <Compile Include="ScreenSpace\ScreenObject.cs" />
     <Compile Include="WorldSpace\Actor.cs" />
     <Compile Include="Background.cs" />

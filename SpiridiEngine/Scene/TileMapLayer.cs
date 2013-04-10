@@ -239,8 +239,9 @@ namespace Spiridios.SpiridiEngine
             foreach (Actor actor in Actors)
             {
                 Rectangle actorBounds = actor.Bounds;
-                Image image = collisionLayer.GetImageFromPosition((int)actor.Position.X, (int)actor.Position.Y);
-                if (image != null)
+                //PositionedImage image = collisionLayer.GetImageFromPosition((int)actor.Position.X, (int)actor.Position.Y);
+                Collidable tileCollidable = collisionLayer.GetCollidableFromPosition(actor.Position);
+                if (actor.Collidable.CollidesWith(tileCollidable))
                 {
                     actor.Position = actor.Position + new Vector2(-actor.Width, 0);
                 }
@@ -248,12 +249,29 @@ namespace Spiridios.SpiridiEngine
 
         }
 
-        private Image GetImageFromPosition(int x, int y)
+        private Collidable GetCollidableFromPosition(Vector2 position)
+        {
+            Collidable collidable = new Collidable();
+            int tilex = (int)(position.X) / tileWidth;
+            int tiley = (int)(position.Y) / tileHeight;
+            int index = tiley * this.layerWidth + tilex;
+            Image image = this.layerTileImages[index];
+            if (image != null)
+            {
+                Vector2 tileCenterPoint = new Vector2((tilex * tileWidth) + (tileWidth/2), (tiley * tileHeight) + (tileHeight/2));
+                double tileRadius = tileWidth > tileHeight ? tileWidth / 2.0f : tileHeight / 2.0f;
+                collidable.RadiusCollidableShape = new RadiusCollidableShape(tileCenterPoint, tileRadius);
+            }
+            return collidable;
+        }
+
+        private PositionedImage GetImageFromPosition(int x, int y)
         {
             int tilex = x/tileWidth;
             int tiley = y/tileHeight;
+            Vector2 position = new Vector2(tilex * tileWidth, tiley * tileHeight);
             int index = tiley * this.layerWidth + tilex;
-            return this.layerTileImages[index];
+            return new PositionedImage(this.layerTileImages[index], position);
         }
     }
 }

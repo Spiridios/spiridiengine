@@ -16,6 +16,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Spiridios.SpiridiEngine
 {
+    // TODO: Should this be a scenelayer?
     public interface Background : Drawable, Updatable
     {
     }

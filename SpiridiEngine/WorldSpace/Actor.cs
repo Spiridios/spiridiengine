@@ -141,6 +141,12 @@ namespace Spiridios.SpiridiEngine
             get { return this.sprite.Origin; }
         }
 
+        public Collidable Collidable
+        {
+            get { return this.collidable; }
+            set { this.collidable = value; }
+        }
+
         //TODO: CollidesWith uses ScreenSpace coordinates
         public bool CollidesWith(Actor that)
         {
