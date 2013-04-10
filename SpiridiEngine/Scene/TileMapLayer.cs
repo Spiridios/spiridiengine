@@ -172,6 +172,9 @@ namespace Spiridios.SpiridiEngine
                                     case("CollisionLayer"):
                                         this.collisionLayerName = xmlReader.GetAttribute("value");
                                         break;
+                                    case ("Visible"):
+                                        this.Visible = Boolean.Parse(xmlReader.GetAttribute("value"));
+                                        break;
                                     default:
                                         throw new InvalidOperationException(string.Format("TileImage: Unsupported node '{0}'", xmlReader.Name));
                                 }
@@ -193,7 +196,10 @@ namespace Spiridios.SpiridiEngine
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            Draw(tileSet, spriteBatch);
+            if (this.Visible)
+            {
+                Draw(tileSet, spriteBatch);
+            }
         }
 
         private void Draw(TileSetCollection tileSet, SpriteBatch spriteBatch)
@@ -242,9 +248,9 @@ namespace Spiridios.SpiridiEngine
                 Collidable tileCollidable = collisionLayer.GetCollidableFromPosition(actor.Position);
                 if (actor.Collidable.CollidesWith(tileCollidable))
                 {
-                    Vector2 collisionNormal = actor.Collidable.CollisionNormal(tileCollidable);
+                    Vector2 collisionVector = actor.Collidable.CollisionVector(tileCollidable);
                     
-                    Vector2 bounceBack = collisionNormal * (float)(actor.Collidable.RadiusCollidableShape.BoundingRadius);
+                    Vector2 bounceBack = collisionVector;
                     actor.Position = actor.Position + bounceBack;
                 }
             }

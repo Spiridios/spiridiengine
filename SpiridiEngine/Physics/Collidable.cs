@@ -10,6 +10,7 @@
     You should have received a copy of the GNU General Public License along with SpiridiEngine. If not, see http://www.gnu.org/licenses/.
 **/
 
+using System;
 using Microsoft.Xna.Framework;
 
 namespace Spiridios.SpiridiEngine
@@ -17,7 +18,13 @@ namespace Spiridios.SpiridiEngine
     public class Collidable
     {
         private RadiusCollidableShape radiusShape = null;
+        private bool confineNormals = false;
 
+        public bool OrthoVectors
+        {
+            get { return confineNormals; }
+            set { confineNormals = value; }
+        }
 
         public RadiusCollidableShape RadiusCollidableShape
         {
@@ -41,7 +48,6 @@ namespace Spiridios.SpiridiEngine
         {
             if (this.RadiusCollidableShape != null && that.RadiusCollidableShape != null)
             {
-
                 return CollisionNormalRadiusRadius(that);
             }
             else
@@ -50,6 +56,19 @@ namespace Spiridios.SpiridiEngine
             }
         }
 
+
+        public Vector2 CollisionVector(Collidable that)
+        {
+            if (this.RadiusCollidableShape != null && that.RadiusCollidableShape != null)
+            {
+                return CollisionVectorRadiusRadius(that);
+            }
+            else
+            {
+                return Vector2.Zero;
+            }
+        }
+        
         private bool CollidesWithRadiusRadius(Collidable that)
         {
             Vector2 direction = this.radiusShape.Position - that.radiusShape.Position;
@@ -74,6 +93,42 @@ namespace Spiridios.SpiridiEngine
             {
                 return Vector2.Zero;
             }
+        }
+
+        private Vector2 CollisionVectorRadiusRadius(Collidable that)
+        {
+            Vector2 direction = this.radiusShape.Position - that.radiusShape.Position;
+            float length = direction.Length();
+            double thisRadius = this.radiusShape.BoundingRadius;
+            double thatRadius = that.radiusShape.BoundingRadius;
+            if (!(length > (thisRadius + thatRadius)))
+            {
+                if (confineNormals)
+                {
+                    direction = orthoizeVector(direction);
+                }
+                return direction;
+            }
+            else
+            {
+                return Vector2.Zero;
+            }
+        }
+
+        private Vector2 orthoizeVector(Vector2 vector)
+        {
+            float length = vector.Length();
+            if (Math.Abs(vector.X) > Math.Abs(vector.Y))
+            {
+                vector.Y = 0;
+            }
+            else
+            {
+                vector.X = 0;
+            }
+            vector.Normalize();
+            vector = vector * length;
+            return vector;
         }
 
     }

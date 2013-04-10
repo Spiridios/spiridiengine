@@ -1,5 +1,5 @@
 ﻿/**
-    Copyright 2012 Micah Lieske
+    Copyright 2013 Micah Lieske
 
     This file is part of SpiridiEngine.
 
@@ -7,7 +7,7 @@
 
     SpiridiEngine is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License along with Foobar. If not, see http://www.gnu.org/licenses/.
+    You should have received a copy of the GNU General Public License along with SpiridiEngine. If not, see http://www.gnu.org/licenses/.
 **/
 
 using System;
