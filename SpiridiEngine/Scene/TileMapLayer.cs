@@ -239,11 +239,13 @@ namespace Spiridios.SpiridiEngine
             foreach (Actor actor in Actors)
             {
                 Rectangle actorBounds = actor.Bounds;
-                //PositionedImage image = collisionLayer.GetImageFromPosition((int)actor.Position.X, (int)actor.Position.Y);
                 Collidable tileCollidable = collisionLayer.GetCollidableFromPosition(actor.Position);
                 if (actor.Collidable.CollidesWith(tileCollidable))
                 {
-                    actor.Position = actor.Position + new Vector2(-actor.Width, 0);
+                    Vector2 collisionNormal = actor.Collidable.CollisionNormal(tileCollidable);
+                    
+                    Vector2 bounceBack = collisionNormal * (float)(actor.Collidable.RadiusCollidableShape.BoundingRadius);
+                    actor.Position = actor.Position + bounceBack;
                 }
             }
 
@@ -255,6 +257,7 @@ namespace Spiridios.SpiridiEngine
             int tilex = (int)(position.X) / tileWidth;
             int tiley = (int)(position.Y) / tileHeight;
             int index = tiley * this.layerWidth + tilex;
+            // TODO: This can get an argument out of range.
             Image image = this.layerTileImages[index];
             if (image != null)
             {

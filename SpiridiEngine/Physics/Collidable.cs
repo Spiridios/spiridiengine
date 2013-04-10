@@ -37,6 +37,19 @@ namespace Spiridios.SpiridiEngine
             }
         }
 
+        public Vector2 CollisionNormal(Collidable that)
+        {
+            if (this.RadiusCollidableShape != null && that.RadiusCollidableShape != null)
+            {
+
+                return CollisionNormalRadiusRadius(that);
+            }
+            else
+            {
+                return Vector2.Zero;
+            }
+        }
+
         private bool CollidesWithRadiusRadius(Collidable that)
         {
             Vector2 direction = this.radiusShape.Position - that.radiusShape.Position;
@@ -45,5 +58,23 @@ namespace Spiridios.SpiridiEngine
             double thatRadius = that.radiusShape.BoundingRadius;
             return !(length > (thisRadius + thatRadius));
         }
+
+        private Vector2 CollisionNormalRadiusRadius(Collidable that)
+        {
+            Vector2 direction = this.radiusShape.Position - that.radiusShape.Position;
+            float length = direction.Length();
+            double thisRadius = this.radiusShape.BoundingRadius;
+            double thatRadius = that.radiusShape.BoundingRadius;
+            if(!(length > (thisRadius + thatRadius)))
+            {
+                direction.Normalize();
+                return direction;
+            }
+            else
+            {
+                return Vector2.Zero;
+            }
+        }
+
     }
 }
