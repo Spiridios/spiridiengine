@@ -56,5 +56,21 @@ namespace Spiridios.SpiridiEngine
             return Vector2.Add(Vector2Ext.Rotate(Vector2.Subtract(v, origin),theta), origin);
         }
 
+        public static Vector2 OrthoizeVector(Vector2 vector)
+        {
+            float length = vector.Length();
+            if (Math.Abs(vector.X) > Math.Abs(vector.Y))
+            {
+                vector.Y = 0;
+            }
+            else
+            {
+                vector.X = 0;
+            }
+            vector.Normalize();
+            vector = vector * length;
+            return vector;
+        }
+
     }
 }
