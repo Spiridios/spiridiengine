@@ -92,6 +92,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Physics\BoxCollidableShape.cs" />
     <Compile Include="Physics\Collidable.cs" />
     <Compile Include="Physics\RadiusCollidableShape.cs" />
     <Compile Include="ScreenSpace\AnimatedImage.cs" />

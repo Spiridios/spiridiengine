@@ -56,7 +56,7 @@ namespace Spiridios.SpiridiEngine
             return Vector2.Add(Vector2Ext.Rotate(Vector2.Subtract(v, origin),theta), origin);
         }
 
-        public static Vector2 OrthoizeVector(Vector2 vector)
+        public static Vector2 SnapToAxis(Vector2 vector)
         {
             float length = vector.Length();
             if (Math.Abs(vector.X) > Math.Abs(vector.Y))

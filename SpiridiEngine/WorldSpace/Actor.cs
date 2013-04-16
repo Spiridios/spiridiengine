@@ -73,6 +73,7 @@ namespace Spiridios.SpiridiEngine
 
             this.collidable = new Collidable();
             this.collidable.RadiusCollidableShape = new RadiusCollidableShape(Position, this.Width > this.Height ? this.Width / 2.0f : this.Height / 2.0f);
+            //this.collidable.BoxCollidableShape = new BoxCollidableShape((int)Position.X, (int)Position.Y, this.Width, this.Height);
 
             this.TintColor = Color.White;
             this.Layer = 0.0f;
@@ -174,7 +175,17 @@ namespace Spiridios.SpiridiEngine
 
             if (this.collidable != null)
             {
-                this.collidable.RadiusCollidableShape.Position = this.GetCenter();
+                if (this.collidable.RadiusCollidableShape != null)
+                {
+                    this.collidable.RadiusCollidableShape.Position = this.GetCenter();
+                }
+                if (this.collidable.BoxCollidableShape != null)
+                {
+                    Rectangle r = this.collidable.BoxCollidableShape.Rectangle;
+                    r.X = (int)this.Position.X;
+                    r.Y = (int)this.Position.Y;
+                    this.collidable.BoxCollidableShape.Rectangle = r;
+                }
             }
         }
 

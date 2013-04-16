@@ -267,9 +267,10 @@ namespace Spiridios.SpiridiEngine
             Image image = this.layerTileImages[index];
             if (image != null)
             {
-                Vector2 tileCenterPoint = new Vector2((tilex * tileWidth) + (tileWidth/2), (tiley * tileHeight) + (tileHeight/2));
-                double tileRadius = tileWidth > tileHeight ? tileWidth / 2.0f : tileHeight / 2.0f;
-                collidable.RadiusCollidableShape = new RadiusCollidableShape(tileCenterPoint, tileRadius);
+                //Vector2 tileCenterPoint = new Vector2((tilex * tileWidth) + (tileWidth/2), (tiley * tileHeight) + (tileHeight/2));
+                //double tileRadius = tileWidth > tileHeight ? tileWidth / 2.0f : tileHeight / 2.0f;
+                //collidable.RadiusCollidableShape = new RadiusCollidableShape(tileCenterPoint, tileRadius);
+                collidable.BoxCollidableShape = new BoxCollidableShape(new Rectangle(tilex * tileWidth, tiley * tileHeight, tileWidth, tileHeight));
             }
             return collidable;
         }
