@@ -17,10 +17,11 @@ using System.IO.Compression;
 using System.Xml;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Spiridios.SpiridiEngine.Physics;
 
 namespace Spiridios.SpiridiEngine
 {
-    class TileMapLayer : SceneLayer
+    public class TileMapLayer : SceneLayer
     {
         private const string TILED_ROOT_ELEMENT = "map";
         private const string TILED_LAYER_ELEMENT = "layer";

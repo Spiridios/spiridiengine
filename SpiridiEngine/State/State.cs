@@ -11,6 +11,7 @@
 **/
 
 using Microsoft.Xna.Framework;
+using Spiridios.SpiridiEngine.Input;
 
 namespace Spiridios.SpiridiEngine
 {

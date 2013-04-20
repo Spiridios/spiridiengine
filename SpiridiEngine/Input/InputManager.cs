@@ -18,7 +18,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
 
-namespace Spiridios.SpiridiEngine
+namespace Spiridios.SpiridiEngine.Input
 {
     public class InputManager
     {

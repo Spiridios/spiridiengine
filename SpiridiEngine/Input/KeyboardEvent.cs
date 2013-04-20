@@ -14,7 +14,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Input;
 
-namespace Spiridios.SpiridiEngine
+namespace Spiridios.SpiridiEngine.Input
 {
     /// <summary>
     /// Translates XNA's keyboard polling into generic Keyup/Keydown events

@@ -13,7 +13,7 @@
 using System;
 using Microsoft.Xna.Framework;
 
-namespace Spiridios.SpiridiEngine
+namespace Spiridios.SpiridiEngine.Physics
 {
     public class Collidable
     {
