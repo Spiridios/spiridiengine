@@ -17,14 +17,22 @@ namespace Spiridios.SpiridiEngine.Physics
 {
     public class Collidable
     {
+        private CollisionListener collisionListener = null;
         private RadiusCollidableShape radiusShape = null;
         private BoxCollidableShape boxShape = null;
         private bool confineNormals = false;
 
+        // TODO: this shouldn't be needed anymore.
         public bool OrthoVectors
         {
             get { return confineNormals; }
             set { confineNormals = value; }
+        }
+
+        public CollisionListener CollisionListener
+        {
+            get { return this.collisionListener; }
+            set { this.collisionListener = value; }
         }
 
         public BoxCollidableShape BoxCollidableShape
@@ -33,10 +41,41 @@ namespace Spiridios.SpiridiEngine.Physics
             set { this.boxShape = value; }
         }
 
+        public bool HasBoxCollidableShape
+        {
+            get { return this.boxShape != null; }
+        }
+
+        public Rectangle BoundingBox
+        {
+            get
+            {
+                if (HasBoxCollidableShape)
+                {
+                    return boxShape.Rectangle;
+                }
+                else if (HasRadiusCollidableShape)
+                {
+                    int width = (int)(radiusShape.BoundingRadius * 2);
+                    double offset = radiusShape.BoundingRadius;
+                    return new Rectangle((int)(radiusShape.Position.X - offset), (int)(radiusShape.Position.Y - offset), width, width);
+                }
+                else
+                {
+                    return new Rectangle(0, 0, 0, 0);
+                }
+            }
+        }
+
         public RadiusCollidableShape RadiusCollidableShape
         {
             get { return this.radiusShape; }
             set { this.radiusShape = value; }
+        }
+
+        public bool HasRadiusCollidableShape
+        {
+            get { return this.radiusShape != null; }
         }
 
         public bool CollidesWith(Collidable that)

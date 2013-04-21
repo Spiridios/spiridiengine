@@ -17,7 +17,8 @@ using System.Text;
 
 namespace Spiridios.SpiridiEngine.Physics
 {
-    interface CollisionListener
+    public interface CollisionListener
     {
+        void OnCollided();
     }
 }

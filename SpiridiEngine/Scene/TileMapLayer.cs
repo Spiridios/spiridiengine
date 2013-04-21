@@ -134,6 +134,13 @@ namespace Spiridios.SpiridiEngine
             return collidable;
         }
 
+
+        internal Collidable GetCollidables(Rectangle actorBounds)
+        {
+            Vector2 position = new Vector2(actorBounds.X, actorBounds.Y);
+            return GetCollidableFromPosition(position);
+        }
+
         private PositionedImage GetImageFromPosition(int x, int y)
         {
             int tilex = x/tileWidth;

@@ -14,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework;
 
 namespace Spiridios.SpiridiEngine.Physics
 {
@@ -39,17 +40,12 @@ namespace Spiridios.SpiridiEngine.Physics
         {
             foreach (Collidable collidable in collidables)
             {
-                /*
-                Rectangle actorBounds = actor.Bounds;
-                Collidable tileCollidable = collisionLayer.GetCollidableFromPosition(actor.Position);
-                if (actor.Collidable.CollidesWith(tileCollidable))
+                Rectangle actorBounds = collidable.BoundingBox;
+                Collidable tileCollidable = mapCollisionLayer.GetCollidables(actorBounds);
+                if (collidable.CollidesWith(tileCollidable))
                 {
-                    Vector2 collisionVector = actor.Collidable.CollisionVector(tileCollidable);
-
-                    Vector2 bounceBack = collisionVector;
-                    actor.Position = actor.Position + bounceBack;
+                    collidable.CollisionListener.OnCollided();
                 }
-                 * */
             }
         }
 
