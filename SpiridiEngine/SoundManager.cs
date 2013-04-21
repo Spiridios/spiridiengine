@@ -1,5 +1,5 @@
 ﻿/**
-    Copyright 2012 Micah Lieske
+    Copyright 2013 Micah Lieske
 
     This file is part of SpiridiEngine.
 
@@ -7,7 +7,7 @@
 
     SpiridiEngine is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License along with Foobar. If not, see http://www.gnu.org/licenses/.
+    You should have received a copy of the GNU General Public License along with SpiridiEngine. If not, see http://www.gnu.org/licenses/.
 **/
 
 using System;
@@ -23,7 +23,6 @@ namespace Spiridios.SpiridiEngine
     {
         private static SoundManager instance;
 
-        // TODO: Should probably not have a public setter on this.
         public static SoundManager Instance
         {
             get { return instance; }
@@ -49,7 +48,7 @@ namespace Spiridios.SpiridiEngine
         /// <param name="soundFile">The actual sound name</param>
         public void AddSound(string soundName, string soundFile)
         {
-            string correctedName = SpiridiGame.NormalizeFilename(soundFile);
+            string correctedName = SpiridiGame.NormalizeFilenameXNA(soundFile);
             try
             {
                 SoundEffect snd = this.contentManager.Load<SoundEffect>(correctedName);

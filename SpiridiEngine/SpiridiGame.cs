@@ -95,9 +95,14 @@ namespace Spiridios.SpiridiEngine
             get { return inputManager; }
         }
 
-        public static String NormalizeFilename(String fileName)
+        internal static String NormalizeFilenameXNA(String filename)
         {
-            return System.IO.Path.GetFileNameWithoutExtension(fileName);
+            return System.IO.Path.GetFileNameWithoutExtension(filename);
+        }
+
+        internal String NormalizeFilenameSystem(String filename)
+        {
+            return Content.RootDirectory + "/" + filename;
         }
 
         public Color ClearColor
@@ -158,12 +163,12 @@ namespace Spiridios.SpiridiEngine
 
         protected SoundEffect LoadSound(String soundFile)
         {
-            return Content.Load<SoundEffect>(NormalizeFilename(soundFile));
+            return Content.Load<SoundEffect>(NormalizeFilenameXNA(soundFile));
         }
 
         public void PlayBackgroundMusic(String musicFile)
         {
-            this.backgroundMusic = Content.Load<Song>(NormalizeFilename(musicFile));
+            this.backgroundMusic = Content.Load<Song>(NormalizeFilenameXNA(musicFile));
             MediaPlayer.IsRepeating = true;
             MediaPlayer.Play(this.backgroundMusic);
         }

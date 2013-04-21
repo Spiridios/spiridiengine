@@ -27,7 +27,7 @@ namespace Spiridios.SpiridiEngine
         private const string TILED_LAYER_ELEMENT = "layer";
 
         private SpiridiGame game;
-        private string collisionLayerName;
+        private string collisionLayerName = null;
         private List<Image> layerTileImages = null;
         private TileSetCollection tileSet;
         private int layerWidth;
@@ -43,157 +43,15 @@ namespace Spiridios.SpiridiEngine
             LoadTiledLayer(mapLayerReader);
         }
 
-        public static List<SceneLayer> LoadTiledMap(SpiridiGame game, Scene scene, string tiledFile)
+        public string CollisionLayerName
         {
-            TileSet tileSet = null;
-            TileSetCollection tileImageSet = new TileSetCollection();
-            int tileWidth = 0;
-            int tileHeight = 0;
-
-            List<SceneLayer> layers = new List<SceneLayer>();
-            using (FileStream fileStream = new FileStream(tiledFile, FileMode.Open))
-            {
-                using (XmlReader xmlReader = XmlReader.Create(fileStream))
-                {
-
-                    while (xmlReader.Read())
-                    {
-                        if (xmlReader.IsStartElement())
-                        {
-                            switch (xmlReader.Name)
-                            {
-                                case (TileMapLayer.TILED_ROOT_ELEMENT):
-                                    tileWidth = int.Parse(xmlReader.GetAttribute("tilewidth"));
-                                    tileHeight = int.Parse(xmlReader.GetAttribute("tileheight"));
-                                    break;
-                                case (TileSet.TILED_TILESET_ELEMENT):
-                                    //string tilesetName = TileSet.ParseTiledTilesetName(xmlReader);
-                                    int startTileId = int.Parse(xmlReader.GetAttribute("firstgid"));
-                                    tileSet = new TileSet(xmlReader);
-                                    tileImageSet.AddTileSet(tileSet, startTileId);
-                                    break;
-                                case (TileMapLayer.TILED_LAYER_ELEMENT):
-                                    TileMapLayer mapLayer = new TileMapLayer(game, scene, tileImageSet, xmlReader);
-                                    mapLayer.tileWidth = tileWidth;
-                                    mapLayer.tileHeight = tileHeight;
-                                    layers.Add(mapLayer);
-                                    break;
-                                case ("objectgroup"):
-                                    break; //ignore it for now.
-                                default:
-                                    throw new InvalidDataException(String.Format("Unsupported tag '{0}'", xmlReader.Name));
-                            }
-                        }
-                    }
-                }
-            }
-            return layers;
+            get { return this.collisionLayerName; }
         }
 
-        private void LoadTiledLayer(XmlReader xmlReader)
+        public bool HasCollisionLayer
         {
-            do
-            {
-                switch (xmlReader.NodeType)
-                {
-                    case (XmlNodeType.Element):
-                        switch (xmlReader.Name)
-                        {
-                            case(TileMapLayer.TILED_LAYER_ELEMENT):
-                                this.Name = xmlReader.GetAttribute("name");
-                                layerHeight = int.Parse(xmlReader.GetAttribute("height"));
-                                layerWidth = int.Parse(xmlReader.GetAttribute("width"));
-                                break;
-                            case ("data"):
-                                string encoding = xmlReader.GetAttribute("encoding");
-                                if (encoding != "base64")
-                                {
-                                    throw new InvalidDataException(String.Format("Unsupported encoding {0}",encoding));
-                                }
-
-                                string compression = xmlReader.GetAttribute("compression");
-                                if(!String.IsNullOrEmpty(compression) && compression != "gzip")
-                                {
-                                    throw new InvalidDataException(String.Format("Unsupported compression {0}",compression));
-                                }
-
-                                string layerString = xmlReader.ReadElementContentAsString().Trim();
-                                byte[] rawLayer = Convert.FromBase64String(layerString);
-
-                                int size = layerWidth * layerHeight;
-                                layerTileImages= new List<Image>(size);
-                                
-                                Stream layerStream = new MemoryStream(rawLayer);
-                                if(compression == "gzip")
-                                {
-                                    layerStream = new GZipStream(layerStream, CompressionMode.Decompress);
-                                }
-
-                                using (BinaryReader layerReader = new BinaryReader(layerStream))
-                                {
-                                    for (int i = 0; i < size; i++)
-                                    {
-                                        int tileId = layerReader.ReadInt32();
-                                        layerTileImages.Add(this.tileSet.GetImage(tileId));
-                                    }
-                                }
-                                break;
-                            case ("properties"):
-                                ReadProperties(xmlReader);
-                                break;
-                            default:
-                                throw new InvalidOperationException(string.Format("TileImage: Unsupported node '{0}'", xmlReader.Name));
-                        }
-                        break;
-                    case (XmlNodeType.EndElement):
-                        if (xmlReader.Name == TILED_LAYER_ELEMENT)
-                        {
-                            return;
-                        }
-                        break;
-                }
-            } while (xmlReader.Read());
+            get { return this.collisionLayerName != null; }
         }
-
-        private void ReadProperties(XmlReader xmlReader)
-        {
-            do
-            {
-                switch (xmlReader.NodeType)
-                {
-                    case (XmlNodeType.Element):
-                        switch (xmlReader.Name)
-                        {
-                            case ("properties"):
-                                break;
-                            case("property"):
-                                string propertyName = xmlReader.GetAttribute("name");
-                                switch(propertyName)
-                                {
-                                    case("CollisionLayer"):
-                                        this.collisionLayerName = xmlReader.GetAttribute("value");
-                                        break;
-                                    case ("Visible"):
-                                        this.Visible = Boolean.Parse(xmlReader.GetAttribute("value"));
-                                        break;
-                                    default:
-                                        throw new InvalidOperationException(string.Format("TileImage: Unsupported node '{0}'", xmlReader.Name));
-                                }
-                                break;
-                            default:
-                                throw new InvalidOperationException(string.Format("TileImage: Unsupported node '{0}'", xmlReader.Name));
-                        }
-                        break;
-                    case (XmlNodeType.EndElement):
-                        if (xmlReader.Name == "properties")
-                        {
-                            return;
-                        }
-                        break;
-                }
-            } while (xmlReader.Read());
-        }
-
 
         public override void Draw(SpriteBatch spriteBatch)
         {
@@ -283,6 +141,157 @@ namespace Spiridios.SpiridiEngine
             Vector2 position = new Vector2(tilex * tileWidth, tiley * tileHeight);
             int index = tiley * this.layerWidth + tilex;
             return new PositionedImage(this.layerTileImages[index], position);
+        }
+
+        public static List<TileMapLayer> LoadTiledMap(SpiridiGame game, Scene scene, string tiledFile)
+        {
+            TileSet tileSet = null;
+            TileSetCollection tileImageSet = new TileSetCollection();
+            int tileWidth = 0;
+            int tileHeight = 0;
+
+            List<TileMapLayer> layers = new List<TileMapLayer>();
+            using (FileStream fileStream = new FileStream(game.NormalizeFilenameSystem(tiledFile), FileMode.Open))
+            {
+                using (XmlReader xmlReader = XmlReader.Create(fileStream))
+                {
+
+                    while (xmlReader.Read())
+                    {
+                        if (xmlReader.IsStartElement())
+                        {
+                            switch (xmlReader.Name)
+                            {
+                                case (TileMapLayer.TILED_ROOT_ELEMENT):
+                                    tileWidth = int.Parse(xmlReader.GetAttribute("tilewidth"));
+                                    tileHeight = int.Parse(xmlReader.GetAttribute("tileheight"));
+                                    break;
+                                case (TileSet.TILED_TILESET_ELEMENT):
+                                    //string tilesetName = TileSet.ParseTiledTilesetName(xmlReader);
+                                    int startTileId = int.Parse(xmlReader.GetAttribute("firstgid"));
+                                    tileSet = new TileSet(xmlReader);
+                                    tileImageSet.AddTileSet(tileSet, startTileId);
+                                    break;
+                                case (TileMapLayer.TILED_LAYER_ELEMENT):
+                                    TileMapLayer mapLayer = new TileMapLayer(game, scene, tileImageSet, xmlReader);
+                                    mapLayer.tileWidth = tileWidth;
+                                    mapLayer.tileHeight = tileHeight;
+                                    layers.Add(mapLayer);
+                                    break;
+                                case ("objectgroup"):
+                                    break; //ignore it for now.
+                                default:
+                                    throw new InvalidDataException(String.Format("Unsupported tag '{0}'", xmlReader.Name));
+                            }
+                        }
+                    }
+                }
+            }
+            return layers;
+        }
+
+        private void LoadTiledLayer(XmlReader xmlReader)
+        {
+            do
+            {
+                switch (xmlReader.NodeType)
+                {
+                    case (XmlNodeType.Element):
+                        switch (xmlReader.Name)
+                        {
+                            case (TileMapLayer.TILED_LAYER_ELEMENT):
+                                this.Name = xmlReader.GetAttribute("name");
+                                layerHeight = int.Parse(xmlReader.GetAttribute("height"));
+                                layerWidth = int.Parse(xmlReader.GetAttribute("width"));
+                                break;
+                            case ("data"):
+                                string encoding = xmlReader.GetAttribute("encoding");
+                                if (encoding != "base64")
+                                {
+                                    throw new InvalidDataException(String.Format("Unsupported encoding {0}", encoding));
+                                }
+
+                                string compression = xmlReader.GetAttribute("compression");
+                                if (!String.IsNullOrEmpty(compression) && compression != "gzip")
+                                {
+                                    throw new InvalidDataException(String.Format("Unsupported compression {0}", compression));
+                                }
+
+                                string layerString = xmlReader.ReadElementContentAsString().Trim();
+                                byte[] rawLayer = Convert.FromBase64String(layerString);
+
+                                int size = layerWidth * layerHeight;
+                                layerTileImages = new List<Image>(size);
+
+                                Stream layerStream = new MemoryStream(rawLayer);
+                                if (compression == "gzip")
+                                {
+                                    layerStream = new GZipStream(layerStream, CompressionMode.Decompress);
+                                }
+
+                                using (BinaryReader layerReader = new BinaryReader(layerStream))
+                                {
+                                    for (int i = 0; i < size; i++)
+                                    {
+                                        int tileId = layerReader.ReadInt32();
+                                        layerTileImages.Add(this.tileSet.GetImage(tileId));
+                                    }
+                                }
+                                break;
+                            case ("properties"):
+                                ReadProperties(xmlReader);
+                                break;
+                            default:
+                                throw new InvalidOperationException(string.Format("TileImage: Unsupported node '{0}'", xmlReader.Name));
+                        }
+                        break;
+                    case (XmlNodeType.EndElement):
+                        if (xmlReader.Name == TILED_LAYER_ELEMENT)
+                        {
+                            return;
+                        }
+                        break;
+                }
+            } while (xmlReader.Read());
+        }
+
+        private void ReadProperties(XmlReader xmlReader)
+        {
+            do
+            {
+                switch (xmlReader.NodeType)
+                {
+                    case (XmlNodeType.Element):
+                        switch (xmlReader.Name)
+                        {
+                            case ("properties"):
+                                break;
+                            case ("property"):
+                                string propertyName = xmlReader.GetAttribute("name");
+                                switch (propertyName)
+                                {
+                                    case ("CollisionLayer"):
+                                        this.collisionLayerName = xmlReader.GetAttribute("value");
+                                        break;
+                                    case ("Visible"):
+                                        this.Visible = Boolean.Parse(xmlReader.GetAttribute("value"));
+                                        break;
+                                    default:
+                                        throw new InvalidOperationException(string.Format("TileImage: Unsupported node '{0}'", xmlReader.Name));
+                                }
+                                break;
+                            default:
+                                throw new InvalidOperationException(string.Format("TileImage: Unsupported node '{0}'", xmlReader.Name));
+                        }
+                        break;
+                    case (XmlNodeType.EndElement):
+                        if (xmlReader.Name == "properties")
+                        {
+                            return;
+                        }
+                        break;
+                }
+            } while (xmlReader.Read());
         }
     }
 }

@@ -12,11 +12,15 @@
 
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
+using Spiridios.SpiridiEngine.Physics;
 
 namespace Spiridios.SpiridiEngine
 {
+
     public class SceneLayer : Drawable, Updatable
     {
+        private CollisionDetector collisionDetector = new CollisionDetector();
+
         private List<Actor> actors = new List<Actor>();
         private IComparer<Actor> actorsComparer = new Actor.AscendingYComparitor();
         private string layerName = null;
@@ -31,6 +35,10 @@ namespace Spiridios.SpiridiEngine
         public void AddActor(Actor actor)
         {
             this.actors.Add(actor);
+            if (actor.HasCollidable)
+            {
+                this.collisionDetector.AddCollidable(actor.Collidable);
+            }
         }
 
         public virtual void Draw(SpriteBatch spriteBatch)
@@ -80,9 +88,22 @@ namespace Spiridios.SpiridiEngine
             set { this.layerName = value; }
         }
 
+        public bool HasName
+        {
+            get { return this.layerName != null; }
+        }
+
+        public CollisionDetector CollisionDetector
+        {
+            get { return this.collisionDetector; }
+        }
+
         public virtual void ProcessCollisions()
         {
-
+            if (this.collisionDetector != null)
+            {
+                this.collisionDetector.ProcessCollisions();
+            }
         }
     }
 }

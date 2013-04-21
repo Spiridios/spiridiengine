@@ -32,13 +32,18 @@ namespace Spiridios.SpiridiEngine
 
         public void LoadTiledMap(string tiledFile)
         {
-            List<SceneLayer> tmpLayers = TileMapLayer.LoadTiledMap(game, this, tiledFile);
+            List<TileMapLayer> tmpLayers = TileMapLayer.LoadTiledMap(game, this, tiledFile);
             layers.AddRange(tmpLayers);
-            foreach(SceneLayer layer in tmpLayers)
+            foreach (TileMapLayer layer in tmpLayers)
             {
-                if (layer.Name != null)
+                if (layer.HasName)
                 {
                     layerNameMap.Add(layer.Name, layer);
+                }
+
+                if (layer.HasCollisionLayer)
+                {
+                    layer.CollisionDetector.AddMapCollisionLayer((TileMapLayer)GetLayer(layer.CollisionLayerName));
                 }
             }
         }
@@ -70,7 +75,7 @@ namespace Spiridios.SpiridiEngine
             return this.layers[layerIndex];
         }
 
-        public SceneLayer GetLayer(String layerName)
+        public SceneLayer GetLayer(string layerName)
         {
             SceneLayer sceneLayer = null;
             layerNameMap.TryGetValue(layerName, out sceneLayer);

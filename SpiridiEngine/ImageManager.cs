@@ -66,7 +66,7 @@ namespace Spiridios.SpiridiEngine
         {
             try
             {
-                string correctedName = SpiridiGame.NormalizeFilename(imageSrc);
+                string correctedName = SpiridiGame.NormalizeFilenameXNA(imageSrc);
                 Texture2D tex = this.contentManager.Load<Texture2D>(correctedName);
                 return tex;
             }

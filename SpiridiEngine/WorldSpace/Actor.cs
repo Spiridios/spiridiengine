@@ -1,5 +1,5 @@
 ﻿/**
-    Copyright 2012 Micah Lieske
+    Copyright 2013 Micah Lieske
 
     This file is part of SpiridiEngine.
 
@@ -149,6 +149,11 @@ namespace Spiridios.SpiridiEngine
             set { this.collidable = value; }
         }
 
+        public bool HasCollidable
+        {
+            get { return this.collidable != null; }
+        }
+
         //TODO: CollidesWith uses ScreenSpace coordinates
         public bool CollidesWith(Actor that)
         {
@@ -232,6 +237,5 @@ namespace Spiridios.SpiridiEngine
                 d.Draw(spriteBatch);
             }
         }
-
     }
 }
