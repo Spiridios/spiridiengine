@@ -93,29 +93,6 @@ namespace Spiridios.SpiridiEngine
             }
         }
 
-        public override void ProcessCollisions()
-        {
-            TileMapLayer collisionLayer = this;
-            if(!String.IsNullOrEmpty(this.collisionLayerName))
-            {
-                collisionLayer = (TileMapLayer)this.Scene.GetLayer(this.collisionLayerName);
-            }
-
-            foreach (Actor actor in Actors)
-            {
-                Rectangle actorBounds = actor.Bounds;
-                Collidable tileCollidable = collisionLayer.GetCollidableFromPosition(actor.Position);
-                if (actor.Collidable.CollidesWith(tileCollidable))
-                {
-                    Vector2 collisionVector = actor.Collidable.CollisionVector(tileCollidable);
-                    
-                    Vector2 bounceBack = collisionVector;
-                    actor.Position = actor.Position + bounceBack;
-                }
-            }
-
-        }
-
         private Collidable GetCollidableFromPosition(Vector2 position)
         {
             Collidable collidable = new Collidable();
@@ -135,10 +112,14 @@ namespace Spiridios.SpiridiEngine
         }
 
 
-        internal Collidable GetCollidables(Rectangle actorBounds)
+        internal List<Collidable> GetCollidables(Rectangle actorBounds)
         {
-            Vector2 position = new Vector2(actorBounds.X, actorBounds.Y);
-            return GetCollidableFromPosition(position);
+            List<Collidable> collidables = new List<Collidable>();
+            collidables.Add(GetCollidableFromPosition(new Vector2(actorBounds.X, actorBounds.Y)));
+            collidables.Add(GetCollidableFromPosition(new Vector2(actorBounds.X, actorBounds.Bottom)));
+            collidables.Add(GetCollidableFromPosition(new Vector2(actorBounds.Right, actorBounds.Y)));
+            collidables.Add(GetCollidableFromPosition(new Vector2(actorBounds.Right, actorBounds.Bottom)));
+            return collidables;
         }
 
         private PositionedImage GetImageFromPosition(int x, int y)

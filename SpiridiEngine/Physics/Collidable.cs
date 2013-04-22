@@ -12,6 +12,7 @@
 
 using System;
 using Microsoft.Xna.Framework;
+using System.Collections.Generic;
 
 namespace Spiridios.SpiridiEngine.Physics
 {
@@ -29,10 +30,17 @@ namespace Spiridios.SpiridiEngine.Physics
             set { confineNormals = value; }
         }
 
-        public CollisionListener CollisionListener
+        public void AddCollisionListener(CollisionListener collisionListener)
         {
-            get { return this.collisionListener; }
-            set { this.collisionListener = value; }
+            this.collisionListener = collisionListener;
+        }
+
+        public void NotifyCollisionListeners(List<Collidable> activeCollidables)
+        {
+            if (this.collisionListener != null)
+            {
+                this.collisionListener.OnCollided(activeCollidables);
+            }
         }
 
         public BoxCollidableShape BoxCollidableShape

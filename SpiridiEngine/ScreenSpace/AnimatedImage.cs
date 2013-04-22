@@ -60,10 +60,7 @@ namespace Spiridios.SpiridiEngine
 
         private void CreateImage(string imageName, int tileWidth, int tileHeight)
         {
-            if (!SpiridiGame.ImageManagerInstance.ImageExists(imageName))
-            {
-                SpiridiGame.ImageManagerInstance.AddImage(imageName, imageName);
-            }
+            SpiridiGame.ImageManagerInstance.AddImage(imageName, imageName);
             tileSet = new TileSet(imageName, tileWidth, tileHeight);
             this.Texture = tileSet.Texture;
             //this.Origin = new Vector2(tileWidth / 2.0f, tileHeight / 2.0f);
@@ -77,7 +74,7 @@ namespace Spiridios.SpiridiEngine
 
         private void LoadXML(string xmlAnimationName)
         {
-            using (FileStream fileStream = new FileStream(xmlAnimationName, FileMode.Open))
+            using (FileStream fileStream = new FileStream(SpiridiGame.Instance.NormalizeFilenameSystem(xmlAnimationName), FileMode.Open))
             {
                 using (XmlReader xmlReader = XmlReader.Create(fileStream))
                 {

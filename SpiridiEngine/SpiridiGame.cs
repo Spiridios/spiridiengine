@@ -26,6 +26,7 @@ namespace Spiridios.SpiridiEngine
         private static Random random = new Random();
         // TODO: I don't think there should be a single image manager unless it understands level sets.
         private static ImageManager imageManager = null;
+        private static SpiridiGame gameInstance = null;
 
         private InputManager inputManager;
 
@@ -39,7 +40,6 @@ namespace Spiridios.SpiridiEngine
 
         public TextRenderer DefaultTextRenderer { get; set; }
 
-
         private SpriteSortMode SpriteSortMode { get; set; }
         private int windowWidth;
         private int windowHeight;
@@ -52,6 +52,9 @@ namespace Spiridios.SpiridiEngine
         private float fps = 0.0f;
         public Vector2 FPSPosition { get; set; }
 
+        // TODO: put in line drawing class
+        private Texture2D drawingPixel;
+
         public SpiridiGame()
         {
             Content.RootDirectory = "Content";
@@ -61,6 +64,15 @@ namespace Spiridios.SpiridiEngine
             if (imageManager == null)
             {
                 imageManager = new ImageManager(Content);
+            }
+
+            if (gameInstance != null)
+            {
+                throw new InvalidOperationException("There cannot be more than one SpiridiGame instance.");
+            }
+            else
+            {
+                gameInstance = this;
             }
 
             SetWindowSize(640, 480);
@@ -88,6 +100,11 @@ namespace Spiridios.SpiridiEngine
         public static ImageManager ImageManagerInstance
         {
             get { return SpiridiGame.imageManager; }
+        }
+
+        public static SpiridiGame Instance
+        {
+            get { return SpiridiGame.gameInstance; }
         }
 
         public InputManager InputManager
@@ -190,6 +207,8 @@ namespace Spiridios.SpiridiEngine
         {
             base.LoadContent();
             imageManager.Clear();
+            this.drawingPixel = new Texture2D(this.GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
+            this.drawingPixel.SetData(new[] { Color.White });
         }
 
         protected override void Initialize()
@@ -239,6 +258,27 @@ namespace Spiridios.SpiridiEngine
             }
         }
 
+        public void DrawRectangle(Rectangle rect, Color color)
+        {
+            int lineWeight = 1;
+            // Draw top line
+            spriteBatch.Draw(this.drawingPixel, new Rectangle(rect.X, rect.Y, rect.Width, lineWeight), color);
+
+            // Draw left line
+            spriteBatch.Draw(this.drawingPixel, new Rectangle(rect.X, rect.Y, lineWeight, rect.Height), color);
+
+            // Draw right line
+            spriteBatch.Draw(this.drawingPixel, new Rectangle((rect.X + rect.Width - lineWeight),
+                                            rect.Y,
+                                            lineWeight,
+                                            rect.Height), color);
+            // Draw bottom line
+            spriteBatch.Draw(this.drawingPixel, new Rectangle(rect.X,
+                                            rect.Y + rect.Height - lineWeight,
+                                            rect.Width,
+                                            lineWeight), color);
+        }
+
         protected sealed override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(this.clearColor);
@@ -264,10 +304,7 @@ namespace Spiridios.SpiridiEngine
 #else
             spriteBatch.Begin(SpriteBlendMode.AlphaBlend, this.SpriteSortMode, SaveStateMode.None);
 #endif
-// TODO: When Main is fully deprecated (after LD), remove this block.
-#pragma warning disable 612, 618
-            this.currentState.Main(gameTime);
-#pragma warning restore 612, 618
+
             this.currentState.Draw(gameTime);
 
             spriteBatch.End();

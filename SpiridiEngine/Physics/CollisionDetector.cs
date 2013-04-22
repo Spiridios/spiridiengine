@@ -40,11 +40,35 @@ namespace Spiridios.SpiridiEngine.Physics
         {
             foreach (Collidable collidable in collidables)
             {
-                Rectangle actorBounds = collidable.BoundingBox;
-                Collidable tileCollidable = mapCollisionLayer.GetCollidables(actorBounds);
-                if (collidable.CollidesWith(tileCollidable))
+                List<Collidable> activeCollidables = new List<Collidable>();
+
+                foreach (Collidable otherCollidable in collidables)
                 {
-                    collidable.CollisionListener.OnCollided();
+                    if (otherCollidable != collidable)
+                    {
+                        if (collidable.CollidesWith(otherCollidable))
+                        {
+                            activeCollidables.Add(otherCollidable);
+                        }
+                    }
+                }
+
+                if (mapCollisionLayer != null)
+                {
+                    Rectangle actorBounds = collidable.BoundingBox;
+                    List<Collidable> tileCollidables = mapCollisionLayer.GetCollidables(actorBounds);
+                    foreach (Collidable tileCollidable in tileCollidables)
+                    {
+                        if (collidable.CollidesWith(tileCollidable))
+                        {
+                            activeCollidables.Add(tileCollidable);
+                        }
+                    }
+                }
+
+                if (activeCollidables.Any())
+                {
+                    collidable.NotifyCollisionListeners(activeCollidables);
                 }
             }
         }

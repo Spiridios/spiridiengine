@@ -19,6 +19,6 @@ namespace Spiridios.SpiridiEngine.Physics
 {
     public interface CollisionListener
     {
-        void OnCollided();
+        void OnCollided(List<Collidable> activeCollidables);
     }
 }

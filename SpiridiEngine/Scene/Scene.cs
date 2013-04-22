@@ -34,13 +34,19 @@ namespace Spiridios.SpiridiEngine
         {
             List<TileMapLayer> tmpLayers = TileMapLayer.LoadTiledMap(game, this, tiledFile);
             layers.AddRange(tmpLayers);
+
+            // Create name map
             foreach (TileMapLayer layer in tmpLayers)
             {
                 if (layer.HasName)
                 {
                     layerNameMap.Add(layer.Name, layer);
                 }
+            }
 
+            // Find collision layer(s) and add them to the collision detectors.
+            foreach (TileMapLayer layer in tmpLayers)
+            {
                 if (layer.HasCollisionLayer)
                 {
                     layer.CollisionDetector.AddMapCollisionLayer((TileMapLayer)GetLayer(layer.CollisionLayerName));
