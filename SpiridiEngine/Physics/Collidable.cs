@@ -21,6 +21,9 @@ namespace Spiridios.SpiridiEngine.Physics
         private CollisionListener collisionListener = null;
         private RadiusCollidableShape radiusShape = null;
         private BoxCollidableShape boxShape = null;
+        private ImageCollidableShape imageShape = null;
+
+        // TODO: this shouldn't be needed anymore.
         private bool confineNormals = false;
 
         // TODO: this shouldn't be needed anymore.
@@ -86,6 +89,17 @@ namespace Spiridios.SpiridiEngine.Physics
             get { return this.radiusShape != null; }
         }
 
+        public ImageCollidableShape ImageCollidableShape
+        {
+            get { return this.imageShape; }
+            set { this.imageShape = value; }
+        }
+
+        public bool HasImageCollidableShape
+        {
+            get { return this.imageShape != null; }
+        }
+
         public bool CollidesWith(Collidable that)
         {
             Vector2 v = CollisionVector(that);
@@ -106,7 +120,11 @@ namespace Spiridios.SpiridiEngine.Physics
         public Vector2 CollisionVector(Collidable that)
         {
             Vector2 v = Vector2.Zero;
-            if (this.radiusShape != null && that.radiusShape != null)
+            if (this.HasBoxCollidableShape && that.HasImageCollidableShape)
+            {
+                v = CollisionVectorBoxImage(that);
+            }
+            else if (this.radiusShape != null && that.radiusShape != null)
             {
                 v = CollisionVectorRadiusRadius(that);
             }
@@ -120,6 +138,8 @@ namespace Spiridios.SpiridiEngine.Physics
             }
             else if (this.boxShape != null && that.radiusShape != null)
             {
+                v = CollisionVectorRadiusBox(this);
+                v = v * -1;
             }
 
             if(confineNormals && v != Vector2.Zero)
@@ -234,6 +254,16 @@ namespace Spiridios.SpiridiEngine.Physics
             }
 
             return v;
+        }
+
+        private Vector2 CollisionVectorBoxImage(Collidable that)
+        {
+            if (that.HasBoxCollidableShape)
+            {
+                Vector2 v = CollisionVectorBoxBox(that);
+                return v;
+            }
+            return Vector2.Zero;
         }
     }
 }

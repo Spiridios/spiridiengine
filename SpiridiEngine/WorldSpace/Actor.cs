@@ -73,8 +73,8 @@ namespace Spiridios.SpiridiEngine
             lifeStage = LifeStage.ALIVE;
 
             this.collidable = new Collidable();
-            this.collidable.RadiusCollidableShape = new RadiusCollidableShape(Position, this.Width > this.Height ? this.Width / 2.0f : this.Height / 2.0f);
-            //this.collidable.BoxCollidableShape = new BoxCollidableShape((int)Position.X, (int)Position.Y, this.Width, this.Height);
+            //this.collidable.RadiusCollidableShape = new RadiusCollidableShape(Position, this.Width > this.Height ? this.Width / 2.0f : this.Height / 2.0f);
+            this.collidable.BoxCollidableShape = new BoxCollidableShape((int)Position.X, (int)Position.Y, this.Width, this.Height);
 
             this.TintColor = Color.White;
             this.Layer = 0.0f;
@@ -204,6 +204,7 @@ namespace Spiridios.SpiridiEngine
         // TODO: move into default behavior.
         public override void Draw(SpriteBatch spriteBatch)
         {
+            SpiridiGame.Instance.DrawRectangle(this.collidable.BoundingBox, Color.Red);
             if (stageBehaviors.ContainsKey(this.lifeStage))
             {
                 Behavior b = stageBehaviors[this.lifeStage];

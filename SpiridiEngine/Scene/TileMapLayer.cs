@@ -107,6 +107,7 @@ namespace Spiridios.SpiridiEngine
                 //double tileRadius = tileWidth > tileHeight ? tileWidth / 2.0f : tileHeight / 2.0f;
                 //collidable.RadiusCollidableShape = new RadiusCollidableShape(tileCenterPoint, tileRadius);
                 collidable.BoxCollidableShape = new BoxCollidableShape(new Rectangle(tilex * tileWidth, tiley * tileHeight, tileWidth, tileHeight));
+                collidable.ImageCollidableShape = new ImageCollidableShape(new Vector2(tilex * tileWidth, tiley * tileHeight), image);
             }
             return collidable;
         }

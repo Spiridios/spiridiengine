@@ -14,10 +14,21 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework;
 
 namespace Spiridios.SpiridiEngine.Physics
 {
-    class ImageCollidableShape
+    public class ImageCollidableShape
     {
+        // TODO: This needs to be common somehow.
+        private Vector2 position;
+        private Image image;
+
+        public ImageCollidableShape(Vector2 position, Image image)
+        {
+            this.position = position;
+            this.image = image;
+        }
+
     }
 }
