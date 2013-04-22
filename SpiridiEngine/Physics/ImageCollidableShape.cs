@@ -30,5 +30,10 @@ namespace Spiridios.SpiridiEngine.Physics
             this.image = image;
         }
 
+
+        public Image Image
+        {
+            get { return this.image; }
+        }
     }
 }

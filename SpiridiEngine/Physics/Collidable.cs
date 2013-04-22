@@ -258,12 +258,141 @@ namespace Spiridios.SpiridiEngine.Physics
 
         private Vector2 CollisionVectorBoxImage(Collidable that)
         {
-            if (that.HasBoxCollidableShape)
+            Vector2 v = Vector2.Zero;
+            Rectangle thisBoundingBox = this.BoundingBox;
+            Rectangle thatBoundingBox = that.BoundingBox;
+            Rectangle intersection = Rectangle.Intersect(thisBoundingBox, thatBoundingBox);
+
+            if (intersection.Width > 0 && intersection.Height > 0)
             {
-                Vector2 v = CollisionVectorBoxBox(that);
-                return v;
+                // Translate into local coordinates.
+                intersection.X = intersection.X - thatBoundingBox.X;
+                intersection.Y = intersection.Y - thatBoundingBox.Y;
+
+                List<Point> points = GetRectangleIntersections(that.imageShape.Image, intersection);
+                if (points.Count == 1)
+                {
+                    System.Diagnostics.Debug.Print("Only one collision point found!!! Fix this somehow!");
+                }
+                else if (points.Count > 1)
+                {
+                    v = this.GetNormalFromPoints(that.imageShape.Image, points[0], points[1]);
+                }
             }
-            return Vector2.Zero;
+            return v;
         }
+
+        // Maybe this belongs in image....
+        private List<Point> GetRectangleIntersections(Image image, Rectangle screenRect)
+        {
+            List<Point> points = new List<Point>();
+            Point tempPt;
+
+            // Upper Left
+            tempPt = this.GetLineIntersection(image, new Point(screenRect.Left, screenRect.Top), 1, 0, screenRect.Width);
+            if (tempPt.X >= 0 && tempPt.Y >= 0)
+            {
+                points.Add(tempPt);
+            }
+            tempPt = this.GetLineIntersection(image, new Point(screenRect.Left, screenRect.Top), 0, 1, screenRect.Height);
+            if (tempPt.X >= 0 && tempPt.Y >= 0)
+            {
+                points.Add(tempPt);
+            }
+            // Lower Left
+            tempPt = this.GetLineIntersection(image, new Point(screenRect.Left, screenRect.Bottom), 1, 0, screenRect.Width);
+            if (tempPt.X >= 0 && tempPt.Y >= 0)
+            {
+                points.Add(tempPt);
+            }
+            tempPt = this.GetLineIntersection(image, new Point(screenRect.Left, screenRect.Bottom), 0, -1, screenRect.Height);
+            if (tempPt.X >= 0 && tempPt.Y >= 0)
+            {
+                points.Add(tempPt);
+            }
+            // Lower Right
+            tempPt = this.GetLineIntersection(image, new Point(screenRect.Right, screenRect.Bottom), -1, 0, screenRect.Width);
+            if (tempPt.X >= 0 && tempPt.Y >= 0)
+            {
+                points.Add(tempPt);
+            }
+            tempPt = this.GetLineIntersection(image, new Point(screenRect.Right, screenRect.Bottom), 0, -1, screenRect.Height);
+            if (tempPt.X >= 0 && tempPt.Y >= 0)
+            {
+                points.Add(tempPt);
+            }
+            // Upper Right
+            tempPt = this.GetLineIntersection(image, new Point(screenRect.Right, screenRect.Top), -1, 0, screenRect.Width);
+            if (tempPt.X >= 0 && tempPt.Y >= 0)
+            {
+                points.Add(tempPt);
+            }
+            tempPt = this.GetLineIntersection(image, new Point(screenRect.Right, screenRect.Top), 0, 1, screenRect.Height);
+            if (tempPt.X >= 0 && tempPt.Y >= 0)
+            {
+                points.Add(tempPt);
+            }
+
+            return points;
+        }
+
+        /// <summary>
+        /// Used to scan a horizontal or vertical line to find where it intersects with the contained image.
+        /// The pixel of intersection is always colored.
+        /// </summary>
+        /// <param name="x">The starting coordinate</param>
+        /// <param name="y">The starting coordinate</param>
+        /// <param name="xIncrement">Number to add to X coordinate in each step</param>
+        /// <param name="yIncrement">Number to add to Y coordinate in each step</param>
+        /// <param name="numSteps">Number of steps to execute</param>
+        /// <returns>The point of intersection. If either X or Y (or both) are less than zero, then no intersection was found.</returns>
+        private Point GetLineIntersection(Image image, Point position, int xIncrement, int yIncrement, int numSteps, byte alphaCutoff = 10)
+        {
+            int x = position.X;
+            int y = position.Y;
+            Point intersection = new Point(-1, -1);
+
+            Color pixel = image.GetPixel(x, y);
+            // True == pixel, false == no pixel
+            bool startState = pixel.A > alphaCutoff;
+
+            for (int i = 1; i < numSteps; i++)
+            {
+                x += xIncrement;
+                y += yIncrement;
+                pixel = image.GetPixel(x, y);
+                if (startState != (pixel.A > alphaCutoff))
+                {
+                    // Pixel If we started on a pixel, then the pixel we're on is empty,
+                    // and we need to get the previous pixel as our intersection point
+                    intersection.X = startState ? x - xIncrement : x;
+                    intersection.Y = startState ? y - yIncrement : y;
+                    // Exit loop 
+                    break;
+                }
+            }
+
+            return intersection;
+        }
+
+        private Vector2 GetNormalFromPoints(Image image, Point point1, Point point2, byte alphaCutoff = 10)
+        {
+            Vector2 normal = new Vector2(-(point1.Y - point2.Y), (point1.X - point2.X));
+            if (normal != Vector2.Zero)
+            {
+                normal.Normalize();
+                Vector2 test = normal * 2;
+                int testX = point1.X + (int)test.X;
+                int testY = point1.Y + (int)test.Y;
+
+                Color color = image.GetPixel(testX, testY);
+                if (color.A > alphaCutoff)
+                {
+                    normal = -normal;
+                }
+            }
+            return normal;
+        }
+
     }
 }

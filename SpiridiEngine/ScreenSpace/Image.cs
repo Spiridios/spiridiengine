@@ -18,7 +18,10 @@ namespace Spiridios.SpiridiEngine
 {
     public class Image 
     {
+        private static readonly Color PIXEL_OUT_OF_BOUNDS = new Color(0, 0, 0, 0);
+
         private Texture2D image;
+        private Color[] pixelData = null;
         private Vector2 origin = new Vector2(0, 0);
         private Rectangle sourceRect;
 
@@ -97,5 +100,41 @@ namespace Spiridios.SpiridiEngine
         {
             spriteBatch.Draw(this.image, destination, sourceRect, tintColor, rotation, Origin, SpriteEffects.None, layer);
         }
+
+        private bool InBounds(int x, int y)
+        {
+            return (x >= 0 && x < this.image.Width && y >= 0 && y < this.image.Height);
+        }
+
+        public Color GetPixel(int x, int y)
+        {
+            if (!InBounds(x, y))
+            {
+                //throw new Exception("Pixel out of bounds");
+                return Image.PIXEL_OUT_OF_BOUNDS;
+            }
+            else
+            {
+                // TODO: Make this PixelData[offset] instead of using temp var
+                Color[] pixelData = this.PixelData;
+                int offset = x + (y * this.image.Width);
+                return pixelData[offset];
+            }
+        }
+
+        private Color[] PixelData
+        {
+            get
+            {
+                if (this.pixelData == null)
+                {
+                    this.pixelData = new Color[this.image.Width * this.image.Height];
+                    this.image.GetData<Color>(this.pixelData);
+                }
+                return this.pixelData;
+            }
+        }
+
+
     }
 }
