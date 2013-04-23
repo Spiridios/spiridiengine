@@ -300,34 +300,34 @@ namespace Spiridios.SpiridiEngine.Physics
                 points.Add(tempPt);
             }
             // Lower Left
-            tempPt = this.GetLineIntersection(image, new Point(screenRect.Left, screenRect.Bottom), 1, 0, screenRect.Width);
+            tempPt = this.GetLineIntersection(image, new Point(screenRect.Left, screenRect.Bottom-1), 1, 0, screenRect.Width);
             if (tempPt.X >= 0 && tempPt.Y >= 0)
             {
                 points.Add(tempPt);
             }
-            tempPt = this.GetLineIntersection(image, new Point(screenRect.Left, screenRect.Bottom), 0, -1, screenRect.Height);
+            tempPt = this.GetLineIntersection(image, new Point(screenRect.Left, screenRect.Bottom-1), 0, -1, screenRect.Height);
             if (tempPt.X >= 0 && tempPt.Y >= 0)
             {
                 points.Add(tempPt);
             }
             // Lower Right
-            tempPt = this.GetLineIntersection(image, new Point(screenRect.Right, screenRect.Bottom), -1, 0, screenRect.Width);
+            tempPt = this.GetLineIntersection(image, new Point(screenRect.Right-1, screenRect.Bottom-1), -1, 0, screenRect.Width);
             if (tempPt.X >= 0 && tempPt.Y >= 0)
             {
                 points.Add(tempPt);
             }
-            tempPt = this.GetLineIntersection(image, new Point(screenRect.Right, screenRect.Bottom), 0, -1, screenRect.Height);
+            tempPt = this.GetLineIntersection(image, new Point(screenRect.Right-1, screenRect.Bottom-1), 0, -1, screenRect.Height);
             if (tempPt.X >= 0 && tempPt.Y >= 0)
             {
                 points.Add(tempPt);
             }
             // Upper Right
-            tempPt = this.GetLineIntersection(image, new Point(screenRect.Right, screenRect.Top), -1, 0, screenRect.Width);
+            tempPt = this.GetLineIntersection(image, new Point(screenRect.Right-1, screenRect.Top), -1, 0, screenRect.Width);
             if (tempPt.X >= 0 && tempPt.Y >= 0)
             {
                 points.Add(tempPt);
             }
-            tempPt = this.GetLineIntersection(image, new Point(screenRect.Right, screenRect.Top), 0, 1, screenRect.Height);
+            tempPt = this.GetLineIntersection(image, new Point(screenRect.Right-1, screenRect.Top), 0, 1, screenRect.Height);
             if (tempPt.X >= 0 && tempPt.Y >= 0)
             {
                 points.Add(tempPt);
@@ -370,6 +370,12 @@ namespace Spiridios.SpiridiEngine.Physics
                     // Exit loop 
                     break;
                 }
+            }
+
+            if(startState && (intersection.X < 0 || intersection.Y < 0))
+            {
+                // Means we were ENTIRELY within something. Use starting point as point of intersection
+                intersection = position;
             }
 
             return intersection;

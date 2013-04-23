@@ -192,6 +192,11 @@ namespace Spiridios.SpiridiEngine
                                 this.Name = xmlReader.GetAttribute("name");
                                 layerHeight = int.Parse(xmlReader.GetAttribute("height"));
                                 layerWidth = int.Parse(xmlReader.GetAttribute("width"));
+                                String visibleAttribute = xmlReader.GetAttribute("visible");
+                                if (visibleAttribute != null)
+                                {
+                                    this.Visible = int.Parse(visibleAttribute) != 0;
+                                }
                                 break;
                             case ("data"):
                                 string encoding = xmlReader.GetAttribute("encoding");

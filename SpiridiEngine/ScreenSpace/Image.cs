@@ -103,7 +103,7 @@ namespace Spiridios.SpiridiEngine
 
         private bool InBounds(int x, int y)
         {
-            return (x >= 0 && x <= sourceRect.Right && y >= 0 && y <= sourceRect.Bottom);
+            return (x >= 0 && x < sourceRect.Right && y >= 0 && y < sourceRect.Bottom);
         }
 
         private bool InBounds(Point point)
