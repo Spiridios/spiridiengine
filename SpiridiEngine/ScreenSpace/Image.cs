@@ -103,23 +103,43 @@ namespace Spiridios.SpiridiEngine
 
         private bool InBounds(int x, int y)
         {
-            return (x >= 0 && x < this.image.Width && y >= 0 && y < this.image.Height);
+            return (x >= 0 && x <= sourceRect.Right && y >= 0 && y <= sourceRect.Bottom);
+        }
+
+        private bool InBounds(Point point)
+        {
+            return InBounds(point.X, point.Y);
         }
 
         public Color GetPixel(int x, int y)
         {
-            if (!InBounds(x, y))
+            return GetPixel(new Point(x, y));
+        }
+
+        public Color GetPixel(Point point)
+        {
+            Point texturePoint = SourcePointToTexturePoint(point);
+            if (!InBounds(point))
             {
                 //throw new Exception("Pixel out of bounds");
+                //System.Diagnostics.Debug.Print("Pixel out of bounds");
                 return Image.PIXEL_OUT_OF_BOUNDS;
             }
             else
             {
                 // TODO: Make this PixelData[offset] instead of using temp var
                 Color[] pixelData = this.PixelData;
-                int offset = x + (y * this.image.Width);
+                int offset = texturePoint.X + (texturePoint.Y * this.image.Width);
                 return pixelData[offset];
             }
+        }
+
+        private Point SourcePointToTexturePoint(Point point)
+        {
+            Point p = new Point(point.X, point.Y);
+            p.X += sourceRect.X;
+            p.Y += sourceRect.Y;
+            return p;
         }
 
         private Color[] PixelData
