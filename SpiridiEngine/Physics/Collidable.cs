@@ -269,6 +269,7 @@ namespace Spiridios.SpiridiEngine.Physics
                 intersection.X = intersection.X - thatBoundingBox.X;
                 intersection.Y = intersection.Y - thatBoundingBox.Y;
 
+                // TODO: This was originally a set to remove dupes.
                 List<Point> points = GetRectangleIntersections(that.imageShape.Image, intersection);
                 if (points.Count == 1)
                 {
@@ -285,51 +286,61 @@ namespace Spiridios.SpiridiEngine.Physics
         // Maybe this belongs in image....
         private List<Point> GetRectangleIntersections(Image image, Rectangle screenRect)
         {
+            // JSIL can't iterate over a HashSet, so build parallel containers.
+            HashSet<Point> pointSet = new HashSet<Point>();
             List<Point> points = new List<Point>();
             Point tempPt;
 
             // Upper Left
             tempPt = this.GetLineIntersection(image, new Point(screenRect.Left, screenRect.Top), 1, 0, screenRect.Width);
-            if (tempPt.X >= 0 && tempPt.Y >= 0)
+            if (tempPt.X >= 0 && tempPt.Y >= 0 && !pointSet.Contains(tempPt))
             {
+                pointSet.Add(tempPt);
                 points.Add(tempPt);
             }
             tempPt = this.GetLineIntersection(image, new Point(screenRect.Left, screenRect.Top), 0, 1, screenRect.Height);
-            if (tempPt.X >= 0 && tempPt.Y >= 0)
+            if (tempPt.X >= 0 && tempPt.Y >= 0 && !pointSet.Contains(tempPt))
             {
+                pointSet.Add(tempPt);
                 points.Add(tempPt);
             }
             // Lower Left
             tempPt = this.GetLineIntersection(image, new Point(screenRect.Left, screenRect.Bottom-1), 1, 0, screenRect.Width);
-            if (tempPt.X >= 0 && tempPt.Y >= 0)
+            if (tempPt.X >= 0 && tempPt.Y >= 0 && !pointSet.Contains(tempPt))
             {
+                pointSet.Add(tempPt);
                 points.Add(tempPt);
             }
             tempPt = this.GetLineIntersection(image, new Point(screenRect.Left, screenRect.Bottom-1), 0, -1, screenRect.Height);
-            if (tempPt.X >= 0 && tempPt.Y >= 0)
+            if (tempPt.X >= 0 && tempPt.Y >= 0 && !pointSet.Contains(tempPt))
             {
+                pointSet.Add(tempPt);
                 points.Add(tempPt);
             }
             // Lower Right
             tempPt = this.GetLineIntersection(image, new Point(screenRect.Right-1, screenRect.Bottom-1), -1, 0, screenRect.Width);
-            if (tempPt.X >= 0 && tempPt.Y >= 0)
+            if (tempPt.X >= 0 && tempPt.Y >= 0 && !pointSet.Contains(tempPt))
             {
+                pointSet.Add(tempPt);
                 points.Add(tempPt);
             }
             tempPt = this.GetLineIntersection(image, new Point(screenRect.Right-1, screenRect.Bottom-1), 0, -1, screenRect.Height);
-            if (tempPt.X >= 0 && tempPt.Y >= 0)
+            if (tempPt.X >= 0 && tempPt.Y >= 0 && !pointSet.Contains(tempPt))
             {
+                pointSet.Add(tempPt);
                 points.Add(tempPt);
             }
             // Upper Right
             tempPt = this.GetLineIntersection(image, new Point(screenRect.Right-1, screenRect.Top), -1, 0, screenRect.Width);
-            if (tempPt.X >= 0 && tempPt.Y >= 0)
+            if (tempPt.X >= 0 && tempPt.Y >= 0 && !pointSet.Contains(tempPt))
             {
+                pointSet.Add(tempPt);
                 points.Add(tempPt);
             }
             tempPt = this.GetLineIntersection(image, new Point(screenRect.Right-1, screenRect.Top), 0, 1, screenRect.Height);
-            if (tempPt.X >= 0 && tempPt.Y >= 0)
+            if (tempPt.X >= 0 && tempPt.Y >= 0 && !pointSet.Contains(tempPt))
             {
+                pointSet.Add(tempPt);
                 points.Add(tempPt);
             }
 
