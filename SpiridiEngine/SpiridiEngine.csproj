@@ -105,13 +105,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cameras\FollowingCamera.cs" />
     <Compile Include="Physics\BoxCollidableShape.cs" />
     <Compile Include="Physics\Collidable.cs" />
     <Compile Include="Physics\CollisionDetector.cs" />
     <Compile Include="Physics\CollisionListener.cs" />
     <Compile Include="Physics\ImageCollidableShape.cs" />
     <Compile Include="Physics\RadiusCollidableShape.cs" />
-    <Compile Include="Scene\Camera.cs" />
+    <Compile Include="Cameras\Camera.cs" />
     <Compile Include="ScreenSpace\AnimatedImage.cs" />
     <Compile Include="ScreenSpace\DrawableAt.cs" />
     <Compile Include="ScreenSpace\PositionedImage.cs" />
