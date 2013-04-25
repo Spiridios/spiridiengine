@@ -41,6 +41,8 @@ namespace Spiridios.SpiridiEngine
         public TextRenderer DefaultTextRenderer { get; set; }
 
         private SpriteSortMode SpriteSortMode { get; set; }
+        
+        // TODO: windowWidth seems a misnomer. Probably screenWidth
         private int windowWidth;
         private int windowHeight;
 

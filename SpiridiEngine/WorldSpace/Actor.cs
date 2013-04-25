@@ -204,7 +204,7 @@ namespace Spiridios.SpiridiEngine
         // TODO: move into default behavior.
         public override void Draw(SpriteBatch spriteBatch)
         {
-            SpiridiGame.Instance.DrawRectangle(this.collidable.BoundingBox, Color.Red);
+            //SpiridiGame.Instance.DrawRectangle(this.collidable.BoundingBox, Color.Red);
             if (stageBehaviors.ContainsKey(this.lifeStage))
             {
                 Behavior b = stageBehaviors[this.lifeStage];

@@ -10,24 +10,30 @@
     You should have received a copy of the GNU General Public License along with Foobar. If not, see http://www.gnu.org/licenses/.
 **/
 
-using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Xml;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Spiridios.SpiridiEngine
+namespace Spiridios.SpiridiEngine.Scene
 {
     public class Scene : Drawable, Updatable
     {
         private SpiridiGame game;
 
+        private Camera camera;
         private List<SceneLayer> layers = new List<SceneLayer>();
         private Dictionary<string, SceneLayer> layerNameMap = new Dictionary<string, SceneLayer>();
 
         public Scene(SpiridiGame game) 
         {
+            this.camera = new Camera();
             this.game = game;
+        }
+
+        public Camera Camera
+        {
+            get { return this.camera; }
+            set { this.camera = value; }
         }
 
         public void LoadTiledMap(string tiledFile)
@@ -92,7 +98,7 @@ namespace Spiridios.SpiridiEngine
         {
             foreach (SceneLayer layer in layers)
             {
-                layer.Draw(spriteBatch);
+                layer.Draw(spriteBatch, this.camera);
             }
         }
 

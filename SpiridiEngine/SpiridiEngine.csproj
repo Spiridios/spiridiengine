@@ -111,6 +111,7 @@
     <Compile Include="Physics\CollisionListener.cs" />
     <Compile Include="Physics\ImageCollidableShape.cs" />
     <Compile Include="Physics\RadiusCollidableShape.cs" />
+    <Compile Include="Scene\Camera.cs" />
     <Compile Include="ScreenSpace\AnimatedImage.cs" />
     <Compile Include="ScreenSpace\DrawableAt.cs" />
     <Compile Include="ScreenSpace\PositionedImage.cs" />

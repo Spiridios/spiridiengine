@@ -13,6 +13,7 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Spiridios.SpiridiEngine.Scene;
 
 namespace Spiridios.SpiridiEngine
 {
@@ -36,10 +37,22 @@ namespace Spiridios.SpiridiEngine
 
         protected PositionHandler PositionHandler { get; set; }
 
+        public Camera Camera
+        {
+            get { return this.PositionHandler.Camera; }
+            set { this.PositionHandler.Camera = value; }
+        }
+
         protected void AddScreenObject(ScreenObject screenObject)
         {
             this.screenObject = screenObject;
             screenObject.Position = PositionHandler.Position;
+        }
+
+        // TODO: this is hacky
+        public Vector2 ScreenPosition
+        {
+            get { return this.PositionHandler.ScreenPosition; }
         }
 
         // TODO: make this non-virtual. Note: if this becomes non-virtual, then there NEEDS to be a

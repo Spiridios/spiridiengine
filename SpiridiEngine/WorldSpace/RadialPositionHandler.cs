@@ -61,7 +61,7 @@ namespace Spiridios.SpiridiEngine
 
         public override Vector2 ScreenPosition
         {
-            get { return screenPosition; }
+            get { return CameraTranslate(this.screenPosition); }
         }
 
         public override Vector2 Position

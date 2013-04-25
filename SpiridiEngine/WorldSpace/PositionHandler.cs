@@ -11,6 +11,7 @@
 **/
 
 using Microsoft.Xna.Framework;
+using Spiridios.SpiridiEngine.Scene;
 
 namespace Spiridios.SpiridiEngine
 {
@@ -20,10 +21,29 @@ namespace Spiridios.SpiridiEngine
     public class PositionHandler
     {
         private Vector2 position;
+        private Camera camera = null;
+
+        public Camera Camera
+        {
+            get { return this.camera; }
+            set { this.camera = value; }
+        }
 
         public virtual Vector2 ScreenPosition
         {
-            get { return position; }
+            get { return CameraTranslate(this.position); }
+        }
+
+        protected Vector2 CameraTranslate(Vector2 point)
+        {
+            if (camera == null)
+            {
+                return point;
+            }
+            else
+            {
+                return camera.TranslatePoint(point);
+            }
         }
 
         public virtual Vector2 Position

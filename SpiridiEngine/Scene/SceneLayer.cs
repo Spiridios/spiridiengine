@@ -14,10 +14,10 @@ using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using Spiridios.SpiridiEngine.Physics;
 
-namespace Spiridios.SpiridiEngine
+namespace Spiridios.SpiridiEngine.Scene
 {
 
-    public class SceneLayer : Drawable, Updatable
+    public class SceneLayer : Updatable
     {
         private CollisionDetector collisionDetector = new CollisionDetector();
 
@@ -41,7 +41,7 @@ namespace Spiridios.SpiridiEngine
             }
         }
 
-        public virtual void Draw(SpriteBatch spriteBatch)
+        public virtual void Draw(SpriteBatch spriteBatch, Camera camera)
         {
             if (this.visible)
             {

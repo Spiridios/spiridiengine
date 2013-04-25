@@ -19,7 +19,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Spiridios.SpiridiEngine.Physics;
 
-namespace Spiridios.SpiridiEngine
+namespace Spiridios.SpiridiEngine.Scene
 {
     public class TileMapLayer : SceneLayer
     {
@@ -53,15 +53,15 @@ namespace Spiridios.SpiridiEngine
             get { return this.collisionLayerName != null; }
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch, Camera camera)
         {
             if (this.Visible)
             {
-                Draw(tileSet, spriteBatch);
+                Draw(tileSet, spriteBatch, camera);
             }
         }
 
-        private void Draw(TileSetCollection tileSet, SpriteBatch spriteBatch)
+        private void Draw(TileSetCollection tileSet, SpriteBatch spriteBatch, Camera camera)
         {
             SortActors();
 
@@ -82,7 +82,7 @@ namespace Spiridios.SpiridiEngine
                 Image image = layerTileImages[i];
                 if (image != null)
                 {
-                    image.Draw(spriteBatch, destCoord);
+                    image.Draw(spriteBatch, camera.TranslatePoint(destCoord));
                 }
             }
 
