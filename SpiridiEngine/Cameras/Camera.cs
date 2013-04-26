@@ -17,5 +17,12 @@ namespace Spiridios.SpiridiEngine.Scene
         {
             return point - position;
         }
+
+        public void Center(Vector2 position)
+        {
+            this.position = position;
+            this.position.X = this.position.X - (int)(SpiridiGame.Instance.WindowWidth / 2.0);
+            this.position.Y = this.position.Y - (int)(SpiridiGame.Instance.WindowHeight / 2.0);
+        }
     }
 }

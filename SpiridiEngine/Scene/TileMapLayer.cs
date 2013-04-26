@@ -53,11 +53,11 @@ namespace Spiridios.SpiridiEngine.Scene
             get { return this.collisionLayerName != null; }
         }
 
-        public override void Draw(SpriteBatch spriteBatch, Camera camera)
+        public override void Draw(SpriteBatch spriteBatch)
         {
             if (this.Visible)
             {
-                Draw(tileSet, spriteBatch, camera);
+                Draw(tileSet, spriteBatch, this.Camera);
             }
         }
 

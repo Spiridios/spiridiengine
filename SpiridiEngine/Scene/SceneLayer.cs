@@ -26,22 +26,38 @@ namespace Spiridios.SpiridiEngine.Scene
         private string layerName = null;
         private Scene scene;
         private bool visible = true;
+        private Camera camera;
+
 
         public SceneLayer(Scene scene)
         {
             this.scene = scene;
         }
 
+        public Camera Camera
+        {
+            get { return this.camera; }
+            set
+            {
+                this.camera = value;
+                foreach (Actor actor in actors)
+                {
+                    actor.Camera = value;
+                }
+            }
+        }
+
         public void AddActor(Actor actor)
         {
             this.actors.Add(actor);
+            actor.Camera = this.camera;
             if (actor.HasCollidable)
             {
                 this.collisionDetector.AddCollidable(actor.Collidable);
             }
         }
 
-        public virtual void Draw(SpriteBatch spriteBatch, Camera camera)
+        public virtual void Draw(SpriteBatch spriteBatch)
         {
             if (this.visible)
             {

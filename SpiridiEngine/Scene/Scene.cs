@@ -33,7 +33,14 @@ namespace Spiridios.SpiridiEngine.Scene
         public Camera Camera
         {
             get { return this.camera; }
-            set { this.camera = value; }
+            set
+            {
+                this.camera = value;
+                foreach(SceneLayer layer in layers)
+                {
+                    layer.Camera=value;
+                }
+            }
         }
 
         public void LoadTiledMap(string tiledFile)
@@ -44,6 +51,7 @@ namespace Spiridios.SpiridiEngine.Scene
             // Create name map
             foreach (TileMapLayer layer in tmpLayers)
             {
+                layer.Camera = camera;
                 if (layer.HasName)
                 {
                     layerNameMap.Add(layer.Name, layer);
@@ -62,6 +70,7 @@ namespace Spiridios.SpiridiEngine.Scene
 
         public void AddLayer(SceneLayer layer)
         {
+            layer.Camera = camera;
             this.layers.Add(layer);
         }
 
@@ -73,6 +82,7 @@ namespace Spiridios.SpiridiEngine.Scene
 
         public void AddLayer(SceneLayer layer, int layerIndex)
         {
+            layer.Camera = camera;
             this.layers.Insert(layerIndex, layer);
         }
 
@@ -98,7 +108,7 @@ namespace Spiridios.SpiridiEngine.Scene
         {
             foreach (SceneLayer layer in layers)
             {
-                layer.Draw(spriteBatch, this.camera);
+                layer.Draw(spriteBatch);
             }
         }
 
