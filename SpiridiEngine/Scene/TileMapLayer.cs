@@ -57,7 +57,7 @@ namespace Spiridios.SpiridiEngine.Scene
         {
             if (this.Visible)
             {
-                Draw(tileSet, spriteBatch, this.Camera);
+                Draw(tileSet, spriteBatch, this.Scene.Camera);
             }
         }
 

@@ -26,7 +26,6 @@ namespace Spiridios.SpiridiEngine.Scene
         private string layerName = null;
         private Scene scene;
         private bool visible = true;
-        private Camera camera;
 
 
         public SceneLayer(Scene scene)
@@ -34,23 +33,10 @@ namespace Spiridios.SpiridiEngine.Scene
             this.scene = scene;
         }
 
-        public Camera Camera
-        {
-            get { return this.camera; }
-            set
-            {
-                this.camera = value;
-                foreach (Actor actor in actors)
-                {
-                    actor.Camera = value;
-                }
-            }
-        }
-
         public void AddActor(Actor actor)
         {
             this.actors.Add(actor);
-            actor.Camera = this.camera;
+            actor.Camera = this.scene.Camera;
             if (actor.HasCollidable)
             {
                 this.collisionDetector.AddCollidable(actor.Collidable);
