@@ -79,6 +79,15 @@ namespace Spiridios.SpiridiEngine.Audio
             float pan = 0.0f;
 
             float angle = (float)(Vector2Ext.AngleOf(orientation, vectorToSound));
+            if (angle > MathHelper.Pi)
+            {
+                angle -= MathHelper.TwoPi;
+            }
+            else if (angle < -MathHelper.Pi)
+            {
+                angle += MathHelper.TwoPi;
+            }
+
             pan = (float)Math.Sin(angle);
             float sign = Math.Sign(pan);
             pan = (float)Math.Sqrt(Math.Abs(pan));
