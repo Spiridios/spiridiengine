@@ -10,6 +10,11 @@ namespace Spiridios.SpiridiEngine.Audio
     {
         private Image image = null;
         private SoundEffectInstance soundEffectInstance;
+        private Actor listener = null;
+        private static readonly Vector2 FORWARD = new Vector2(0, 1);
+
+        private const float MAX_DISTANCE = 50.0f;
+
 
         public PositionedSound(SoundEffect soundEffect)
             : this(soundEffect.CreateInstance())
@@ -19,6 +24,11 @@ namespace Spiridios.SpiridiEngine.Audio
         public PositionedSound(SoundEffectInstance soundEffectInstance)
         {
             this.soundEffectInstance = soundEffectInstance;
+        }
+
+        public Actor Listener
+        {
+            set { this.listener = value; }
         }
 
         public Image DebugImage
@@ -36,14 +46,53 @@ namespace Spiridios.SpiridiEngine.Audio
 
         public override void Update(TimeSpan elapsedTime)
         {
-            // Nothing yet
+            if (listener != null)
+            {
+                UpdateListener(listener.Position, Vector2Ext.Rotate(FORWARD, listener.Rotation));
+            }
         }
 
-        public void Play(Vector2 position, Vector2 orientation)
+        public void Play()
         {
-            soundEffectInstance.Volume = 1.0f;
-            soundEffectInstance.Pan = 0.0f;
             soundEffectInstance.Play();
         }
+
+        public void PlayLooped()
+        {
+            soundEffectInstance.IsLooped = true;
+            Play();
+        }
+
+        private void UpdateListener(Vector2 position, Vector2 orientation)
+        {
+            Vector2 vectorToSound = position - this.Position;
+            float distance = vectorToSound.Length();
+            // Linear
+            //float volume = Math.Max(1 - (distance / MAX_DISTANCE), 0.0f)
+            
+            // Exponential
+            float volume = Math.Min(1 / distance, 1.0f);
+
+            // Exponetial square
+            //float volume = Math.Min(1 / (distance * distance), 1.0f);
+
+            float pan = 0.0f;
+
+            float angle = (float)(Vector2Ext.AngleOf(orientation, vectorToSound));
+            pan = (float)Math.Sin(angle);
+            float sign = Math.Sign(pan);
+            pan = (float)Math.Sqrt(Math.Abs(pan));
+
+            pan = pan * sign;
+
+            if (Math.Abs(angle) > MathHelper.PiOver2)
+            {
+                volume = volume * .5f;
+            }
+
+            soundEffectInstance.Volume = volume;
+            soundEffectInstance.Pan = pan;
+        }
+
     }
 }
