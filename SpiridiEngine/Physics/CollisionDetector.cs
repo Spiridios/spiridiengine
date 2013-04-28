@@ -37,6 +37,11 @@ namespace Spiridios.SpiridiEngine.Physics
             this.collidables.Add(collidable);
         }
 
+        public void RemoveCollidable(Collidable collidable)
+        {
+            this.collidables.Remove(collidable);
+        }
+
         public void ProcessCollisions()
         {
             foreach (Collidable collidable in collidables)

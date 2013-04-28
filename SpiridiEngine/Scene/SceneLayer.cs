@@ -37,9 +37,18 @@ namespace Spiridios.SpiridiEngine.Scene
         {
             this.actors.Add(actor);
             actor.Camera = this.scene.Camera;
+            // TODO: this doesn't seem very flexible.
             if (actor.HasCollidable)
             {
                 this.collisionDetector.AddCollidable(actor.Collidable);
+            }
+        }
+        public void RemoveActor(Actor actor)
+        {
+            this.actors.Remove(actor);
+            if (actor.HasCollidable)
+            {
+                this.collisionDetector.RemoveCollidable(actor.Collidable);
             }
         }
 
@@ -57,9 +66,19 @@ namespace Spiridios.SpiridiEngine.Scene
 
         public virtual void Update(System.TimeSpan elapsedTime)
         {
-            foreach (Actor actor in actors)
+            for(int i = 0; i < actors.Count; i++)
             {
+                Actor actor = actors[i];
                 actor.Update(elapsedTime);
+                if (actor.IsDead)
+                {
+                    actors.RemoveAt(i);
+                    if (actor.HasCollidable)
+                    {
+                        this.collisionDetector.RemoveCollidable(actor.Collidable);
+                    }
+                    i--;
+                }
             }
         }
 
