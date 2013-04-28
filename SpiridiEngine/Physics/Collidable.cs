@@ -23,6 +23,7 @@ namespace Spiridios.SpiridiEngine.Physics
         private BoxCollidableShape boxShape = null;
         private ImageCollidableShape imageShape = null;
         private String tag = null;
+        private Actor owner = null;
 
         // TODO: this shouldn't be needed anymore.
         private bool confineNormals = false;
@@ -38,6 +39,12 @@ namespace Spiridios.SpiridiEngine.Physics
         {
             get { return this.tag; }
             set { this.tag = value; }
+        }
+
+        public Actor Owner
+        {
+            get { return owner; }
+            set { owner = value; }
         }
 
         public void AddCollisionListener(CollisionListener collisionListener)

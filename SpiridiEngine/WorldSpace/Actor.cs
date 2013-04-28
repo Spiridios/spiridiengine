@@ -20,6 +20,8 @@ namespace Spiridios.SpiridiEngine
 {
     public class Actor : WorldObject
     {
+        public const string COLLIDABLE_TAG = "Actor";
+
         public class AscendingYComparitor : IComparer<Actor>
         {
             public int Compare(Actor a, Actor b)
@@ -73,6 +75,8 @@ namespace Spiridios.SpiridiEngine
             lifeStage = LifeStage.ALIVE;
 
             this.collidable = new Collidable();
+            this.collidable.Owner = this;
+            this.collidable.Tag = COLLIDABLE_TAG;
             //this.collidable.RadiusCollidableShape = new RadiusCollidableShape(Position, this.Width > this.Height ? this.Width / 2.0f : this.Height / 2.0f);
             this.collidable.BoxCollidableShape = new BoxCollidableShape((int)Position.X, (int)Position.Y, this.Width, this.Height);
 
