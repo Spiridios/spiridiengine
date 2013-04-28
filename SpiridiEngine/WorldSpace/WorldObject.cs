@@ -37,19 +37,22 @@ namespace Spiridios.SpiridiEngine
 
         protected PositionHandler PositionHandler { get; set; }
 
-        public Camera Camera
+        public virtual Camera Camera
         {
             get { return this.PositionHandler.Camera; }
-            set { this.PositionHandler.Camera = value; }
+            set
+            {
+                this.PositionHandler.Camera = value;
+                this.RefreshScreenObjectPosition();
+            }
         }
 
         protected void AddScreenObject(ScreenObject screenObject)
         {
             this.screenObject = screenObject;
-            screenObject.Position = PositionHandler.Position;
+            this.RefreshScreenObjectPosition();
         }
 
-        // TODO: this is hacky
         public Vector2 ScreenPosition
         {
             get { return this.PositionHandler.ScreenPosition; }
@@ -63,10 +66,15 @@ namespace Spiridios.SpiridiEngine
             set
             {
                 this.PositionHandler.Position = value;
-                if (screenObject != null)
-                {
-                    screenObject.Position = this.PositionHandler.ScreenPosition;
-                }
+                this.RefreshScreenObjectPosition();
+            }
+        }
+
+        private void RefreshScreenObjectPosition()
+        {
+            if (screenObject != null)
+            {
+                screenObject.Position = this.PositionHandler.ScreenPosition;
             }
         }
 

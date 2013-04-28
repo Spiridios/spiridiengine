@@ -17,6 +17,7 @@ namespace Spiridios.SpiridiEngine
 {
     public class State
     {
+        // TODO: could this be genericized so states always have native access to their type?
         protected SpiridiGame game;
         protected InputManager inputManager;
 

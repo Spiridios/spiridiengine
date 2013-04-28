@@ -18,7 +18,7 @@ using Microsoft.Xna.Framework.Content;
 
 namespace Spiridios.SpiridiEngine
 {
-
+    // TODO: this needs a redesign. It should not be singleton and it needs to work better with PositionedSound
     public class SoundManager
     {
         private static SoundManager instance;

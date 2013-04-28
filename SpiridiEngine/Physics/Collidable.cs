@@ -294,6 +294,7 @@ namespace Spiridios.SpiridiEngine.Physics
         private List<Point> GetRectangleIntersections(Image image, Rectangle screenRect)
         {
             // JSIL can't iterate over a HashSet, so build parallel containers.
+            // TODO: there's only 8 points involved, use points.contains().
             HashSet<Point> pointSet = new HashSet<Point>();
             List<Point> points = new List<Point>();
             Point tempPt;
