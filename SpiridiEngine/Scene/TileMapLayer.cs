@@ -25,6 +25,7 @@ namespace Spiridios.SpiridiEngine.Scene
     {
         private const string TILED_ROOT_ELEMENT = "map";
         private const string TILED_LAYER_ELEMENT = "layer";
+        public const string COLLIDABLE_TAG = "Layer Collision";
 
         private SpiridiGame game;
         private string collisionLayerName = null;
@@ -106,6 +107,7 @@ namespace Spiridios.SpiridiEngine.Scene
                 //Vector2 tileCenterPoint = new Vector2((tilex * tileWidth) + (tileWidth/2), (tiley * tileHeight) + (tileHeight/2));
                 //double tileRadius = tileWidth > tileHeight ? tileWidth / 2.0f : tileHeight / 2.0f;
                 //collidable.RadiusCollidableShape = new RadiusCollidableShape(tileCenterPoint, tileRadius);
+                collidable.Tag = COLLIDABLE_TAG;
                 collidable.BoxCollidableShape = new BoxCollidableShape(new Rectangle(tilex * tileWidth, tiley * tileHeight, tileWidth, tileHeight));
                 collidable.ImageCollidableShape = new ImageCollidableShape(new Vector2(tilex * tileWidth, tiley * tileHeight), image);
             }

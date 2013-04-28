@@ -11,7 +11,9 @@ namespace Spiridios.SpiridiEngine.Audio
         private Image image = null;
         private SoundEffectInstance soundEffectInstance;
         private Actor listener = null;
+        private float attenuationFactor = 1.0f;
         private static readonly Vector2 FORWARD = new Vector2(0, 1);
+        private float maxVolume = 1.0f;
 
         private const float MAX_DISTANCE = 50.0f;
 
@@ -26,9 +28,25 @@ namespace Spiridios.SpiridiEngine.Audio
             this.soundEffectInstance = soundEffectInstance;
         }
 
+        public float AttenuationFactor
+        {
+            get { return this.attenuationFactor; }
+            set { this.attenuationFactor = value; }
+        }
+
+        public float Volume
+        {
+            get { return this.maxVolume; }
+            set { this.maxVolume = Math.Min(value, 1.0f); }
+        }
+
         public Actor Listener
         {
-            set { this.listener = value; }
+            set
+            {
+                this.listener = value;
+                this.UpdateListener();
+            }
         }
 
         public Image DebugImage
@@ -48,7 +66,7 @@ namespace Spiridios.SpiridiEngine.Audio
         {
             if (listener != null)
             {
-                UpdateListener(listener.Position, Vector2Ext.Rotate(FORWARD, listener.Rotation));
+                UpdateListener();
             }
         }
 
@@ -63,6 +81,10 @@ namespace Spiridios.SpiridiEngine.Audio
             Play();
         }
 
+        private void UpdateListener()
+        {
+            UpdateListener(listener.Position, Vector2Ext.Rotate(FORWARD, listener.Rotation));
+        }
         private void UpdateListener(Vector2 position, Vector2 orientation)
         {
             Vector2 vectorToSound = position - this.Position;
@@ -71,10 +93,10 @@ namespace Spiridios.SpiridiEngine.Audio
             //float volume = Math.Max(1 - (distance / MAX_DISTANCE), 0.0f)
             
             // Exponential
-            float volume = Math.Min(1 / distance, 1.0f);
+            float volume = Math.Min(1 / (distance * attenuationFactor), this.maxVolume);
 
             // Exponetial square
-            //float volume = Math.Min(1 / (distance * distance), 1.0f);
+            //float volume = Math.Min(1 / (distance * distance * attenuationFactor), this.maxVolume);
 
             float pan = 0.0f;
 

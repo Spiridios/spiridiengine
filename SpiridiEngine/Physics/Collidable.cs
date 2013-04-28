@@ -22,6 +22,7 @@ namespace Spiridios.SpiridiEngine.Physics
         private RadiusCollidableShape radiusShape = null;
         private BoxCollidableShape boxShape = null;
         private ImageCollidableShape imageShape = null;
+        private String tag = null;
 
         // TODO: this shouldn't be needed anymore.
         private bool confineNormals = false;
@@ -31,6 +32,12 @@ namespace Spiridios.SpiridiEngine.Physics
         {
             get { return confineNormals; }
             set { confineNormals = value; }
+        }
+
+        public String Tag
+        {
+            get { return this.tag; }
+            set { this.tag = value; }
         }
 
         public void AddCollisionListener(CollisionListener collisionListener)
