@@ -117,6 +117,23 @@ namespace Spiridios.SpiridiEngine
             this.stageBehaviors[stage] = behavior;
         }
 
+        public Behavior CurrentBehavior
+        {
+            get
+            {
+                // TODO: use tryget
+                if (stageBehaviors.ContainsKey(this.lifeStage))
+                {
+                    return stageBehaviors[this.lifeStage];
+                }
+                else
+                {
+                    return null;
+                }
+
+            }
+        }
+
         public bool IsALive
         {
             get { return this.lifeStage == LifeStage.ALIVE; }

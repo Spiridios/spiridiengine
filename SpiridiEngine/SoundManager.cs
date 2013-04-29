@@ -33,7 +33,9 @@ namespace Spiridios.SpiridiEngine
             SoundManager.instance = instance;
         }
 
+        // TODO: What's the difference between and effects instance and an effect?
         Dictionary<string, SoundEffect> soundEffects = new Dictionary<string, SoundEffect>();
+        Dictionary<string, SoundEffectInstance> soundEffectInstances = new Dictionary<string, SoundEffectInstance>();
         ContentManager contentManager;
 
         internal SoundManager(ContentManager contentManager)
@@ -53,6 +55,7 @@ namespace Spiridios.SpiridiEngine
             {
                 SoundEffect snd = this.contentManager.Load<SoundEffect>(correctedName);
                 this.soundEffects[soundName] = snd;
+                this.soundEffectInstances[soundName] = snd.CreateInstance();
             }
             catch (Exception e)
             {
@@ -66,9 +69,14 @@ namespace Spiridios.SpiridiEngine
             return this.soundEffects[soundName];
         }
 
+        public SoundEffectInstance GetSoundInstance(string soundName)
+        {
+            return this.soundEffectInstances[soundName];
+        }
+
         public void PlaySound(string soundName)
         {
-            GetSound(soundName).Play();
+            GetSoundInstance(soundName).Play();
         }
 
         internal void Clear()

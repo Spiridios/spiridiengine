@@ -72,13 +72,24 @@ namespace Spiridios.SpiridiEngine.Audio
 
         public void Play()
         {
+            soundEffectInstance.IsLooped = false;
             soundEffectInstance.Play();
         }
 
         public void PlayLooped()
         {
             soundEffectInstance.IsLooped = true;
-            Play();
+            soundEffectInstance.Play();
+        }
+
+        public void Stop()
+        {
+            soundEffectInstance.Stop();
+        }
+
+        public bool IsPlaying
+        {
+            get { return soundEffectInstance.State == SoundState.Playing; }
         }
 
         private void UpdateListener()
