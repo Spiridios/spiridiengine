@@ -12,13 +12,16 @@
 
 using System;
 using Microsoft.Xna.Framework;
+using Spiridios.SpiridiEngine.Physics;
+using Spiridios.SpiridiEngine.Scene;
 
 namespace Spiridios.SpiridiEngine
 {
-    public class BulletBehavior : Behavior
+    public class BulletBehavior : Behavior, CollisionListener
     {
         private Vector2 velocity;
         private SpiridiGame game;
+        public const string COLLIDABLE_TAG = "BulletActor";
 
         public BulletBehavior(Actor actor, Vector2 velocity, SpiridiGame game)
             : base(actor)
@@ -49,10 +52,28 @@ namespace Spiridios.SpiridiEngine
         public static Actor CreateBullet(string imageName, Vector2 startPosition, Vector2 velocity, string laserSound, SpiridiGame game)
         {
             Actor bullet = new Actor(imageName);
+
             bullet.Position = startPosition - bullet.Origin;
-            bullet.SetBehavior(Actor.LifeStage.ALIVE, new BulletBehavior(bullet, velocity, game));
+            BulletBehavior b = new BulletBehavior(bullet, velocity, game);
+            bullet.SetBehavior(Actor.LifeStage.ALIVE, b);
+
+            bullet.Collidable.Tag = COLLIDABLE_TAG;
+            bullet.Collidable.AddCollisionListener(b);
+
             SoundManager.Instance.PlaySound(laserSound);
+
             return bullet;
+        }
+
+        void CollisionListener.OnCollided(System.Collections.Generic.List<Collidable> activeCollidables)
+        {
+            foreach (Collidable collidable in activeCollidables)
+            {
+                if (collidable.Tag == TileMapLayer.COLLIDABLE_TAG)
+                {
+                    this.Actor.lifeStage = Actor.LifeStage.DEAD;
+                }
+            }
         }
     }
 }

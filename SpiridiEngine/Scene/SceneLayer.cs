@@ -126,5 +126,10 @@ namespace Spiridios.SpiridiEngine.Scene
                 this.collisionDetector.ProcessCollisions();
             }
         }
+
+        public void Clear()
+        {
+            this.actors.Clear();
+        }
     }
 }

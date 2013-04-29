@@ -128,5 +128,14 @@ namespace Spiridios.SpiridiEngine.Scene
                 layer.ProcessCollisions();
             }
         }
+
+        public void Clear()
+        {
+            while (this.layers.Count > 0)
+            {
+                this.layers[0].Clear();
+                this.layers.RemoveAt(0);
+            }
+        }
     }
 }
