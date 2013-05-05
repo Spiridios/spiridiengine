@@ -11,38 +11,41 @@
 **/
 
 using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Xml;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Spiridios.SpiridiEngine
 {
-    public abstract class Image : PixelProvider
+    public abstract class TileMapImage : Image
     {
-        private Vector2 origin = new Vector2(0, 0);
+        private List<Image> layerTileImages = null;
+        private int imageWidth;
+        private int imageHeight;
+        private int tileWidth;
+        private int tileHeight;
 
-        protected Image()
+        public TileMapImage()
+            : base()
         {
         }
 
-        public Vector2 Origin
+        public override int Width
         {
-            get { return origin; }
-            set { origin = value; }
+            get { return imageWidth; }
         }
 
-        public abstract int Width { get; }
+        public override int Height
+        {
+            get { return imageHeight; }
+        }
 
-        public abstract int Height { get; }
-
-        public abstract void Draw(SpriteBatch spriteBatch, Vector2 position);
-
-        public abstract void Draw(SpriteBatch spriteBatch, Vector2 position, Color tintColor, float rotation, float layer);
-
-        public abstract void Draw(SpriteBatch spriteBatch, Rectangle destination, Color tintColor, float rotation, float layer);
-
-        public abstract Color GetPixel(int x, int y);
-
-        public abstract Color GetPixel(Point point);
+        public override void Draw(SpriteBatch spriteBatch, Rectangle destination, Color tintColor, float rotation, float layer)
+        {
+            //spriteBatch.Draw(this.image, destination, sourceRect, tintColor, rotation, Origin, SpriteEffects.None, layer);
+        }
 
     }
 }

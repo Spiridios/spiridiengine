@@ -138,7 +138,7 @@ namespace Spiridios.SpiridiEngine
         public Image CreateTileImage(int tileId)
         {
             Rectangle source = GetTileSourceRect(tileId);
-            Image tileImage = new Image(this.tileSet, source);
+            Image tileImage = new TextureImage(this.tileSet, source);
             return tileImage;
         }
 

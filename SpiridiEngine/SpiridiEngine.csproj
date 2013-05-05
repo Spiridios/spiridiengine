@@ -116,8 +116,11 @@
     <Compile Include="Cameras\Camera.cs" />
     <Compile Include="ScreenSpace\AnimatedImage.cs" />
     <Compile Include="ScreenSpace\DrawableAt.cs" />
+    <Compile Include="ScreenSpace\PixelProvider.cs" />
     <Compile Include="ScreenSpace\PositionedImage.cs" />
     <Compile Include="ScreenSpace\ScreenObject.cs" />
+    <Compile Include="ScreenSpace\TextureImage.cs" />
+    <Compile Include="ScreenSpace\TileMapImage.cs" />
     <Compile Include="WorldSpace\Actor.cs" />
     <Compile Include="Background.cs" />
     <Compile Include="Behavior\BeelineBehavior.cs" />

@@ -40,6 +40,7 @@ namespace Spiridios.SpiridiEngine
         {
             base.Initialize();
             this.splashImage = new Sprite(this.splashImageName);
+            this.splashImage.Origin = new Vector2(0, 0);
             this.splashImage.Position = new Vector2((game.WindowWidth - this.splashImage.Width) / 2, (game.WindowHeight - this.splashImage.Height) / 2);
         }
 

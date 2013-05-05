@@ -39,7 +39,7 @@ namespace Spiridios.SpiridiEngine
         }
 
         public Sprite(string imageName)
-            : this(new Image(imageName))
+            : this(new TextureImage(imageName))
         {
         }
 
@@ -51,6 +51,7 @@ namespace Spiridios.SpiridiEngine
         public Vector2 Origin
         {
             get { return image.Origin; }
+            set { image.Origin = value; }
         }
 
         public override void Draw(SpriteBatch spriteBatch)

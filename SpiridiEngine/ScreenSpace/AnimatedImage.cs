@@ -19,7 +19,8 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Spiridios.SpiridiEngine
 {
-    public class AnimatedImage : Image, Updatable
+    // TODO: Is this really a TextureImage? I don't think so.
+    public class AnimatedImage : TextureImage, Updatable
     {
         private const string XML_CONFIG_ROOT_ELEMENT = "AnimatedSprite";
         private const string XML_CONFIG_ANIMATION_ELEMENT = "Animation";
