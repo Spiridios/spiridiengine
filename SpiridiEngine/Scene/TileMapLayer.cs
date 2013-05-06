@@ -73,7 +73,7 @@ namespace Spiridios.SpiridiEngine.Scene
             for (int i = 0; i < size; i++)
             {
                 Vector2 destCoord = TileSet.GetImageCoordinatesFromOffset(i, layerWidth, tileWidth, tileHeight);
-                if (currentActor != null && (currentActor.Position.Y + currentActor.Height) < (destCoord.Y + tileHeight))
+                if (currentActor != null && (currentActor.Position.Y) < (destCoord.Y + tileHeight))
                 {
                     currentActor.Draw(spriteBatch);
                     currentActorIndex++;

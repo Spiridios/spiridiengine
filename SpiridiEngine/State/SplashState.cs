@@ -16,12 +16,13 @@ using Spiridios.SpiridiEngine.Input;
 
 namespace Spiridios.SpiridiEngine
 {
-    // TODO: combine SplashState with BootState since the both advance to a new state...
+    // TODO: combine SplashState with BootState since they both advance to a new state...
     public class SplashState : State
     {
         private State nextState;
 
         private string splashImageName;
+        // TODO: This should not be sprite anymore
         private Sprite splashImage;
 
         private TimeSpan splashStart;

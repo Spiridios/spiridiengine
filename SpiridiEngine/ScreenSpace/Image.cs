@@ -24,7 +24,7 @@ namespace Spiridios.SpiridiEngine
         {
         }
 
-        public Vector2 Origin
+        public virtual Vector2 Origin
         {
             get { return origin; }
             set { origin = value; }
@@ -34,15 +34,47 @@ namespace Spiridios.SpiridiEngine
 
         public abstract int Height { get; }
 
-        public abstract void Draw(SpriteBatch spriteBatch, Vector2 position);
+        public void Draw(SpriteBatch spriteBatch, Vector2 position)
+        {
+            this.Draw(spriteBatch, position, Color.White, 0.0f, 1.0f);
+        }
 
-        public abstract void Draw(SpriteBatch spriteBatch, Vector2 position, Color tintColor, float rotation, float layer);
+        public void Draw(SpriteBatch spriteBatch, Vector2 position, Color tintColor, float rotation, float layer)
+        {
+            Rectangle destination;
+            destination.X = (int)(position.X - Origin.X);
+            destination.Y = (int)(position.Y - Origin.Y);
+            destination.Width = this.Width;
+            destination.Height = this.Height;
 
-        public abstract void Draw(SpriteBatch spriteBatch, Rectangle destination, Color tintColor, float rotation, float layer);
+            this.Draw(spriteBatch, destination, tintColor, rotation, layer);
+        }
+
+        public void Draw(SpriteBatch spriteBatch, Rectangle destination, Color tintColor, float rotation, float layer)
+        {
+            this.Draw(spriteBatch, Rectangle.Empty, destination, tintColor, rotation, layer);
+        }
+
+        public void Draw(SpriteBatch spriteBatch, Rectangle source, Rectangle destination, Color tintColor, float rotation, float layer)
+        {
+            this.DrawImpl(spriteBatch, source, destination, tintColor, rotation, layer);
+        }
+
+        protected abstract void DrawImpl(SpriteBatch spriteBatch, Rectangle source, Rectangle destination, Color tintColor, float rotation, float layer);
 
         public abstract Color GetPixel(int x, int y);
 
         public abstract Color GetPixel(Point point);
+
+        protected bool InBounds(int x, int y)
+        {
+            return (x >= 0 && x < this.Width && y >= 0 && y < this.Height);
+        }
+
+        protected bool InBounds(Point point)
+        {
+            return InBounds(point.X, point.Y);
+        }
 
     }
 }

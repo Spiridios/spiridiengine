@@ -283,7 +283,6 @@ namespace Spiridios.SpiridiEngine.Physics
                 intersection.X = intersection.X - thatBoundingBox.X;
                 intersection.Y = intersection.Y - thatBoundingBox.Y;
 
-                // TODO: This was originally a set to remove dupes.
                 List<Point> points = GetRectangleIntersections(that.imageShape.Image, intersection);
                 if (points.Count == 1)
                 {

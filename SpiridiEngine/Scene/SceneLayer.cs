@@ -37,7 +37,7 @@ namespace Spiridios.SpiridiEngine.Scene
         {
             this.actors.Add(actor);
             actor.Camera = this.scene.Camera;
-            // TODO: this doesn't seem very flexible.
+            // TODO: this doesn't seem very flexible. What if actor adds collidable later? What if actor remove collidable?
             if (actor.HasCollidable)
             {
                 this.collisionDetector.AddCollidable(actor.Collidable);

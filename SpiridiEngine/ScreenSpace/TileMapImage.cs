@@ -42,7 +42,7 @@ namespace Spiridios.SpiridiEngine
             get { return imageHeight; }
         }
 
-        public override void Draw(SpriteBatch spriteBatch, Rectangle destination, Color tintColor, float rotation, float layer)
+        protected override void DrawImpl(SpriteBatch spriteBatch, Rectangle source, Rectangle destination, Color tintColor, float rotation, float layer)
         {
             //spriteBatch.Draw(this.image, destination, sourceRect, tintColor, rotation, Origin, SpriteEffects.None, layer);
         }

@@ -18,6 +18,21 @@ namespace Spiridios.SpiridiEngine.Scene
             return point - position;
         }
 
+        public Point TranslatePoint(Point point)
+        {
+            point.X -= (int)position.X;
+            point.Y -= (int)position.Y;
+            return point;
+        }
+
+        public Rectangle TranslateRectangle(Rectangle rect)
+        {
+            rect.X -= (int)position.X;
+            rect.Y -= (int)position.Y;
+
+            return rect;
+        }
+
         public void Center(Vector2 position)
         {
             this.position = position;

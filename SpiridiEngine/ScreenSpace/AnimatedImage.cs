@@ -19,8 +19,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Spiridios.SpiridiEngine
 {
-    // TODO: Is this really a TextureImage? I don't think so.
-    public class AnimatedImage : TextureImage, Updatable
+    public class AnimatedImage : Image, Updatable
     {
         private const string XML_CONFIG_ROOT_ELEMENT = "AnimatedSprite";
         private const string XML_CONFIG_ANIMATION_ELEMENT = "Animation";
@@ -37,7 +36,9 @@ namespace Spiridios.SpiridiEngine
             public int frameNumber;
         };
 
+        //TODO: do we need both?
         private TileSet tileSet = null;
+        private SubsetImage image;
 
         private Dictionary<string, List<FrameInfo>> animations = new Dictionary<string, List<FrameInfo>>();
 
@@ -45,7 +46,6 @@ namespace Spiridios.SpiridiEngine
         private int currentTile = 1;
         private string currentAnimation;
         private double currentFrameElapsedSeconds = 0;
-
 
         public AnimatedImage(string imageName, int tileWidth, int tileHeight)
             : base()
@@ -63,7 +63,7 @@ namespace Spiridios.SpiridiEngine
         {
             SpiridiGame.ImageManagerInstance.AddImage(imageName, imageName);
             tileSet = new TileSet(imageName, tileWidth, tileHeight);
-            this.Texture = tileSet.Texture;
+            this.image = new SubsetImage(new TextureImage(tileSet.Texture), Rectangle.Empty);
             //this.Origin = new Vector2(tileWidth / 2.0f, tileHeight / 2.0f);
         }
 
@@ -190,7 +190,7 @@ namespace Spiridios.SpiridiEngine
                     currentFrameIndex = value % frameInfos.Count;
                     FrameInfo currentFrameInfo = frameInfos[currentFrameIndex];
                     this.currentTile = currentFrameInfo.frameNumber;
-                    this.SourceRectangle = this.tileSet.GetTileSourceRect(currentTile);
+                    this.image.SourceRectangle = this.tileSet.GetTileSourceRect(currentTile);
                 }
             }
         }
@@ -241,10 +241,25 @@ namespace Spiridios.SpiridiEngine
 
                         currentFrameInfo = frameInfos[currentFrameIndex];
                         this.currentTile = currentFrameInfo.frameNumber;
-                        this.SourceRectangle = this.tileSet.GetTileSourceRect(currentTile);
+                        this.image.SourceRectangle = this.tileSet.GetTileSourceRect(currentTile);
                     }
                 }
             }
+        }
+
+        protected override void DrawImpl(SpriteBatch spriteBatch, Rectangle source, Rectangle destination, Color tintColor, float rotation, float layer)
+        {
+            this.image.Draw(spriteBatch, source, destination, tintColor, rotation, layer);
+        }
+
+        public override Color GetPixel(int x, int y)
+        {
+            return this.image.GetPixel(x, y);
+        }
+
+        public override Color GetPixel(Point point)
+        {
+            return this.image.GetPixel(point);
         }
     }
 }

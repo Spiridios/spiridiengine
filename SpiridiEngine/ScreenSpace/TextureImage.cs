@@ -18,43 +18,17 @@ namespace Spiridios.SpiridiEngine
 {
     public class TextureImage : Image
     {
-        private static readonly Color PIXEL_OUT_OF_BOUNDS = new Color(0, 0, 0, 0);
-
         private Texture2D image;
         private Color[] pixelData = null;
-        private Rectangle sourceRect;
 
         public TextureImage(string imageName)
         {
             image = SpiridiGame.ImageManagerInstance.GetImage(imageName);
-            sourceRect = new Rectangle(0, 0, image.Width, image.Height);
         }
 
         public TextureImage(Texture2D image)
         {
             this.image = image;
-            sourceRect = new Rectangle(0, 0, image.Width, image.Height);
-        }
-
-        public TextureImage(string imageName, Rectangle sourceRect)
-        {
-            this.sourceRect = sourceRect;
-        }
-
-        public TextureImage(Texture2D image, Rectangle sourceRect)
-        {
-            this.image = image;
-            this.sourceRect = sourceRect;
-        }
-
-        protected TextureImage()
-        {
-        }
-
-        public Rectangle SourceRectangle
-        {
-            get { return sourceRect; }
-            set { sourceRect = value; }
         }
 
         protected Texture2D Texture
@@ -73,35 +47,15 @@ namespace Spiridios.SpiridiEngine
             get { return this.image.Height; }
         }
 
-        public override void Draw(SpriteBatch spriteBatch, Vector2 position)
+        protected override void DrawImpl(SpriteBatch spriteBatch, Rectangle source, Rectangle destination, Color tintColor, float rotation, float layer)
         {
-            this.Draw(spriteBatch, position, Color.White, 0.0f, 1.0f);
-        }
-
-        public override void Draw(SpriteBatch spriteBatch, Vector2 position, Color tintColor, float rotation, float layer)
-        {
-            Rectangle destination;
-            destination.X = (int)(position.X + Origin.X);
-            destination.Y = (int)(position.Y + Origin.Y);
-            destination.Width = (int)(sourceRect.Width);
-            destination.Height = (int)(sourceRect.Height);
-
-            this.Draw(spriteBatch, destination, tintColor, rotation, layer);
-        }
-
-        public override void Draw(SpriteBatch spriteBatch, Rectangle destination, Color tintColor, float rotation, float layer)
-        {
+            Rectangle sourceRect = source;
+            if (sourceRect.IsEmpty)
+            {
+                sourceRect.Width = this.Width;
+                sourceRect.Height = this.Height;
+            }
             spriteBatch.Draw(this.image, destination, sourceRect, tintColor, rotation, Origin, SpriteEffects.None, layer);
-        }
-
-        private bool InBounds(int x, int y)
-        {
-            return (x >= 0 && x < sourceRect.Right && y >= 0 && y < sourceRect.Bottom);
-        }
-
-        private bool InBounds(Point point)
-        {
-            return InBounds(point.X, point.Y);
         }
 
         public override Color GetPixel(int x, int y)
@@ -111,7 +65,7 @@ namespace Spiridios.SpiridiEngine
 
         public override Color GetPixel(Point point)
         {
-            Point texturePoint = SourcePointToTexturePoint(point);
+            Point texturePoint = point; // SourcePointToTexturePoint(point);
             if (!InBounds(point))
             {
                 throw new InvalidOperationException("Pixel out of bounds");
@@ -122,14 +76,6 @@ namespace Spiridios.SpiridiEngine
                 int offset = texturePoint.X + (texturePoint.Y * this.image.Width);
                 return this.PixelData[offset];
             }
-        }
-
-        private Point SourcePointToTexturePoint(Point point)
-        {
-            Point p = new Point(point.X, point.Y);
-            p.X += sourceRect.X;
-            p.Y += sourceRect.Y;
-            return p;
         }
 
         private Color[] PixelData

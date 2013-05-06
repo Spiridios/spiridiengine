@@ -78,7 +78,7 @@ namespace Spiridios.SpiridiEngine
             this.collidable.Owner = this;
             this.collidable.Tag = COLLIDABLE_TAG;
             //this.collidable.RadiusCollidableShape = new RadiusCollidableShape(Position, this.Width > this.Height ? this.Width / 2.0f : this.Height / 2.0f);
-            this.collidable.BoxCollidableShape = new BoxCollidableShape((int)Position.X, (int)Position.Y, this.Width, this.Height);
+            this.collidable.BoxCollidableShape = new BoxCollidableShape((int)(Position.X - sprite.Origin.X), (int)(Position.Y - sprite.Origin.Y), this.Width, this.Height);
 
             this.TintColor = Color.White;
             this.Layer = 0.0f;
@@ -121,10 +121,10 @@ namespace Spiridios.SpiridiEngine
         {
             get
             {
-                // TODO: use tryget
-                if (stageBehaviors.ContainsKey(this.lifeStage))
+                Behavior b;
+                if (stageBehaviors.TryGetValue(this.lifeStage, out b))
                 {
-                    return stageBehaviors[this.lifeStage];
+                    return b;
                 }
                 else
                 {
@@ -209,8 +209,8 @@ namespace Spiridios.SpiridiEngine
                 if (this.collidable.BoxCollidableShape != null)
                 {
                     Rectangle r = this.collidable.BoxCollidableShape.Rectangle;
-                    r.X = (int)this.Position.X;
-                    r.Y = (int)this.Position.Y;
+                    r.X = (int)(this.Position.X - sprite.Origin.X);
+                    r.Y = (int)(this.Position.Y - sprite.Origin.Y);
                     this.collidable.BoxCollidableShape.Rectangle = r;
                 }
             }
@@ -225,7 +225,7 @@ namespace Spiridios.SpiridiEngine
         // TODO: move into default behavior.
         public override void Draw(SpriteBatch spriteBatch)
         {
-            //SpiridiGame.Instance.DrawRectangle(this.collidable.BoundingBox, Color.Red);
+            DrawBoundingBox();
             if (stageBehaviors.ContainsKey(this.lifeStage))
             {
                 Behavior b = stageBehaviors[this.lifeStage];
@@ -235,6 +235,12 @@ namespace Spiridios.SpiridiEngine
             {
                 this.DrawSprite(spriteBatch);
             }
+        }
+
+        private void DrawBoundingBox()
+        {
+            Rectangle boundingBox = this.collidable.BoundingBox;
+            SpiridiGame.Instance.DrawRectangle(this.Camera.TranslateRectangle(boundingBox), Color.Red);
         }
 
         public static void UpdateList(List<Actor> sprites, TimeSpan elapsedTime)
