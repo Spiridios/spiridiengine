@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<AnimatedSprite image="AnimatedImage.png" tileWidth="32" tileHeight="32">
+  <Animation name="default" frameTime="0.25">
+    <Frame tile="1" />
+    <Frame tile="2" />
+    <Frame tile="3" />
+    <Frame tile="4" />
+  </Animation>
+</AnimatedSprite>

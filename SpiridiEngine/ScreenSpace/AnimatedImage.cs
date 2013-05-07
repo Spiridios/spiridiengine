@@ -75,6 +75,7 @@ namespace Spiridios.SpiridiEngine
 
         private void LoadXML(string xmlAnimationName)
         {
+            bool foundAnimation = false;
             using (FileStream fileStream = new FileStream(SpiridiGame.Instance.NormalizeFilenameSystem(xmlAnimationName), FileMode.Open))
             {
                 using (XmlReader xmlReader = XmlReader.Create(fileStream))
@@ -93,7 +94,8 @@ namespace Spiridios.SpiridiEngine
                                     CreateImage(imageName, tileWidth, tileHeight);
                                     break;
                                 case (AnimatedImage.XML_CONFIG_ANIMATION_ELEMENT):
-                                    LoadXMLAnimation(xmlReader);
+                                    LoadXMLAnimation(xmlReader, !foundAnimation);
+                                    foundAnimation = true;
                                     break;
                                 default:
                                     throw new InvalidDataException(String.Format("Unsupported tag '{0}'", xmlReader.Name));
@@ -104,7 +106,7 @@ namespace Spiridios.SpiridiEngine
             }
         }
 
-        private void LoadXMLAnimation(XmlReader xmlReader)
+        private void LoadXMLAnimation(XmlReader xmlReader, bool setAsCurrentAnimation)
         {
             double defaultFrameTime = 0.0;
             string animationName = "";
@@ -119,6 +121,10 @@ namespace Spiridios.SpiridiEngine
                                 string defaultFrameTimeString = xmlReader.GetAttribute("frameTime");
                                 defaultFrameTime = defaultFrameTimeString == null ? 0.25 : double.Parse(defaultFrameTimeString);
                                 animationName = xmlReader.GetAttribute("name");
+                                if (setAsCurrentAnimation)
+                                {
+                                    this.CurrentAnimation = animationName;
+                                }
                                 break;
                             case (AnimatedImage.XML_CONFIG_FRAME_ELEMENT):
                                 LoadXMLFrame(xmlReader, animationName, defaultFrameTime);
