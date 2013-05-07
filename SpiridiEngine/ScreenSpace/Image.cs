@@ -39,11 +39,17 @@ namespace Spiridios.SpiridiEngine
             this.Draw(spriteBatch, position, Color.White, 0.0f, 1.0f);
         }
 
+        public void Draw(SpriteBatch spriteBatch, Rectangle position)
+        {
+            this.Draw(spriteBatch, position, Color.White, 0.0f, 1.0f);
+        }
+
         public void Draw(SpriteBatch spriteBatch, Vector2 position, Color tintColor, float rotation, float layer)
         {
+            // TODO: I'm not sure if origin should be factoered in here or not. The underlying XNA call expects origin to NOT be in the rect.
             Rectangle destination;
-            destination.X = (int)(position.X - Origin.X);
-            destination.Y = (int)(position.Y - Origin.Y);
+            destination.X = (int)(position.X - origin.X);
+            destination.Y = (int)(position.Y - origin.Y);
             destination.Width = this.Width;
             destination.Height = this.Height;
 

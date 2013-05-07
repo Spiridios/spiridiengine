@@ -162,6 +162,7 @@ namespace Spiridios.SpiridiEngine
         public Vector2 Origin
         {
             get { return this.sprite.Origin; }
+            set { this.sprite.Origin = value; }
         }
 
         public Collidable Collidable

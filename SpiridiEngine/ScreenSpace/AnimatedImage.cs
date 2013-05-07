@@ -73,6 +73,16 @@ namespace Spiridios.SpiridiEngine
             LoadXML(xmlAnimationFile);
         }
 
+        public override Vector2 Origin
+        {
+            get { return base.Origin; }
+            set
+            {
+                base.Origin = value;
+                this.image.Origin = value;
+            }
+        }
+
         private void LoadXML(string xmlAnimationName)
         {
             bool foundAnimation = false;

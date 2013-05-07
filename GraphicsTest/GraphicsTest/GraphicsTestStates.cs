@@ -13,8 +13,11 @@ namespace Spiridios.GraphicsTest
         private Camera camera;
         private Image staticImage;
         private Vector2 staticImagePosition = new Vector2(64, 64);
+        private Rectangle staticImageRectangle = new Rectangle(128,128,32,32);
         private AnimatedImage animatedImage;
         private Vector2 animatedImagePosition = new Vector2(64, 96);
+        private SubsetImage subsetImage;
+        private Vector2 subsetImagePosition = new Vector2(64, 128);
 
         public TestState(SpiridiGame game)
             : base(game)
@@ -26,12 +29,17 @@ namespace Spiridios.GraphicsTest
             base.Initialize();
 
             game.ImageManager.AddImage("StaticImage", "StaticImage.png");
+            game.ImageManager.AddImage("AnimatedImage", "AnimatedImage.png");
 
             staticImage = new TextureImage("StaticImage");
-            staticImage.Origin = new Vector2(16, 16);
+            staticImage.Origin = new Vector2(24, 24);
 
             animatedImage = new AnimatedImage("AnimatedImage.xml");
-            animatedImage.Origin = new Vector2(16, 16);
+            animatedImage.Origin = new Vector2(24, 24);
+
+            subsetImage = new SubsetImage("AnimatedImage", new Rectangle(32,32,32,32));
+            subsetImage.Origin = new Vector2(24, 24);
+
 
             testMap = new Scene(game);
             testMap.LoadTiledMap("TestMap.tmx");
@@ -50,10 +58,16 @@ namespace Spiridios.GraphicsTest
         {
             base.Draw(gameTime);
             testMap.Draw(game.SpriteBatch);
+
             staticImage.Draw(game.SpriteBatch, staticImagePosition);
             staticImage.Draw(game.SpriteBatch, camera.TranslatePoint(staticImagePosition));
+            staticImage.Draw(game.SpriteBatch, camera.TranslateRectangle(staticImageRectangle));
+
             animatedImage.Draw(game.SpriteBatch, animatedImagePosition);
             animatedImage.Draw(game.SpriteBatch, camera.TranslatePoint(animatedImagePosition));
+
+            subsetImage.Draw(game.SpriteBatch, subsetImagePosition);
+            subsetImage.Draw(game.SpriteBatch, camera.TranslatePoint(subsetImagePosition));
         }
     }
 }

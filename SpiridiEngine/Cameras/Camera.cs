@@ -34,15 +34,15 @@ namespace Spiridios.SpiridiEngine.Scene
 
         public Point TranslatePoint(Point point)
         {
-            point.X -= (int)halfWindowPosition.X;
-            point.Y -= (int)halfWindowPosition.Y;
+            point.X = point.X - (int)halfWindowPosition.X;
+            point.Y = point.Y - (int)halfWindowPosition.Y;
             return point;
         }
 
         public Rectangle TranslateRectangle(Rectangle rect)
         {
-            rect.X -= (int)halfWindowPosition.X;
-            rect.Y -= (int)halfWindowPosition.Y;
+            rect.X = rect.X - (int)halfWindowPosition.X;
+            rect.Y = rect.Y - (int)halfWindowPosition.Y;
 
             return rect;
         }

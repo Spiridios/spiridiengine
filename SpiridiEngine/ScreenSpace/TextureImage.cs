@@ -55,7 +55,10 @@ namespace Spiridios.SpiridiEngine
                 sourceRect.Width = this.Width;
                 sourceRect.Height = this.Height;
             }
-            spriteBatch.Draw(this.image, destination, sourceRect, tintColor, rotation, Origin, SpriteEffects.None, layer);
+            Rectangle destRect = destination;
+            destRect.X += (int)this.Origin.X;
+            destRect.Y += (int)this.Origin.Y;
+            spriteBatch.Draw(this.image, destRect, sourceRect, tintColor, rotation, Origin, SpriteEffects.None, layer);
         }
 
         public override Color GetPixel(int x, int y)

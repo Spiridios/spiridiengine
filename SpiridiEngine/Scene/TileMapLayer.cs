@@ -87,7 +87,7 @@ namespace Spiridios.SpiridiEngine.Scene
                 }
             }
 
-            // Draw any  undrawn actors.
+            // Draw any undrawn actors.
             for (int i = currentActorIndex; i < Actors.Count; i++)
             {
                 Actors[currentActorIndex].Draw(spriteBatch);
