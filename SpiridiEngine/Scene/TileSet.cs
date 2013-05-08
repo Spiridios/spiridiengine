@@ -106,7 +106,14 @@ namespace Spiridios.SpiridiEngine
             } while (xmlReader.Read());
         }
 
-        // Move to Vector2Ext maybe
+        /// <summary>
+        /// TODO: this is a utility method can can go elsewhere. Move to Vector2Ext maybe?
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="imageWidth">The image width. If using to calculate a tile, this is in tiles.</param>
+        /// <param name="xMult"></param>
+        /// <param name="yMult"></param>
+        /// <returns></returns>
         public static Vector2 GetImageCoordinatesFromOffset(int index, int imageWidth, int xMult, int yMult)
         {
             int y = index / imageWidth;

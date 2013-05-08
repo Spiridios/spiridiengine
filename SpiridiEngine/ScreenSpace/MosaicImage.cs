@@ -19,17 +19,30 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Spiridios.SpiridiEngine
 {
-    public abstract class TileMapImage : Image
+    public class MosaicImage : Image
     {
-        private List<Image> layerTileImages = null;
+        private List<Image> mosaicImages = null;
+        // In pixels
         private int imageWidth;
         private int imageHeight;
+        // In tiles
+        private int mosaicWidth;
+        private int mosaicHeight;
+
         private int tileWidth;
         private int tileHeight;
 
-        public TileMapImage()
+        public MosaicImage(List<Image> sourceImages, int tileWidth, int tileHeight, int mosaicWidth, int mosaicHeight)
             : base()
         {
+            this.tileWidth = tileWidth;
+            this.tileHeight = tileHeight;
+            this.mosaicWidth = mosaicWidth;
+            this.mosaicHeight = mosaicHeight;
+            this.imageWidth = tileWidth * mosaicWidth;
+            this.imageHeight = tileHeight * mosaicHeight;
+            this.mosaicImages = sourceImages;
+
         }
 
         public override int Width
@@ -44,8 +57,33 @@ namespace Spiridios.SpiridiEngine
 
         protected override void DrawImpl(SpriteBatch spriteBatch, Rectangle source, Rectangle destination, Color tintColor, float rotation, float layer)
         {
+            int size = mosaicImages.Count;
+            Rectangle destRect = new Rectangle(0, 0, tileWidth, tileHeight);
+            for (int i = 0; i < size; i++)
+            {
+                Vector2 destCoord = TileSet.GetImageCoordinatesFromOffset(i, mosaicWidth, tileWidth, tileHeight);
+
+                Image image = mosaicImages[i];
+                if (image != null)
+                {
+                    destRect.X = destination.X + (int)destCoord.X;
+                    destRect.Y = destination.Y + (int)destCoord.Y;
+                    image.Draw(spriteBatch, destRect, tintColor, rotation, layer);
+                }
+            }
+
             //spriteBatch.Draw(this.image, destination, sourceRect, tintColor, rotation, Origin, SpriteEffects.None, layer);
         }
 
+
+        public override Color GetPixel(int x, int y)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Color GetPixel(Point point)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

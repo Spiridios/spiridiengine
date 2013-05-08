@@ -31,6 +31,7 @@ namespace Spiridios.SpiridiEngine.Scene
         private string collisionLayerName = null;
         private List<Image> layerTileImages = null;
         private TileSetCollection tileSet;
+        // Width/Height in tiles
         private int layerWidth;
         private int layerHeight;
         private int tileWidth;

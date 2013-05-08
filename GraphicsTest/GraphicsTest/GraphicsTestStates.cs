@@ -1,9 +1,10 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Spiridios.SpiridiEngine;
 using Spiridios.SpiridiEngine.Input;
 using Spiridios.SpiridiEngine.Scene;
-using System;
 
 namespace Spiridios.GraphicsTest
 {
@@ -19,6 +20,10 @@ namespace Spiridios.GraphicsTest
         private SubsetImage subsetImage;
         private Vector2 subsetImagePosition = new Vector2(64, 128);
 
+        private List<Image> mosaicImages = new List<Image>();
+        private MosaicImage mosaicImage;
+        private Vector2 mosaicImagePosition = new Vector2(64, 192);
+
         public TestState(SpiridiGame game)
             : base(game)
         {
@@ -30,6 +35,17 @@ namespace Spiridios.GraphicsTest
 
             game.ImageManager.AddImage("StaticImage", "StaticImage.png");
             game.ImageManager.AddImage("AnimatedImage", "AnimatedImage.png");
+            game.ImageManager.AddImage("LR", "LR.png");
+            game.ImageManager.AddImage("LL", "LL.png");
+            game.ImageManager.AddImage("UL", "UL.png");
+            game.ImageManager.AddImage("UR", "UR.png");
+
+            mosaicImages.Add(new TextureImage("LR"));
+            mosaicImages.Add(new TextureImage("LL"));
+            mosaicImages.Add(new TextureImage("UR"));
+            mosaicImages.Add(new TextureImage("UL"));
+            mosaicImage = new MosaicImage(mosaicImages, 32, 32, 2, 2);
+
 
             staticImage = new TextureImage("StaticImage");
             staticImage.Origin = new Vector2(24, 24);
@@ -68,6 +84,8 @@ namespace Spiridios.GraphicsTest
 
             subsetImage.Draw(game.SpriteBatch, subsetImagePosition);
             subsetImage.Draw(game.SpriteBatch, camera.TranslatePoint(subsetImagePosition));
+
+            mosaicImage.Draw(game.SpriteBatch, camera.TranslatePoint(mosaicImagePosition));
         }
     }
 }

@@ -121,7 +121,7 @@
     <Compile Include="ScreenSpace\ScreenObject.cs" />
     <Compile Include="ScreenSpace\SubsetImage.cs" />
     <Compile Include="ScreenSpace\TextureImage.cs" />
-    <Compile Include="ScreenSpace\TileMapImage.cs" />
+    <Compile Include="ScreenSpace\MosaicImage.cs" />
     <Compile Include="WorldSpace\Actor.cs" />
     <Compile Include="Background.cs" />
     <Compile Include="Behavior\BeelineBehavior.cs" />
