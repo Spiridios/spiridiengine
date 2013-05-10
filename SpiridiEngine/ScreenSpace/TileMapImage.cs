@@ -90,12 +90,32 @@ namespace Spiridios.SpiridiEngine
 
         public override Color GetPixel(int x, int y)
         {
-            throw new NotImplementedException();
+            Color color = new Color(0.0f, 0.0f, 0.0f, 0.0f);
+            if (!InBounds(x, y))
+            {
+                throw new InvalidOperationException("Pixel out of bounds");
+            }
+            else
+            {
+                int tileX = x / tileWidth;
+                int tileY = y / tileHeight;
+                int index = tileY * this.mapWidth + tileX;
+
+                // Note: if X and Y are out of bounds, then this may also produce an out of bounds exception.
+                Image image = this.tileImages[index];
+                if (image != null)
+                {
+                    int tilePixelX = x - (tileX * tileWidth);
+                    int tilePixelY = y - (tileY * tileHeight);
+                    color = image.GetPixel(tilePixelX, tilePixelY);
+                }
+            }
+            return color;
         }
 
         public override Color GetPixel(Point point)
         {
-            throw new NotImplementedException();
+            return GetPixel(point.X, point.Y);
         }
     }
 }

@@ -63,21 +63,20 @@ namespace Spiridios.SpiridiEngine
 
         public override Color GetPixel(int x, int y)
         {
-            return GetPixel(new Point(x, y));
-        }
-
-        public override Color GetPixel(Point point)
-        {
-            Point texturePoint = point; 
-            if (!InBounds(point))
+            if (!InBounds(x,y))
             {
                 throw new InvalidOperationException("Pixel out of bounds");
             }
             else
             {
-                int offset = texturePoint.X + (texturePoint.Y * this.image.Width);
+                int offset = x + (y * this.image.Width);
                 return this.PixelData[offset];
             }
+        }
+
+        public override Color GetPixel(Point point)
+        {
+            return GetPixel(point.X, point.Y);
         }
 
         private Color[] PixelData

@@ -47,6 +47,26 @@ namespace Spiridios.GraphicsTest
             mosaicImages.Add(new TextureImage("UL"));
             mosaicImage = new TileMapImage(mosaicImages, 32, 32, 2, 2);
 
+            Color noPixel = new Color(0,0,0,0);
+            Color color;
+            color = mosaicImage.GetPixel(0, 0);
+            if (color != noPixel)
+            {
+                throw new Exception("Found color where none should be");
+            }
+
+            color = mosaicImage.GetPixel(32, 0);
+            if (color == noPixel)
+            {
+                throw new Exception("Found color where none should be");
+            }
+
+            color = mosaicImage.GetPixel(33, 0);
+            if (color != noPixel)
+            {
+                throw new Exception("Found color where none should be");
+            }
+
 
             staticImage = new TextureImage("StaticImage");
             staticImage.Origin = new Vector2(24, 24);
@@ -63,6 +83,8 @@ namespace Spiridios.GraphicsTest
             camera = new Camera();
             camera.Position = new Vector2(352, 272);
             testMap.Camera = camera;
+
+
         }
 
         public override void Update(GameTime gameTime)
