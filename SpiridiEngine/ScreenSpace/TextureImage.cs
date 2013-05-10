@@ -68,11 +68,10 @@ namespace Spiridios.SpiridiEngine
 
         public override Color GetPixel(Point point)
         {
-            Point texturePoint = point; // SourcePointToTexturePoint(point);
+            Point texturePoint = point; 
             if (!InBounds(point))
             {
                 throw new InvalidOperationException("Pixel out of bounds");
-                //return TextureImage.PIXEL_OUT_OF_BOUNDS;
             }
             else
             {

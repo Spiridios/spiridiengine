@@ -19,29 +19,38 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Spiridios.SpiridiEngine
 {
-    public class MosaicImage : Image
+    public class TileMapImage : Image
     {
-        private List<Image> mosaicImages = null;
+        private List<Image> tileImages = null;
         // In pixels
         private int imageWidth;
         private int imageHeight;
         // In tiles
-        private int mosaicWidth;
-        private int mosaicHeight;
+        private int mapWidth;
+        private int mapHeight;
 
         private int tileWidth;
         private int tileHeight;
 
-        public MosaicImage(List<Image> sourceImages, int tileWidth, int tileHeight, int mosaicWidth, int mosaicHeight)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tileImages">A list of images that make up the tiles.
+        /// If an entry is null, it is treated as an image that is filled with transparent pixels.</param>
+        /// <param name="tileWidth">Width of the tiles</param>
+        /// <param name="tileHeight">Height of the tiles</param>
+        /// <param name="mapWidth">Map width in tiles</param>
+        /// <param name="mapHeight">Map height in tiles</param>
+        public TileMapImage(List<Image> tileImages, int tileWidth, int tileHeight, int mapWidth, int mapHeight)
             : base()
         {
             this.tileWidth = tileWidth;
             this.tileHeight = tileHeight;
-            this.mosaicWidth = mosaicWidth;
-            this.mosaicHeight = mosaicHeight;
-            this.imageWidth = tileWidth * mosaicWidth;
-            this.imageHeight = tileHeight * mosaicHeight;
-            this.mosaicImages = sourceImages;
+            this.mapWidth = mapWidth;
+            this.mapHeight = mapHeight;
+            this.imageWidth = tileWidth * mapWidth;
+            this.imageHeight = tileHeight * mapHeight;
+            this.tileImages = tileImages;
 
         }
 
@@ -57,13 +66,18 @@ namespace Spiridios.SpiridiEngine
 
         protected override void DrawImpl(SpriteBatch spriteBatch, Rectangle source, Rectangle destination, Color tintColor, float rotation, float layer)
         {
-            int size = mosaicImages.Count;
-            Rectangle destRect = new Rectangle(0, 0, tileWidth, tileHeight);
+            int size = tileImages.Count;
+            float scaleFactorX = destination.Width / (float)imageWidth;
+            float scaleFactorY = destination.Height / (float)imageHeight;
+            int scaledWidth = (int)(tileWidth * scaleFactorX);
+            int scaledHeight = (int)(tileHeight * scaleFactorY);
+
+            Rectangle destRect = new Rectangle(0, 0, scaledWidth, scaledHeight);
             for (int i = 0; i < size; i++)
             {
-                Vector2 destCoord = TileSet.GetImageCoordinatesFromOffset(i, mosaicWidth, tileWidth, tileHeight);
+                Vector2 destCoord = TileSet.GetImageCoordinatesFromOffset(i, mapWidth, scaledWidth, scaledHeight);
 
-                Image image = mosaicImages[i];
+                Image image = tileImages[i];
                 if (image != null)
                 {
                     destRect.X = destination.X + (int)destCoord.X;
@@ -71,8 +85,6 @@ namespace Spiridios.SpiridiEngine
                     image.Draw(spriteBatch, destRect, tintColor, rotation, layer);
                 }
             }
-
-            //spriteBatch.Draw(this.image, destination, sourceRect, tintColor, rotation, Origin, SpriteEffects.None, layer);
         }
 
 

@@ -241,7 +241,11 @@ namespace Spiridios.SpiridiEngine
         private void DrawBoundingBox()
         {
             Rectangle boundingBox = this.collidable.BoundingBox;
-            SpiridiGame.Instance.DrawRectangle(this.Camera.TranslateRectangle(boundingBox), Color.Red);
+            if (this.Camera != null)
+            {
+                boundingBox = this.Camera.TranslateRectangle(boundingBox);
+            }
+            SpiridiGame.Instance.DrawRectangle(boundingBox, Color.Red);
         }
 
         public static void UpdateList(List<Actor> sprites, TimeSpan elapsedTime)

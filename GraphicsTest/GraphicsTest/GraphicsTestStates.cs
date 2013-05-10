@@ -21,8 +21,9 @@ namespace Spiridios.GraphicsTest
         private Vector2 subsetImagePosition = new Vector2(64, 128);
 
         private List<Image> mosaicImages = new List<Image>();
-        private MosaicImage mosaicImage;
+        private TileMapImage mosaicImage;
         private Vector2 mosaicImagePosition = new Vector2(64, 192);
+        private Rectangle mosaicImageRectangle= new Rectangle(192, 192, 32, 32);
 
         public TestState(SpiridiGame game)
             : base(game)
@@ -44,7 +45,7 @@ namespace Spiridios.GraphicsTest
             mosaicImages.Add(new TextureImage("LL"));
             mosaicImages.Add(new TextureImage("UR"));
             mosaicImages.Add(new TextureImage("UL"));
-            mosaicImage = new MosaicImage(mosaicImages, 32, 32, 2, 2);
+            mosaicImage = new TileMapImage(mosaicImages, 32, 32, 2, 2);
 
 
             staticImage = new TextureImage("StaticImage");
@@ -86,6 +87,7 @@ namespace Spiridios.GraphicsTest
             subsetImage.Draw(game.SpriteBatch, camera.TranslatePoint(subsetImagePosition));
 
             mosaicImage.Draw(game.SpriteBatch, camera.TranslatePoint(mosaicImagePosition));
+            mosaicImage.Draw(game.SpriteBatch, camera.TranslateRectangle(mosaicImageRectangle));
         }
     }
 }
