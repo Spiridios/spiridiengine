@@ -105,9 +105,6 @@ namespace Spiridios.SpiridiEngine.Scene
             Image image = this.layerTileImages[index];
             if (image != null)
             {
-                //Vector2 tileCenterPoint = new Vector2((tilex * tileWidth) + (tileWidth/2), (tiley * tileHeight) + (tileHeight/2));
-                //double tileRadius = tileWidth > tileHeight ? tileWidth / 2.0f : tileHeight / 2.0f;
-                //collidable.RadiusCollidableShape = new RadiusCollidableShape(tileCenterPoint, tileRadius);
                 collidable.Tag = COLLIDABLE_TAG;
                 collidable.BoxCollidableShape = new BoxCollidableShape(new Rectangle(tilex * tileWidth, tiley * tileHeight, tileWidth, tileHeight));
                 collidable.ImageCollidableShape = new ImageCollidableShape(new Vector2(tilex * tileWidth, tiley * tileHeight), image);
@@ -124,6 +121,42 @@ namespace Spiridios.SpiridiEngine.Scene
             collidables.Add(GetCollidableFromPosition(new Vector2(actorBounds.Right, actorBounds.Y)));
             collidables.Add(GetCollidableFromPosition(new Vector2(actorBounds.Right, actorBounds.Bottom)));
             return collidables;
+        }
+
+        internal Collidable GetCollidable(Rectangle bounds)
+        {
+            Rectangle boundingRectangle = Rectangle.Empty;
+
+            Collidable collidable = null;
+            int tilex1 = bounds.X / tileWidth;
+            int tiley1 = bounds.Y / tileHeight;
+            int tilex2 = (bounds.Right -1) / tileWidth;
+            int tiley2 = (bounds.Bottom - 1) / tileHeight;
+
+            boundingRectangle.X = tilex1 * tileWidth;
+            boundingRectangle.Y = tiley1 * tileHeight;
+            int boundingWidthTiles = tilex2 - tilex1 + 1;
+            int boundingHeightTiles = tiley2 - tiley1 + 1;
+            boundingRectangle.Width = (boundingWidthTiles) * tileWidth;
+            boundingRectangle.Height = (boundingHeightTiles) * tileHeight;
+
+            List<Image> tileImages = new List<Image>();
+
+            for (int y = tiley1; y <= tiley2; y++)
+            {
+                for (int x = tilex1; x <= tilex2; x++)
+                {
+                    int index = y * this.layerWidth + x;
+                    tileImages.Add(this.layerTileImages[index]);
+                }
+            }
+
+            Image image = new TileMapImage(tileImages, tileWidth, tileHeight, boundingWidthTiles, boundingHeightTiles);
+            collidable = new Collidable();
+            collidable.Tag = COLLIDABLE_TAG;
+            collidable.BoxCollidableShape = new BoxCollidableShape(boundingRectangle); 
+            collidable.ImageCollidableShape = new ImageCollidableShape(new Vector2(boundingRectangle.X, boundingRectangle.Y), image);
+            return collidable;
         }
 
         private PositionedImage GetImageFromPosition(int x, int y)

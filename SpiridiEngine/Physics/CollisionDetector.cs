@@ -62,13 +62,10 @@ namespace Spiridios.SpiridiEngine.Physics
                 if (mapCollisionLayer != null)
                 {
                     Rectangle actorBounds = collidable.BoundingBox;
-                    List<Collidable> tileCollidables = mapCollisionLayer.GetCollidables(actorBounds);
-                    foreach (Collidable tileCollidable in tileCollidables)
+                    Collidable tileCollidable = mapCollisionLayer.GetCollidable(actorBounds);
+                    if (collidable.CollidesWith(tileCollidable))
                     {
-                        if (collidable.CollidesWith(tileCollidable))
-                        {
-                            activeCollidables.Add(tileCollidable);
-                        }
+                        activeCollidables.Add(tileCollidable);
                     }
                 }
 
