@@ -141,7 +141,7 @@ namespace Spiridios.SpiridiEngine.Scene
             boundingRectangle.Height = (boundingHeightTiles) * tileHeight;
 
             List<Image> tileImages = new List<Image>();
-
+            // TODO: this can be out-of-bounds.
             for (int y = tiley1; y <= tiley2; y++)
             {
                 for (int x = tilex1; x <= tilex2; x++)

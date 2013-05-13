@@ -25,16 +25,6 @@ namespace Spiridios.SpiridiEngine.Physics
         private String tag = null;
         private Actor owner = null;
 
-        // TODO: this shouldn't be needed anymore.
-        private bool confineNormals = false;
-
-        // TODO: this shouldn't be needed anymore.
-        public bool OrthoVectors
-        {
-            get { return confineNormals; }
-            set { confineNormals = value; }
-        }
-
         public String Tag
         {
             get { return this.tag; }
@@ -154,11 +144,6 @@ namespace Spiridios.SpiridiEngine.Physics
             {
                 v = CollisionVectorRadiusBox(this);
                 v = v * -1;
-            }
-
-            if(confineNormals && v != Vector2.Zero)
-            {
-                v = Vector2Ext.SnapToAxis(v);
             }
 
             return v;
@@ -290,7 +275,23 @@ namespace Spiridios.SpiridiEngine.Physics
                 }
                 else if (points.Count > 1)
                 {
-                    v = this.GetNormalFromPoints(that.imageShape.Image, points[0], points[1]);
+                    // TODO: this seems messy, fixit. Isn't there a way to get the normal from the rectangle intersections?
+                    if (points.Count > 2)
+                    {
+                        v = Vector2.Zero;
+                        for (int i = 0; i < (points.Count - 1); i++)
+                        {
+                            for (int j = (i+1); j < points.Count; j++)
+                            {
+                                v = v + this.GetNormalFromPoints(that.imageShape.Image, points[i], points[j]);
+                            }
+                        }
+                        v = v / points.Count;
+                    }
+                    else
+                    {
+                        v = this.GetNormalFromPoints(that.imageShape.Image, points[0], points[1]);
+                    }
                 }
             }
             return v;
