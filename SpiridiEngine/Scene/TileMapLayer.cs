@@ -78,6 +78,7 @@ namespace Spiridios.SpiridiEngine.Scene
             {
                 if (currentActor != null && (currentActor.Position.Y) < (y + tileHeight))
                 {
+                    // TODO: some kind of actor culling
                     currentActor.Draw(spriteBatch);
                     currentActorIndex++;
                     currentActor = (currentActorIndex < Actors.Count) ? Actors[currentActorIndex] : null;
@@ -86,7 +87,11 @@ namespace Spiridios.SpiridiEngine.Scene
                 Image image = layerTileImages[i];
                 if (image != null)
                 {
-                    image.Draw(spriteBatch, camera.TranslateVector2(x,y));
+                    Vector2 coord = camera.TranslateVector2(x,y);
+                    if (coord.X >= -tileWidth && coord.Y >= -tileHeight && coord.X < SpiridiGame.Instance.WindowWidth && coord.Y < SpiridiGame.Instance.WindowHeight)
+                    {
+                        image.Draw(spriteBatch, coord);
+                    }
                 }
 
                 x += tileWidth;

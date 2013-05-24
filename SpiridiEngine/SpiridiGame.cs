@@ -180,6 +180,22 @@ namespace Spiridios.SpiridiEngine
             get { return windowHeight; }
         }
 
+        public bool InBounds(int x, int y)
+        {
+            return (x >= 0 && x < this.windowWidth && y >= 0 && y < this.windowHeight);
+        }
+
+        public bool InBounds(Point point)
+        {
+            return InBounds(point.X, point.Y);
+        }
+
+        public bool InBounds(Vector2 point)
+        {
+            return InBounds((int)point.X, (int)point.Y);
+        }
+
+
         protected SoundEffect LoadSound(String soundFile)
         {
             return Content.Load<SoundEffect>(NormalizeFilenameXNA(soundFile));
