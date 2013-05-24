@@ -71,10 +71,12 @@ namespace Spiridios.SpiridiEngine.Scene
             int currentActorIndex = 0;
             Actor currentActor = (currentActorIndex < Actors.Count) ? Actors[currentActorIndex] : null;
 
+            int y = 0;
+            int x = 0;
+            int maxX = layerWidth * tileWidth;
             for (int i = 0; i < size; i++)
             {
-                Vector2 destCoord = TileSet.GetImageCoordinatesFromOffset(i, layerWidth, tileWidth, tileHeight);
-                if (currentActor != null && (currentActor.Position.Y) < (destCoord.Y + tileHeight))
+                if (currentActor != null && (currentActor.Position.Y) < (y + tileHeight))
                 {
                     currentActor.Draw(spriteBatch);
                     currentActorIndex++;
@@ -84,7 +86,14 @@ namespace Spiridios.SpiridiEngine.Scene
                 Image image = layerTileImages[i];
                 if (image != null)
                 {
-                    image.Draw(spriteBatch, camera.TranslatePoint(destCoord));
+                    image.Draw(spriteBatch, camera.TranslateVector2(x,y));
+                }
+
+                x += tileWidth;
+                if (x >= maxX)
+                {
+                    y += tileHeight;
+                    x = 0;
                 }
             }
 

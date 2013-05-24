@@ -49,16 +49,14 @@ namespace Spiridios.SpiridiEngine
 
         protected override void DrawImpl(SpriteBatch spriteBatch, Rectangle source, Rectangle destination, Color tintColor, float rotation, float layer)
         {
-            Rectangle sourceRect = source;
-            if (sourceRect.IsEmpty)
+            if (source.IsEmpty)
             {
-                sourceRect.Width = this.Width;
-                sourceRect.Height = this.Height;
+                source.Width = this.Width;
+                source.Height = this.Height;
             }
-            Rectangle destRect = destination;
-            destRect.X += (int)this.Origin.X;
-            destRect.Y += (int)this.Origin.Y;
-            spriteBatch.Draw(this.image, destRect, sourceRect, tintColor, rotation, Origin, SpriteEffects.None, layer);
+            destination.X += (int)this.Origin.X;
+            destination.Y += (int)this.Origin.Y;
+            spriteBatch.Draw(this.image, destination, source, tintColor, rotation, Origin, SpriteEffects.None, layer);
         }
 
         public override Color GetPixel(int x, int y)

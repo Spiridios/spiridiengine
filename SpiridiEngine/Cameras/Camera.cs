@@ -27,9 +27,14 @@ namespace Spiridios.SpiridiEngine.Scene
 
         }
 
-        public Vector2 TranslatePoint(Vector2 point)
+        public Vector2 TranslateVector2(Vector2 point)
         {
             return point - halfWindowPosition;
+        }
+
+        public Vector2 TranslateVector2(int x, int y)
+        {
+            return new Vector2(x - halfWindowPosition.X, y - halfWindowPosition.Y);
         }
 
         public Point TranslatePoint(Point point)

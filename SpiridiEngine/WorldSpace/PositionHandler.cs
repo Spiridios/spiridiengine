@@ -42,7 +42,7 @@ namespace Spiridios.SpiridiEngine
             }
             else
             {
-                return camera.TranslatePoint(point);
+                return camera.TranslateVector2(point);
             }
         }
 
