@@ -37,7 +37,7 @@ namespace Spiridios.SpiridiEngine
         private List<TileSetCollectionEntry> tileSets = new List<TileSetCollectionEntry>();
 
         // collection id -> Image map
-        private Dictionary<int, Image> tileImageMap = new Dictionary<int, Image>();
+        private Dictionary<int, SubsetImage> tileImageMap = new Dictionary<int, SubsetImage>();
 
         // How to find the TileSet for the given tileId?
 
@@ -46,9 +46,9 @@ namespace Spiridios.SpiridiEngine
             this.tileSets.Add(new TileSetCollectionEntry(firstCollectionTileId, tileImage));
         }
 
-        public Image GetImage(int collectionTileId)
+        public SubsetImage GetImage(int collectionTileId)
         {
-            Image image = null;
+            SubsetImage image = null;
             if (this.tileImageMap == null)
             {
                 image = this.GetImageNoCache(collectionTileId);
@@ -66,9 +66,9 @@ namespace Spiridios.SpiridiEngine
         /// </summary>
         /// <param name="collectionTileId">Must be greater than 0</param>
         /// <returns></returns>
-        private Image GetImageNoCache(int collectionTileId)
+        private SubsetImage GetImageNoCache(int collectionTileId)
         {
-            Image image = null;
+            SubsetImage image = null;
             TileSetCollectionEntry globalTileSet = FindTileSetEntry(collectionTileId);
             if (globalTileSet != null)
             {

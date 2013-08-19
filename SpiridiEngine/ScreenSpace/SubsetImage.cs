@@ -58,7 +58,7 @@ namespace Spiridios.SpiridiEngine
             get { return sourceRect.Height; }
         }
 
-        protected override void DrawImpl(SpriteBatch spriteBatch, Rectangle source, Rectangle destination, Color tintColor, float rotation, float layer)
+        public override void DrawImpl(SpriteBatch spriteBatch, Rectangle source, Rectangle destination, Color tintColor, float rotation, float layer)
         {
             if (source.IsEmpty)
             {

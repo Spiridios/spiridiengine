@@ -29,7 +29,7 @@ namespace Spiridios.SpiridiEngine.Scene
 
         private SpiridiGame game;
         private string collisionLayerName = null;
-        private List<Image> layerTileImages = null;
+        private List<SubsetImage> layerTileImages = null;
         private TileSetCollection tileSet;
         // Width/Height in tiles
         private int layerWidth;
@@ -70,6 +70,9 @@ namespace Spiridios.SpiridiEngine.Scene
             int size = layerTileImages.Count;
             int currentActorIndex = 0;
             Actor currentActor = (currentActorIndex < Actors.Count) ? Actors[currentActorIndex] : null;
+            Rectangle sourceRect = new Rectangle(0,0,this.tileWidth, this.tileHeight);
+            Rectangle destRect = new Rectangle(0,0,this.tileWidth, this.tileHeight);
+
 
             int y = 0;
             int x = 0;
@@ -84,13 +87,15 @@ namespace Spiridios.SpiridiEngine.Scene
                     currentActor = (currentActorIndex < Actors.Count) ? Actors[currentActorIndex] : null;
                 }
 
-                Image image = layerTileImages[i];
+                SubsetImage image = layerTileImages[i];
                 if (image != null)
                 {
-                    Vector2 coord = camera.TranslateVector2(x,y);
-                    if (coord.X >= -tileWidth && coord.Y >= -tileHeight && coord.X < SpiridiGame.Instance.WindowWidth && coord.Y < SpiridiGame.Instance.WindowHeight)
+                    destRect.X = x;
+                    destRect.Y = y;
+                    camera.TranslateReference(ref destRect);
+                    if (destRect.X >= -tileWidth && destRect.Y >= -tileHeight && destRect.X < SpiridiGame.Instance.WindowWidth && destRect.Y < SpiridiGame.Instance.WindowHeight)
                     {
-                        image.Draw(spriteBatch, coord);
+                        image.DrawImpl(spriteBatch, sourceRect, destRect, Color.White, 0.0f, 1.0f);
                     }
                 }
 
@@ -265,7 +270,7 @@ namespace Spiridios.SpiridiEngine.Scene
                                 byte[] rawLayer = Convert.FromBase64String(layerString);
 
                                 int size = layerWidth * layerHeight;
-                                layerTileImages = new List<Image>(size);
+                                layerTileImages = new List<SubsetImage>(size);
 
                                 Stream layerStream = new MemoryStream(rawLayer);
                                 if (compression == "gzip")

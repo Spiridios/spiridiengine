@@ -23,15 +23,14 @@ namespace Spiridios.SpiridiEngine
         internal const string TILED_TILESET_ELEMENT = "tileset";
         private const string TILED_TILESET_IMAGE_ELEMENT = "image";
 
-        // TODO: shouldn't this be an image?
-        private Texture2D tileSet = null;
+        private TextureImage tileSet = null;
         private int tileWidth = 0;
         private int tileHeight = 0;
         private int tileCount = 0;
 
         public TileSet(string imageName, int tileWidth, int tileHeight)
         {
-            tileSet = SpiridiGame.ImageManagerInstance.GetImage(imageName);
+            tileSet = new TextureImage(SpiridiGame.ImageManagerInstance.GetImage(imageName));
             this.tileWidth = tileWidth;
             this.tileHeight = tileHeight;
             ComputeTileCount();
@@ -88,7 +87,7 @@ namespace Spiridios.SpiridiEngine
                                 break;
                             case (TileSet.TILED_TILESET_IMAGE_ELEMENT):
                                 string tileSetImageSource = xmlReader.GetAttribute("source");
-                                tileSet = SpiridiGame.ImageManagerInstance.AddImage(tileSetImageSource, tileSetImageSource);
+                                tileSet = new TextureImage(SpiridiGame.ImageManagerInstance.AddImage(tileSetImageSource, tileSetImageSource));
                                 //tileSheetSize.X = int.Parse(tileSetImage.GetAttribute("width"));
                                 //tileSheetSize.Y = int.Parse(tileSetImage.GetAttribute("height"));
                                 break;
@@ -132,21 +131,21 @@ namespace Spiridios.SpiridiEngine
             if (tileId > 0)
             {
                 Rectangle source = GetTileSourceRect(tileId);
-                spriteBatch.Draw(this.tileSet, destination, source, Color.White);
+                this.tileSet.Draw(spriteBatch, source, destination, Color.White, 0.0f, 1.0f);
             }
         }
 
         public Texture2D Texture
         {
-            get { return this.tileSet; }
+            get { return this.tileSet.Texture; }
         }
 
         // TODO: this does not cache the Image
-        public Image CreateTileImage(int tileId)
+        public SubsetImage CreateTileImage(int tileId)
         {
             Rectangle source = GetTileSourceRect(tileId);
             // TODO: remove me
-            Image tileImage = new SubsetImage(new TextureImage(this.tileSet), source);
+            SubsetImage tileImage = new SubsetImage(this.tileSet, source);
             return tileImage;
         }
 

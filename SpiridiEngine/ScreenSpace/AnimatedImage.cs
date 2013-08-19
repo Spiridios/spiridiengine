@@ -263,7 +263,7 @@ namespace Spiridios.SpiridiEngine
             }
         }
 
-        protected override void DrawImpl(SpriteBatch spriteBatch, Rectangle source, Rectangle destination, Color tintColor, float rotation, float layer)
+        public override void DrawImpl(SpriteBatch spriteBatch, Rectangle source, Rectangle destination, Color tintColor, float rotation, float layer)
         {
             this.image.Draw(spriteBatch, source, destination, tintColor, rotation, layer);
         }

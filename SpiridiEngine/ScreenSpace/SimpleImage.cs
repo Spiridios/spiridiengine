@@ -1,53 +1,42 @@
-﻿/**
-    Copyright 2013 Micah Lieske
-
-    This file is part of SpiridiEngine.
-
-    SpiridiEngine is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
-
-    SpiridiEngine is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License along with SpiridiEngine. If not, see http://www.gnu.org/licenses/.
-**/
-
-using System;
+﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Spiridios.SpiridiEngine
 {
-    public class TextureImage : Image
+    class SimpleImage : PixelProvider
     {
         private Texture2D image;
         private Color[] pixelData = null;
+        private Vector2 origin = new Vector2(0, 0);
 
-        public TextureImage(string imageName)
+        public SimpleImage(string imageName)
         {
             image = SpiridiGame.ImageManagerInstance.GetImage(imageName);
         }
 
-        public TextureImage(Texture2D image)
+        public SimpleImage(Texture2D image)
         {
             this.image = image;
         }
 
-        public Texture2D Texture
+        public virtual Vector2 Origin
         {
-            get { return this.image; }
-            set { this.image = value; }
+            get { return origin; }
+            set { origin = value; }
         }
 
-        public override int Width
+        public int Width
         {
             get { return this.image.Width; }
         }
 
-        public override int Height
+        public int Height
         {
             get { return this.image.Height; }
         }
 
-        public override void DrawImpl(SpriteBatch spriteBatch, Rectangle source, Rectangle destination, Color tintColor, float rotation, float layer)
+        protected void Draw(SpriteBatch spriteBatch, Rectangle source, Rectangle destination, Color tintColor, float rotation, float layer)
         {
             if (source.IsEmpty)
             {
@@ -59,9 +48,9 @@ namespace Spiridios.SpiridiEngine
             spriteBatch.Draw(this.image, destination, source, tintColor, rotation, Origin, SpriteEffects.None, layer);
         }
 
-        public override Color GetPixel(int x, int y)
+        public Color GetPixel(int x, int y)
         {
-            if (!InBounds(x,y))
+            if (!InBounds(x, y))
             {
                 throw new InvalidOperationException("Pixel out of bounds");
             }
@@ -72,7 +61,7 @@ namespace Spiridios.SpiridiEngine
             }
         }
 
-        public override Color GetPixel(Point point)
+        public Color GetPixel(Point point)
         {
             return GetPixel(point.X, point.Y);
         }
@@ -88,6 +77,11 @@ namespace Spiridios.SpiridiEngine
                 }
                 return this.pixelData;
             }
+        }
+
+        private bool InBounds(int x, int y)
+        {
+            return (x >= 0 && x < this.Width && y >= 0 && y < this.Height);
         }
     }
 }

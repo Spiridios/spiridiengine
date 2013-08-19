@@ -65,7 +65,7 @@ namespace Spiridios.SpiridiEngine
             this.DrawImpl(spriteBatch, source, destination, tintColor, rotation, layer);
         }
 
-        protected abstract void DrawImpl(SpriteBatch spriteBatch, Rectangle source, Rectangle destination, Color tintColor, float rotation, float layer);
+        public abstract void DrawImpl(SpriteBatch spriteBatch, Rectangle source, Rectangle destination, Color tintColor, float rotation, float layer);
 
         public abstract Color GetPixel(int x, int y);
 

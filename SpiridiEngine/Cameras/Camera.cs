@@ -27,6 +27,18 @@ namespace Spiridios.SpiridiEngine.Scene
 
         }
 
+        public void TranslateReference(ref Vector2 point)
+        {
+            point.X = point.X - halfWindowPosition.X;
+            point.Y = point.Y - halfWindowPosition.Y;
+        }
+
+        public void TranslateReference(ref Rectangle rect)
+        {
+            rect.X = (int)(rect.X - halfWindowPosition.X);
+            rect.Y = (int)(rect.Y - halfWindowPosition.Y);
+        }
+
         public Vector2 TranslateVector2(Vector2 point)
         {
             return point - halfWindowPosition;

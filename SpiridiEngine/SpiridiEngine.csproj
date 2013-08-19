@@ -119,6 +119,7 @@
     <Compile Include="ScreenSpace\PixelProvider.cs" />
     <Compile Include="ScreenSpace\PositionedImage.cs" />
     <Compile Include="ScreenSpace\ScreenObject.cs" />
+    <Compile Include="ScreenSpace\SimpleImage.cs" />
     <Compile Include="ScreenSpace\SubsetImage.cs" />
     <Compile Include="ScreenSpace\TextureImage.cs" />
     <Compile Include="ScreenSpace\TileMapImage.cs" />
