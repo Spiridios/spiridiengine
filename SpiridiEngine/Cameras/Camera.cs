@@ -33,7 +33,7 @@ namespace Spiridios.SpiridiEngine.Scene
             point.Y = point.Y - halfWindowPosition.Y;
         }
 
-        public void TranslateReference(ref Rectangle rect)
+        public void TranslateRectRef(ref Rectangle rect)
         {
             rect.X = (int)(rect.X - halfWindowPosition.X);
             rect.Y = (int)(rect.Y - halfWindowPosition.Y);
@@ -62,6 +62,16 @@ namespace Spiridios.SpiridiEngine.Scene
             rect.Y = rect.Y - (int)halfWindowPosition.Y;
 
             return rect;
+        }
+
+        public int TranslateX(int x)
+        {
+            return x - (int)halfWindowPosition.X;
+        }
+
+        public int TranslateY(int y)
+        {
+            return y - (int)halfWindowPosition.Y;
         }
     }
 }

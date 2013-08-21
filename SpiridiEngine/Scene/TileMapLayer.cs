@@ -67,32 +67,40 @@ namespace Spiridios.SpiridiEngine.Scene
         {
             SortActors();
 
-            int size = layerTileImages.Count;
-            int currentActorIndex = 0;
-            Actor currentActor = (currentActorIndex < Actors.Count) ? Actors[currentActorIndex] : null;
+            List<Actor>.Enumerator actorEnumerator = Actors.GetEnumerator();
+            Actor currentActor = null;
+            if (actorEnumerator.MoveNext())
+            {
+                currentActor = actorEnumerator.Current;
+            }
             Rectangle sourceRect = new Rectangle(0,0,this.tileWidth, this.tileHeight);
             Rectangle destRect = new Rectangle(0,0,this.tileWidth, this.tileHeight);
 
-
-            int y = 0;
-            int x = 0;
-            int maxX = layerWidth * tileWidth;
-            for (int i = 0; i < size; i++)
+            int cameraTranslateY = camera.TranslateY(0);
+            int y = cameraTranslateY;
+            int cameraTranslateX = camera.TranslateX(0);
+            int x = cameraTranslateX;
+            int maxX = cameraTranslateX + (layerWidth * tileWidth);
+            foreach (SubsetImage image in layerTileImages)
             {
-                if (currentActor != null && (currentActor.Position.Y) < (y + tileHeight))
+                if (currentActor != null && (currentActor.Position.Y + cameraTranslateY) < (y + tileHeight))
                 {
                     // TODO: some kind of actor culling
                     currentActor.Draw(spriteBatch);
-                    currentActorIndex++;
-                    currentActor = (currentActorIndex < Actors.Count) ? Actors[currentActorIndex] : null;
+                    if (actorEnumerator.MoveNext())
+                    {
+                        currentActor = actorEnumerator.Current;
+                    }
+                    else
+                    {
+                        currentActor = null;
+                    }
                 }
 
-                SubsetImage image = layerTileImages[i];
                 if (image != null)
                 {
                     destRect.X = x;
                     destRect.Y = y;
-                    camera.TranslateReference(ref destRect);
                     if (destRect.X >= -tileWidth && destRect.Y >= -tileHeight && destRect.X < SpiridiGame.Instance.WindowWidth && destRect.Y < SpiridiGame.Instance.WindowHeight)
                     {
                         image.DrawImpl(spriteBatch, sourceRect, destRect, Color.White, 0.0f, 1.0f);
@@ -103,14 +111,14 @@ namespace Spiridios.SpiridiEngine.Scene
                 if (x >= maxX)
                 {
                     y += tileHeight;
-                    x = 0;
+                    x = cameraTranslateX;
                 }
             }
 
             // Draw any undrawn actors.
-            for (int i = currentActorIndex; i < Actors.Count; i++)
+            while(actorEnumerator.MoveNext())
             {
-                Actors[currentActorIndex].Draw(spriteBatch);
+                actorEnumerator.Current.Draw(spriteBatch);
             }
         }
 
