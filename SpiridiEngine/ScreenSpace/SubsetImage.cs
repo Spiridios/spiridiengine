@@ -10,9 +10,10 @@
     You should have received a copy of the GNU General Public License along with SpiridiEngine. If not, see http://www.gnu.org/licenses/.
 **/
 
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-
+using System.Collections.Generic;
 
 namespace Spiridios.SpiridiEngine
 {
@@ -90,5 +91,57 @@ namespace Spiridios.SpiridiEngine
             p.Y += sourceRect.Y;
             return p;
         }
+
+        public override Turtle GetTurtle(int x, int y)
+        {
+            if (!InBounds(x, y))
+            {
+                throw new InvalidOperationException("Pixel out of bounds");
+            }
+            else
+            {
+                return new SubsetTurtle(this, x + sourceRect.X, y + sourceRect.Y);
+            }
+        }
+
+        private class SubsetTurtle : Turtle
+        {
+            private int x;
+            private int y;
+            private SubsetImage image;
+            public SubsetTurtle(SubsetImage image, int x, int y)
+            {
+                this.image = image;
+                this.x = x;
+                this.y = y;
+            }
+
+            public override Color GetPixel()
+            {
+                return image.sourceImage.GetPixel(x, y);
+            }
+
+            public override Color GetNextPixel(Direction direction)
+            {
+                switch (direction)
+                {
+                    case (Direction.Down):
+                        y++;
+                        break;
+                    case (Direction.Up):
+                        y--;
+                        break;
+                    case (Direction.Left):
+                        x--;
+                        break;
+                    case (Direction.Right):
+                        x++;
+                        break;
+                }
+
+                return GetPixel();
+            }
+        }
+
     }
 }

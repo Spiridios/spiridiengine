@@ -13,6 +13,7 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
 
 namespace Spiridios.SpiridiEngine
 {
@@ -81,5 +82,13 @@ namespace Spiridios.SpiridiEngine
             return InBounds(point.X, point.Y);
         }
 
+        public abstract Turtle GetTurtle(int x, int y);
+
+        public abstract class Turtle
+        {
+            public enum Direction {Left, Right, Up, Down};
+            public abstract Color GetPixel();
+            public abstract Color GetNextPixel(Direction direction);
+        }
     }
 }

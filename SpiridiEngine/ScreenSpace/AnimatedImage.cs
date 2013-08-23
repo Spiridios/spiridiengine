@@ -277,5 +277,10 @@ namespace Spiridios.SpiridiEngine
         {
             return this.image.GetPixel(point);
         }
+
+        public override Turtle GetTurtle(int x, int y)
+        {
+            return this.image.GetTurtle(x, y);
+        }
     }
 }

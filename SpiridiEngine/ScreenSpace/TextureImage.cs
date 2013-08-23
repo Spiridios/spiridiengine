@@ -13,6 +13,7 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
 
 namespace Spiridios.SpiridiEngine
 {
@@ -88,6 +89,61 @@ namespace Spiridios.SpiridiEngine
                 }
                 return this.pixelData;
             }
+        }
+
+        public override Turtle GetTurtle(int x, int y)
+        {
+            if (!InBounds(x, y))
+            {
+                throw new InvalidOperationException("Pixel out of bounds");
+            }
+            else
+            {
+                return new TextureTurtle(this, x + (y * this.image.Width));
+            }
+        }
+
+        private class TextureTurtle : Turtle
+        {
+            private int offset;
+            private TextureImage image;
+            public TextureTurtle(TextureImage image, int offset)
+            {
+                this.image = image;
+                this.offset = offset;
+            }
+
+            public override Color GetPixel()
+            {
+                return image.PixelData[offset];
+            }
+
+            public override Color GetNextPixel(Direction direction)
+            {
+                int offsetChange = 0;
+                switch (direction)
+                {
+                    case(Direction.Down):
+                        offsetChange = this.image.Width;
+                        break;
+                    case (Direction.Up):
+                        offsetChange = -this.image.Width;
+                        break;
+                    case (Direction.Left):
+                        offsetChange = -1;
+                        break;
+                    case (Direction.Right):
+                        offsetChange = 1;
+                        break;
+                }
+
+                if (offset + offsetChange < image.PixelData.Length)
+                {
+                    offset += offsetChange;
+                }
+                return GetPixel();
+            }
+
         }
     }
 }

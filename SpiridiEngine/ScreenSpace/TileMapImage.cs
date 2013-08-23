@@ -21,6 +21,7 @@ namespace Spiridios.SpiridiEngine
 {
     public class TileMapImage : Image
     {
+        private static readonly Color NO_PIXEL = new Color(0.0f, 0.0f, 0.0f, 0.0f);
         private List<Image> tileImages = null;
         // In pixels
         private int imageWidth;
@@ -90,7 +91,6 @@ namespace Spiridios.SpiridiEngine
 
         public override Color GetPixel(int x, int y)
         {
-            Color color = new Color(0.0f, 0.0f, 0.0f, 0.0f);
             if (!InBounds(x, y))
             {
                 throw new InvalidOperationException("Pixel out of bounds");
@@ -107,15 +107,52 @@ namespace Spiridios.SpiridiEngine
                 {
                     int tilePixelX = x - (tileX * tileWidth);
                     int tilePixelY = y - (tileY * tileHeight);
-                    color = image.GetPixel(tilePixelX, tilePixelY);
+                    return image.GetPixel(tilePixelX, tilePixelY);
                 }
             }
-            return color;
+            return NO_PIXEL;
         }
 
         public override Color GetPixel(Point point)
         {
             return GetPixel(point.X, point.Y);
+        }
+
+        public override Turtle GetTurtle(int x, int y)
+        {
+            throw new NotImplementedException();
+        }
+
+        private class TileMapTurtle : Turtle
+        {
+            private TileMapImage image;
+
+            public TileMapTurtle(TileMapImage image)
+            {
+                this.image = image;
+            }
+
+            public override Color GetPixel()
+            {
+                return TileMapImage.NO_PIXEL;
+            }
+
+            public override Color GetNextPixel(Direction direction)
+            {
+                switch (direction)
+                {
+                    case (Direction.Down):
+                        break;
+                    case (Direction.Up):
+                        break;
+                    case (Direction.Left):
+                        break;
+                    case (Direction.Right):
+                        break;
+                }
+
+                return GetPixel();
+            }
         }
     }
 }
