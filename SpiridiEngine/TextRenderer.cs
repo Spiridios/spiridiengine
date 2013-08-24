@@ -61,5 +61,10 @@ namespace Spiridios.SpiridiEngine
 
             spriteBatch.DrawString(this.font, text, position, this.color);
         }
+
+        public int LineHeight
+        {
+            get { return this.font.LineSpacing; }
+        }
     }
 }

@@ -69,7 +69,7 @@ namespace Spiridios.SpiridiEngine.GUI
             base.Update(elapsedTime);
         }
 
-        public override void Draw(Microsoft.Xna.Framework.Graphics.SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
 
