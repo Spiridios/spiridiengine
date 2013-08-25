@@ -59,6 +59,11 @@ namespace Spiridios.SpiridiEngine.Input
             keyBindings.Add(controlName, keyBind);
         }
 
+        public bool IsAnyKeyTriggered
+        {
+            get { return keyEvent.WereAnyKeysPressed; }
+        }
+
         public bool IsTriggered(string controlName)
         {
             bool triggered = false;
