@@ -226,7 +226,12 @@ namespace Spiridios.SpiridiEngine
         // TODO: move into default behavior.
         public override void Draw(SpriteBatch spriteBatch)
         {
-            DrawBoundingBox();
+#if(DEBUG)
+            if (SpiridiGame.Instance.DrawBoundingShapes)
+            {
+                DrawBoundingBox();
+            }
+#endif
             if (stageBehaviors.ContainsKey(this.lifeStage))
             {
                 Behavior b = stageBehaviors[this.lifeStage];

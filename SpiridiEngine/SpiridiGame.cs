@@ -41,7 +41,9 @@ namespace Spiridios.SpiridiEngine
         public TextRenderer DefaultTextRenderer { get; set; }
 
         private SpriteSortMode SpriteSortMode { get; set; }
-        
+
+        public bool DrawBoundingShapes { get; set; }
+
         // TODO: windowWidth seems a misnomer. Probably screenWidth
         private int windowWidth;
         private int windowHeight;
@@ -62,6 +64,14 @@ namespace Spiridios.SpiridiEngine
             Content.RootDirectory = "Content";
             graphics = new GraphicsDeviceManager(this);
             SoundManager.SetInstance(new SoundManager(Content));
+
+#if(DEBUG)
+            this.DrawBoundingShapes = true;
+#else
+            // Note that bounding shapes should NEVER draw in non-debug modes.
+            // this is just establishing a default value.
+            this.DrawBoundingShapes = false;
+#endif
 
             if (imageManager == null)
             {
