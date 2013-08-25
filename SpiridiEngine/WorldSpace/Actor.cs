@@ -54,6 +54,8 @@ namespace Spiridios.SpiridiEngine
 
         private Dictionary<LifeStage, Behavior> stageBehaviors = new Dictionary<LifeStage, Behavior>();
 
+        public bool DrawDead { get; set; }
+
         public Actor(string imageName)
             : this(new Sprite(imageName))
         {
@@ -68,6 +70,8 @@ namespace Spiridios.SpiridiEngine
         {
             this.sprite = sprite;
             AddScreenObject(sprite);
+
+            this.DrawDead = false;
 
             Position = new Vector2(0, 0);
 
@@ -237,7 +241,7 @@ namespace Spiridios.SpiridiEngine
                 Behavior b = stageBehaviors[this.lifeStage];
                 b.Draw(spriteBatch);
             }
-            else if(!this.IsDead)
+            else if(this.DrawDead || !this.IsDead)
             {
                 this.DrawSprite(spriteBatch);
             }
