@@ -45,7 +45,7 @@ namespace Spiridios.SpiridiEngine
         private int currentFrameIndex = 0;
         private int currentTile = 1;
         private string currentAnimation;
-        private double currentFrameElapsedSeconds = 0;
+        private double currentFrameElapsedSeconds = 9999999.0;
 
         public AnimatedImage(string imageName, int tileWidth, int tileHeight)
             : base()
