@@ -25,9 +25,13 @@ namespace Spiridios.SpiridiEngine
         private SpriteFont font;
         private Color color;
         private SpiridiGame game;
+        public bool DropShadow { get; set; }
+        private Color dropShadowColor = new Color(0.0f, 0.0f, 0.0f, 0.5f);
+        private Vector2 dropShadowOffset = new Vector2(1, 1);
 
         public TextRenderer(SpiridiGame game, String fontName, Color fontColor)
         {
+            this.DropShadow = false;
             this.game = game;
             this.font = game.Content.Load<SpriteFont>(fontName);
             this.color = fontColor;
@@ -37,6 +41,18 @@ namespace Spiridios.SpiridiEngine
         {
             get { return color;}
             set { color = value; }
+        }
+
+        public Color DropShadowColor
+        {
+            get { return dropShadowColor; }
+            set { dropShadowColor = value; }
+        }
+
+        public Vector2 DropShadowOffset
+        {
+            get { return dropShadowOffset; }
+            set { dropShadowOffset = value; }
         }
 
         public void DrawText(SpriteBatch spriteBatch, String text, int x, int y)
@@ -59,6 +75,10 @@ namespace Spiridios.SpiridiEngine
                 }
             }
 
+            if (this.DropShadow)
+            {
+                spriteBatch.DrawString(this.font, text, position + dropShadowOffset, this.dropShadowColor);
+            }
             spriteBatch.DrawString(this.font, text, position, this.color);
         }
 
