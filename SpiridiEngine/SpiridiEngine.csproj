@@ -107,6 +107,7 @@
   <ItemGroup>
     <Compile Include="Audio\PositionedSound.cs" />
     <Compile Include="Cameras\FollowingCamera.cs" />
+    <Compile Include="GUI\TextWindow.cs" />
     <Compile Include="Physics\BoxCollidableShape.cs" />
     <Compile Include="Physics\Collidable.cs" />
     <Compile Include="Physics\CollisionDetector.cs" />
@@ -152,7 +153,7 @@
     <Compile Include="State\SplashState.cs" />
     <Compile Include="State\State.cs" />
     <Compile Include="StaticBackground.cs" />
-    <Compile Include="TextRenderer.cs" />
+    <Compile Include="GUI\TextRenderer.cs" />
     <Compile Include="Scene\TileSet.cs" />
     <Compile Include="Scene\Scene.cs" />
     <Compile Include="Scene\TileMapLayer.cs" />

@@ -11,15 +11,13 @@
 **/
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Spiridios.SpiridiEngine.GUI
 {
     public abstract class Window : ScreenObject, Updatable
     {
         public virtual void Update(TimeSpan elapsedTime) {}
-        public override void Draw(Microsoft.Xna.Framework.Graphics.SpriteBatch spriteBatch) {}
+        public override void Draw(SpriteBatch spriteBatch) {}
     }
 }
