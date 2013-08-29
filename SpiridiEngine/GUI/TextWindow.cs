@@ -10,7 +10,6 @@ namespace Spiridios.SpiridiEngine.GUI
     {
         private TextRenderer renderer;
         private string text;
-        private int width, height;
 
         public TextWindow()
             : this(SpiridiGame.Instance.DefaultTextRenderer, null) 
@@ -50,17 +49,5 @@ namespace Spiridios.SpiridiEngine.GUI
             base.Draw(spriteBatch);
             renderer.DrawText(spriteBatch, this.text, (int)this.Position.X, (int)this.Position.Y);
         }
-
-        public override int Height
-        {
-            get { return height; }
-        }
-
-        public override int Width
-        {
-            get { return width; }
-        }
-
-
     }
 }

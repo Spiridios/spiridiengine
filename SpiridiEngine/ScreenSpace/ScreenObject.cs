@@ -21,15 +21,51 @@ namespace Spiridios.SpiridiEngine
     /// </summary>
     public abstract class ScreenObject : Drawable
     {
+        private Rectangle extents;
+
         public ScreenObject()
         {
         }
 
-        public virtual Vector2 Position { get; set; }
+        public virtual Vector2 Position
+        {
+            get { return new Vector2(extents.X, extents.Y); }
+            set
+            { 
+                extents.X = (int)value.X;
+                extents.Y = (int)value.Y;
+            }
+        }
 
-        public abstract int Width { get; }
+        protected Rectangle Extents
+        {
+            get { return extents; }
+            set { extents = value; }
+        }
 
-        public abstract int Height { get; }
+        public int X
+        {
+            get { return extents.X; }
+            set { extents.X = value; }
+        }
+
+        public int Y
+        {
+            get { return extents.Y; }
+            set { extents.Y = value; }
+        }
+
+        public virtual int Width
+        {
+            get { return extents.Width; }
+            set { extents.Width = value; }
+        }
+
+        public virtual int Height
+        {
+            get { return extents.Height; }
+            set { extents.Height = value; }
+        }
 
         public abstract void Draw(SpriteBatch spriteBatch);
     }

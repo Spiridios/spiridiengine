@@ -21,17 +21,9 @@ namespace Spiridios.SpiridiEngine.GUI
         public ImageButton(AnimatedImage buttonSprite, int upFrame, int downFrame)
         {
             this.buttonImage = buttonSprite;
+            this.Height = buttonImage.Height;
+            this.Width = buttonImage.Width;
             buttonSprite.CurrentFrame = upFrame;
-        }
-
-        public override int Height
-        {
-            get { return buttonImage.Height; }
-        }
-
-        public override int Width
-        {
-            get { return buttonImage.Width; }
         }
 
         public override void Update(TimeSpan elapsedTime)
