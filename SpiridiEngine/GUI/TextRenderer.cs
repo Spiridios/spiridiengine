@@ -13,6 +13,8 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Spiridios.SpiridiEngine
 {
@@ -85,6 +87,54 @@ namespace Spiridios.SpiridiEngine
         public int LineHeight
         {
             get { return this.font.LineSpacing; }
+        }
+
+        public List<string> WrapString(string text, int width)
+        {
+            List<string> wrappedLines = new List<string>();
+
+            string[] hardLines = text.Split('\n');
+            if (!String.IsNullOrEmpty(text))
+            {
+                foreach (string hardLine in hardLines)
+                {
+                    String[] words = hardLine.Split(' ');
+                    StringBuilder wrappedLine = new StringBuilder();
+                    int lineWordCount = 0;
+
+                    foreach (string word in words)
+                    {
+                        if (lineWordCount > 0)
+                        {
+                            wrappedLine.Append(' ');
+                        }
+                        wrappedLine.Append(word);
+                        lineWordCount++;
+
+                        Vector2 extents = this.font.MeasureString(wrappedLine);
+                        if (extents.X > width)
+                        {
+                            if (lineWordCount > 1)
+                            {
+                                // +/-1 for space that's added.
+                                wrappedLine.Remove(wrappedLine.Length - word.Length - 1, word.Length + 1);
+                                wrappedLines.Add(wrappedLine.ToString());
+                                wrappedLine.Clear();
+                                wrappedLine.Append(word);
+                                lineWordCount = 1;
+                            }
+                            else
+                            {
+                                wrappedLines.Add(wrappedLine.ToString());
+                                wrappedLine.Clear();
+                                lineWordCount = 0;
+                            }
+                        }
+                    }
+                    wrappedLines.Add(wrappedLine.ToString());
+                }
+            }
+            return wrappedLines;
         }
     }
 }

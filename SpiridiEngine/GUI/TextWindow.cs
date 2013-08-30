@@ -8,8 +8,11 @@ namespace Spiridios.SpiridiEngine.GUI
 {
     public class TextWindow : Window
     {
-        private TextRenderer renderer;
-        private string text;
+        private TextRenderer textRenderer = null;
+        private string text = null;
+        private List<string> lines = null;
+        private bool wordWrap = false;
+        private int margin = 0;
 
         public TextWindow()
             : this(SpiridiGame.Instance.DefaultTextRenderer, null) 
@@ -28,26 +31,70 @@ namespace Spiridios.SpiridiEngine.GUI
 
         public TextWindow(TextRenderer textRenderer, string text)
         {
-            this.renderer = textRenderer;
+            this.textRenderer = textRenderer;
             this.text = text;
         }
 
         public TextRenderer TextRenderer
         {
-            get { return this.renderer; }
-            set { this.renderer = value; }
+            get { return this.textRenderer; }
+            set { this.textRenderer = value; }
         }
 
         public string Text 
         {
             get { return this.text; }
-            set { this.text = value; }
+            set
+            {
+                this.text = value;
+                WrapText();
+            }
+        }
+
+        public bool WordWrap
+        {
+            get { return wordWrap; }
+            set
+            {
+                wordWrap = value;
+                WrapText();
+            }
+        }
+
+        public int Margin
+        {
+            get { return margin; }
+            set
+            {
+                margin = value;
+                WrapText();
+            }
+        }
+
+        private void WrapText()
+        {
+            if (this.wordWrap && this.textRenderer!= null)
+            {
+                this.lines = textRenderer.WrapString(this.text, this.Width - (this.margin + this.margin));
+            }
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
-            renderer.DrawText(spriteBatch, this.text, (int)this.Position.X, (int)this.Position.Y);
+            if (this.wordWrap)
+            {
+                int currentLineY = this.Y + margin;
+                foreach (string line in lines)
+                {
+                    textRenderer.DrawText(spriteBatch, line, this.X + margin, currentLineY);
+                    currentLineY += textRenderer.LineHeight;
+                }
+            }
+            else
+            {
+                textRenderer.DrawText(spriteBatch, this.text, (int)this.Position.X, (int)this.Position.Y);
+            }
         }
     }
 }

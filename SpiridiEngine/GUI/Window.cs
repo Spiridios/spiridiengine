@@ -12,12 +12,21 @@
 
 using System;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
 
 namespace Spiridios.SpiridiEngine.GUI
 {
     public abstract class Window : ScreenObject, Updatable
     {
+        private bool drawFrame = false;
+
         public virtual void Update(TimeSpan elapsedTime) {}
-        public override void Draw(SpriteBatch spriteBatch) {}
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            if(this.drawFrame)
+            {
+                SpiridiGame.Instance.DrawRectangle(this.Extents, Color.Black);
+            }
+        }
     }
 }
