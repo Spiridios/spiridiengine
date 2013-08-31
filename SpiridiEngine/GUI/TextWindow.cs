@@ -11,7 +11,7 @@ namespace Spiridios.SpiridiEngine.GUI
     {
         public enum Alignment { Left, Center, Right };
 
-        private Alignment align = Alignment.Left;
+        private Alignment textAlign = Alignment.Left;
         private TextRenderer textRenderer = null;
         private string text = null;
         private List<string> lines = null;
@@ -46,10 +46,10 @@ namespace Spiridios.SpiridiEngine.GUI
             set { this.textRenderer = value; }
         }
 
-        public Alignment Align
+        public Alignment TextAlign
         {
-            get { return this.align; }
-            set { this.align = value; }
+            get { return this.textAlign; }
+            set { this.textAlign = value; }
         }
 
         public string Text 
@@ -99,7 +99,7 @@ namespace Spiridios.SpiridiEngine.GUI
                 foreach (string line in lines)
                 {
                     int renderX = this.X;
-                    switch (this.align)
+                    switch (this.textAlign)
                     {
                         case(Alignment.Left):
                             renderX = this.X + margin;
