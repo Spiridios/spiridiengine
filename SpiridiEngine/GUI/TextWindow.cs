@@ -3,16 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
 
 namespace Spiridios.SpiridiEngine.GUI
 {
     public class TextWindow : Window
     {
+        public enum Alignment { Left, Center, Right };
+
+        private Alignment align = Alignment.Left;
         private TextRenderer textRenderer = null;
         private string text = null;
         private List<string> lines = null;
         private bool wordWrap = false;
         private int margin = 0;
+
 
         public TextWindow()
             : this(SpiridiGame.Instance.DefaultTextRenderer, null) 
@@ -39,6 +44,12 @@ namespace Spiridios.SpiridiEngine.GUI
         {
             get { return this.textRenderer; }
             set { this.textRenderer = value; }
+        }
+
+        public Alignment Align
+        {
+            get { return this.align; }
+            set { this.align = value; }
         }
 
         public string Text 
@@ -87,7 +98,26 @@ namespace Spiridios.SpiridiEngine.GUI
                 int currentLineY = this.Y + margin;
                 foreach (string line in lines)
                 {
-                    textRenderer.DrawText(spriteBatch, line, this.X + margin, currentLineY);
+                    int renderX = this.X;
+                    switch (this.align)
+                    {
+                        case(Alignment.Left):
+                            renderX = this.X + margin;
+                            break;
+                        case(Alignment.Center):
+                            int centerX = this.X + (this.Width / 2);
+                            Vector2 centerExtents = textRenderer.MeasureText(line);
+                            renderX = centerX - (int)(centerExtents.X / 2);
+                            break;
+                        case(Alignment.Right):
+                            int rightX = this.X + this.Width;
+                            Vector2 rightExtents = textRenderer.MeasureText(line);
+                            renderX = rightX - (int)(rightExtents.X);
+                            break;
+                    }
+                    
+
+                    textRenderer.DrawText(spriteBatch, line, renderX, currentLineY);
                     currentLineY += textRenderer.LineHeight;
                 }
             }

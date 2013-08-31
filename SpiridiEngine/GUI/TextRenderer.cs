@@ -57,7 +57,7 @@ namespace Spiridios.SpiridiEngine
             set { dropShadowOffset = value; }
         }
 
-        public void DrawText(SpriteBatch spriteBatch, String text, int x, int y)
+        public void DrawText(SpriteBatch spriteBatch, string text, int x, int y)
         {
             Vector2 extents = this.font.MeasureString(text);
             Vector2 position = new Vector2(x, y);
@@ -84,6 +84,11 @@ namespace Spiridios.SpiridiEngine
             spriteBatch.DrawString(this.font, text, position, this.color);
         }
 
+        public Vector2 MeasureText(string text)
+        {
+            return this.font.MeasureString(text);
+        }
+
         public int LineHeight
         {
             get { return this.font.LineSpacing; }
@@ -98,7 +103,7 @@ namespace Spiridios.SpiridiEngine
             {
                 foreach (string hardLine in hardLines)
                 {
-                    String[] words = hardLine.Split(' ');
+                    string[] words = hardLine.Split(' ');
                     StringBuilder wrappedLine = new StringBuilder();
                     int lineWordCount = 0;
 
