@@ -153,7 +153,11 @@ namespace Spiridios.SpiridiEngine
         public State NextState 
         {
             get { return currentState; }
-            set { currentState = value; }
+            set
+            {
+                currentState = value;
+                currentState.Activate();
+            }
         }
 
         public State CurrentState

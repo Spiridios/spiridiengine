@@ -35,6 +35,10 @@ namespace Spiridios.SpiridiEngine
             }
         }
 
+        public virtual void Activate()
+        {
+        }
+
         public virtual void Update(GameTime gameTime)
         {
         }
