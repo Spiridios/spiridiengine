@@ -19,10 +19,21 @@ namespace Spiridios.SpiridiEngine.GUI
     public abstract class Window : ScreenObject, Updatable
     {
         private bool drawFrame = false;
+        private Image image;
+
+        public Image Image
+        {
+            get { return image; }
+            set { image = value; }
+        }
 
         public virtual void Update(TimeSpan elapsedTime) {}
         public override void Draw(SpriteBatch spriteBatch)
         {
+            if (this.image != null)
+            {
+                image.Draw(spriteBatch, this.Extents);
+            }
             if(this.drawFrame)
             {
                 SpiridiGame.Instance.DrawRectangle(this.Extents, Color.Black);

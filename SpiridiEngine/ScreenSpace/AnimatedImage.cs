@@ -45,7 +45,7 @@ namespace Spiridios.SpiridiEngine
         private int currentFrameIndex = 0;
         private int currentTile = 1;
         private string currentAnimation;
-        private double currentFrameElapsedSeconds = 9999999.0;
+        private double currentFrameElapsedSeconds = 0;
 
         public AnimatedImage(string imageName, int tileWidth, int tileHeight)
             : base()
@@ -131,10 +131,6 @@ namespace Spiridios.SpiridiEngine
                                 string defaultFrameTimeString = xmlReader.GetAttribute("frameTime");
                                 defaultFrameTime = defaultFrameTimeString == null ? 0.25 : double.Parse(defaultFrameTimeString);
                                 animationName = xmlReader.GetAttribute("name");
-                                if (setAsCurrentAnimation)
-                                {
-                                    this.CurrentAnimation = animationName;
-                                }
                                 break;
                             case (AnimatedImage.XML_CONFIG_FRAME_ELEMENT):
                                 LoadXMLFrame(xmlReader, animationName, defaultFrameTime);
@@ -146,6 +142,10 @@ namespace Spiridios.SpiridiEngine
                     case (XmlNodeType.EndElement):
                         if (xmlReader.Name == AnimatedImage.XML_CONFIG_ANIMATION_ELEMENT)
                         {
+                            if (setAsCurrentAnimation)
+                            {
+                                this.CurrentAnimation = animationName;
+                            }
                             return;
                         }
                         break;
@@ -202,13 +202,17 @@ namespace Spiridios.SpiridiEngine
                 List<FrameInfo> frameInfos;
                 if (currentAnimation != null && animations.TryGetValue(currentAnimation, out frameInfos))
                 {
-                    // TODO: make this a private SetCurrentFrame(value, frameInfos)
-                    currentFrameIndex = value % frameInfos.Count;
-                    FrameInfo currentFrameInfo = frameInfos[currentFrameIndex];
-                    this.currentTile = currentFrameInfo.frameNumber;
-                    this.image.SourceRectangle = this.tileSet.GetTileSourceRect(currentTile);
+                    SetCurrentFrame(value, frameInfos);
                 }
             }
+        }
+
+        private void SetCurrentFrame(int newFrameIndex, List<FrameInfo> frameInfos)
+        {
+            currentFrameIndex = newFrameIndex % frameInfos.Count;
+            FrameInfo currentFrameInfo = frameInfos[currentFrameIndex];
+            this.currentTile = currentFrameInfo.frameNumber;
+            this.image.SourceRectangle = this.tileSet.GetTileSourceRect(currentTile);
         }
 
         public string CurrentAnimation
@@ -252,12 +256,7 @@ namespace Spiridios.SpiridiEngine
                     if (currentFrameElapsedSeconds > currentFrameInfo.frameSeconds)
                     {
                         currentFrameElapsedSeconds -= currentFrameInfo.frameSeconds;
-                        currentFrameIndex++;
-                        currentFrameIndex %= frameInfos.Count;
-
-                        currentFrameInfo = frameInfos[currentFrameIndex];
-                        this.currentTile = currentFrameInfo.frameNumber;
-                        this.image.SourceRectangle = this.tileSet.GetTileSourceRect(currentTile);
+                        SetCurrentFrame(currentFrameIndex + 1, frameInfos);
                     }
                 }
             }
