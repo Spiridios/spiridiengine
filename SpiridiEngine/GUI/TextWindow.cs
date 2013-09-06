@@ -123,37 +123,40 @@ namespace Spiridios.SpiridiEngine.GUI
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
-            if (this.wordWrap)
+            if (this.Visible)
             {
-                int currentLineY = this.Y + margin;
-                foreach (string line in lines)
+                if (this.wordWrap)
                 {
-                    int renderX = this.X;
-                    switch (this.textAlign)
+                    int currentLineY = this.Y + margin;
+                    foreach (string line in lines)
                     {
-                        case(Alignment.Left):
-                            renderX = this.X + margin;
-                            break;
-                        case(Alignment.Center):
-                            int centerX = this.X + (this.Width / 2);
-                            Vector2 centerExtents = textRenderer.MeasureText(line);
-                            renderX = centerX - (int)(centerExtents.X / 2);
-                            break;
-                        case(Alignment.Right):
-                            int rightX = this.X + this.Width;
-                            Vector2 rightExtents = textRenderer.MeasureText(line);
-                            renderX = rightX - (int)(rightExtents.X);
-                            break;
-                    }
-                    
+                        int renderX = this.X;
+                        switch (this.textAlign)
+                        {
+                            case (Alignment.Left):
+                                renderX = this.X + margin;
+                                break;
+                            case (Alignment.Center):
+                                int centerX = this.X + (this.Width / 2);
+                                Vector2 centerExtents = textRenderer.MeasureText(line);
+                                renderX = centerX - (int)(centerExtents.X / 2);
+                                break;
+                            case (Alignment.Right):
+                                int rightX = this.X + this.Width;
+                                Vector2 rightExtents = textRenderer.MeasureText(line);
+                                renderX = rightX - (int)(rightExtents.X);
+                                break;
+                        }
 
-                    textRenderer.DrawText(spriteBatch, line, renderX, currentLineY);
-                    currentLineY += textRenderer.LineHeight;
+
+                        textRenderer.DrawText(spriteBatch, line, renderX, currentLineY);
+                        currentLineY += textRenderer.LineHeight;
+                    }
                 }
-            }
-            else
-            {
-                textRenderer.DrawText(spriteBatch, this.text, (int)this.Position.X, (int)this.Position.Y);
+                else
+                {
+                    textRenderer.DrawText(spriteBatch, this.text, (int)this.Position.X, (int)this.Position.Y);
+                }
             }
         }
     }

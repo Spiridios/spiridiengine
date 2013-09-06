@@ -20,23 +20,33 @@ namespace Spiridios.SpiridiEngine.GUI
     {
         private bool drawFrame = false;
         private Image image;
+        private bool visible = true;
 
         public Image Image
         {
-            get { return image; }
-            set { image = value; }
+            get { return this.image; }
+            set { this.image = value; }
+        }
+
+        public bool Visible
+        {
+            get { return this.visible; }
+            set { this.visible = value; }
         }
 
         public virtual void Update(TimeSpan elapsedTime) {}
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if (this.image != null)
+            if (this.visible)
             {
-                image.Draw(spriteBatch, this.Extents);
-            }
-            if(this.drawFrame)
-            {
-                SpiridiGame.Instance.DrawRectangle(this.Extents, Color.Black);
+                if (this.image != null)
+                {
+                    image.Draw(spriteBatch, this.Extents);
+                }
+                if (this.drawFrame)
+                {
+                    SpiridiGame.Instance.DrawRectangle(this.Extents, Color.Black);
+                }
             }
         }
     }
