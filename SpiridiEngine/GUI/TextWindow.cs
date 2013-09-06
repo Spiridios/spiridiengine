@@ -17,6 +17,7 @@ namespace Spiridios.SpiridiEngine.GUI
         private List<string> lines = null;
         private bool wordWrap = false;
         private int margin = 0;
+        private bool fitHeight = false;
 
 
         public TextWindow()
@@ -52,6 +53,12 @@ namespace Spiridios.SpiridiEngine.GUI
             set { this.textAlign = value; }
         }
 
+        public bool FitHeight
+        {
+            get { return this.fitHeight; }
+            set { this.fitHeight = value; }
+        }
+
         public string Text 
         {
             get { return this.text; }
@@ -59,6 +66,7 @@ namespace Spiridios.SpiridiEngine.GUI
             {
                 this.text = value;
                 WrapText();
+                AdjustSize();
             }
         }
 
@@ -69,6 +77,7 @@ namespace Spiridios.SpiridiEngine.GUI
             {
                 wordWrap = value;
                 WrapText();
+                AdjustSize();
             }
         }
 
@@ -79,6 +88,7 @@ namespace Spiridios.SpiridiEngine.GUI
             {
                 margin = value;
                 WrapText();
+                AdjustSize();
             }
         }
 
@@ -87,6 +97,26 @@ namespace Spiridios.SpiridiEngine.GUI
             if (this.wordWrap && this.textRenderer!= null)
             {
                 this.lines = textRenderer.WrapString(this.text, this.Width - (this.margin + this.margin));
+            }
+        }
+
+        private void AdjustSize()
+        {
+            if (this.fitHeight)
+            {
+                int numLines = 1;
+                if (this.wordWrap && this.lines!= null)
+                {
+                    numLines = this.lines.Count;
+                }
+
+                int textHeight = 20;
+                if (this.textRenderer != null)
+                {
+                    textHeight = textRenderer.LineHeight * numLines;
+                }
+
+                this.Height = (this.margin * 2) + textHeight;
             }
         }
 
