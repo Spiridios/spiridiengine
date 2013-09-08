@@ -34,7 +34,7 @@ namespace Spiridios.SpiridiEngine
         public override void Update(TimeSpan elapsedTime)
         {
             base.Update(elapsedTime);
-            if (this.Actor.IsALive)
+            if (this.Actor.IsAlive)
             {
                 this.Actor.Position = this.Actor.Position + (this.velocity * (float)elapsedTime.TotalSeconds);
                 if (

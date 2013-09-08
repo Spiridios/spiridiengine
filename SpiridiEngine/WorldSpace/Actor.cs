@@ -138,7 +138,7 @@ namespace Spiridios.SpiridiEngine
             }
         }
 
-        public bool IsALive
+        public bool IsAlive
         {
             get { return this.lifeStage == LifeStage.ALIVE; }
         }
